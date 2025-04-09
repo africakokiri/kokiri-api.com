@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useFieldStore } from "@/libs/zustand/store";
 
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const FIELD_TYPES = [
   "string",
@@ -41,6 +42,12 @@ export const ResponsiveFields = () => {
   const [errorResponse, setErrorResponse] = useState(
     '{\n  "error": "An error occurred"\n}'
   ); // 에러 Response
+
+  const { addedFields, addField } = useFieldStore();
+
+  useEffect(() => {
+    console.log(addedFields);
+  }, [addedFields]);
 
   return (
     <div className="space-y-2">
@@ -132,6 +139,7 @@ export const ResponsiveFields = () => {
           <Button
             type="button"
             size="icon"
+            onClick={() => addField()}
           >
             <Plus className="h-4 w-4" />
           </Button>

@@ -82,21 +82,19 @@ interface AddedEndpointsStore {
   addField: (field: Fields) => void;
 }
 
-export const useAddedEndpointsStore = create<AddedEndpointsStore>(
-  (set) => ({
-    addedFields: [
-      {
-        endpointPath: "",
-        httpMethod: "GET",
-        responseType: "Object",
-        fieldName: "",
-        fieldType: "string"
-      }
-    ],
+export const useFieldStore = create<AddedEndpointsStore>((set) => ({
+  addedFields: [
+    {
+      endpointPath: "",
+      httpMethod: "GET",
+      responseType: "Object",
+      fieldName: "",
+      fieldType: "string"
+    }
+  ],
 
-    addField: (field) =>
-      set((state) => ({
-        addedFields: [...state.addedFields, field]
-      }))
-  })
-);
+  addField: (field) =>
+    set((state) => ({
+      addedFields: [...state.addedFields, field]
+    }))
+}));
