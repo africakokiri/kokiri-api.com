@@ -28,47 +28,6 @@ export const useHttpStore = create<HttpStore>((set) => ({
     }))
 }));
 
-interface ResponseTypeStore {
-  responseType: ResponseType;
-
-  setResponseType: (responseType: ResponseType) => void;
-}
-
-// Response Type
-export const useResponseTypeStore = create<ResponseTypeStore>((set) => ({
-  responseType: "Object",
-
-  setResponseType: (responseType) =>
-    set(() => ({
-      responseType
-    }))
-}));
-
-interface ResponsiveFieldStore {
-  fieldName: string;
-  fieldType: FieldType;
-
-  setFieldName: (fieldName: string) => void;
-  setFieldType: (fieldType: FieldType) => void;
-}
-
-// Responsive Fields
-export const useResponsiveFieldStore = create<ResponsiveFieldStore>(
-  (set) => ({
-    fieldName: "",
-    fieldType: "string",
-
-    setFieldName: (fieldName) =>
-      set(() => ({
-        fieldName
-      })),
-    setFieldType: (fieldType) =>
-      set(() => ({
-        fieldType
-      }))
-  })
-);
-
 type Fields = {
   endpointPath: string;
   httpMethod: HttpMethods;
