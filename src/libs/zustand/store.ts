@@ -26,25 +26,26 @@ export const useHttpStore = create<HttpStore>((set) => ({
 }));
 
 interface ResponseStore {
-  successResponse?: string[];
-  errorResponse?: string[];
+  successResponse: string;
+  errorResponse: string;
 
-  addSuccessResponse: (successResponse: string) => void;
-  addErrorResponsve: (errorResponse: string) => void;
+  setSuccessResponse: (successResponse: string) => void;
+  setErrorResponse: (errorResponse: string) => void;
 }
 
 // Response 전체
 export const useResponseStore = create<ResponseStore>((set) => ({
-  successResponse: [],
-  errorResponse: [],
+  successResponse: '{\n  "data": {}\n}',
+  errorResponse: '{\n  "error": "An error occurred"\n}',
 
-  addSuccessResponse: (successResponse) =>
-    set((state) => ({
-      successResponse: [...state.successResponse!, successResponse]
+  setSuccessResponse: (successResponse) =>
+    set(() => ({
+      successResponse
     })),
-  addErrorResponsve: (errorResponse) =>
-    set((state) => ({
-      errorResponse: [...state.errorResponse!, errorResponse]
+
+  setErrorResponse: (errorResponse) =>
+    set(() => ({
+      errorResponse
     }))
 }));
 
