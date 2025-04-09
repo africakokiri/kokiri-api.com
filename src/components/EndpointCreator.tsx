@@ -1,5 +1,4 @@
-"use client";
-
+import { AddEndpointButton } from "@/components/EndpointCreatorAtoms/AddEndpointButton";
 import { EndpointPath } from "@/components/EndpointCreatorAtoms/EndpointPath";
 import { HttpMethod } from "@/components/EndpointCreatorAtoms/HttpMethod";
 import { ResponseType } from "@/components/EndpointCreatorAtoms/ResponseType";
@@ -15,6 +14,8 @@ export const EndpointCreator = () => {
 
       <ResponseType />
       <ResponsiveFields />
+
+      <AddEndpointButton />
     </div>
   );
 };
