@@ -2,10 +2,12 @@ import { robotoMonoVar } from "@/styles/fonts";
 
 export const Header = () => {
   return (
-    <header>
-      <h1 className={`${robotoMonoVar.className} text-4xl font-light`}>
-        REST API Mock Server
-      </h1>
+    <header className={`${robotoMonoVar.className} space-y-4 font-light`}>
+      <h1 className="text-4xl">REST API Mock Server</h1>
+      <p>
+        Create a mock REST API. Customize response data for success and
+        error cases.
+      </p>
     </header>
   );
 };
