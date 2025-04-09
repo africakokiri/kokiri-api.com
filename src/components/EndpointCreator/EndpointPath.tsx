@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/libs/shadcn/utils";
 import { useHttpStore } from "@/libs/zustand/store";
 
 import { useEffect, useState } from "react";
@@ -12,9 +13,13 @@ export const EndpointPath = () => {
   const { endpointPath, setEndPointPath } = useHttpStore();
 
   useEffect(() => {
-    if (endpointPath && endpointPath[0] !== "/") {
+    if (!endpointPath || endpointPath[0] !== "/") {
       setPathStartWordAlert(true);
     } else {
+      setPathStartWordAlert(false);
+    }
+
+    if (!endpointPath) {
       setPathStartWordAlert(false);
     }
   }, [endpointPath]);
@@ -25,7 +30,10 @@ export const EndpointPath = () => {
       <Input
         placeholder="/api/data"
         id="endpoint-path"
-        className="w-full"
+        className={cn(
+          "w-full",
+          pathStartWordAlert && "border-[1px] border-red-500"
+        )}
         value={endpointPath}
         onChange={(e) => setEndPointPath(e.target.value)}
       />
