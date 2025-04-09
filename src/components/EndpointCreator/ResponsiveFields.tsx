@@ -21,7 +21,7 @@ import {
 } from "@/libs/zustand/store";
 
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const FIELD_TYPES = [
   "string",
@@ -64,12 +64,8 @@ export const ResponsiveFields = () => {
   // Response type
   const { responseType } = useResponseTypeStore();
 
-  useEffect(() => {
-    console.log(addedFields);
-  }, [addedFields]);
-
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Label htmlFor="responsive-field">Responsive Fields</Label>
         <div className="flex items-center space-x-2">
@@ -174,40 +170,54 @@ export const ResponsiveFields = () => {
       )}
 
       {addedFields && addedFields.length > 0 && (
-        <Card>
-          <CardContent className="p-6">
-            {addedFields.map(
-              ({
-                endpointPath,
-                httpMethod,
-                responseType,
-                fieldName,
-                fieldType
-              }) => {
-                return (
-                  <div
-                    key={endpointPath + fieldName}
-                    className="flex items-center justify-between rounded-md
-bg-muted/50 p-2"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{fieldName}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {fieldType}
-                      </span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
+        <div className="space-y-4">
+          <Card>
+            <CardContent className="p-6">
+              {addedFields.map(
+                (
+                  {
+                    endpointPath,
+                    httpMethod,
+                    responseType,
+                    fieldName,
+                    fieldType
+                  },
+                  index
+                ) => {
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between
+rounded-md bg-muted/50 p-2"
                     >
-                      Remove
-                    </Button>
-                  </div>
-                );
-              }
-            )}
-          </CardContent>
-        </Card>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{fieldName}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {fieldType}
+                        </span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  );
+                }
+              )}
+            </CardContent>
+          </Card>
+          <div className="space-y-2 rounded-md border p-4">
+            <Label className="mb-2">Generated Response</Label>
+            <pre
+              className="max-h-40 overflow-auto rounded-md bg-muted p-2
+text-xs"
+            >
+              asdf
+            </pre>
+          </div>
+        </div>
       )}
     </div>
   );

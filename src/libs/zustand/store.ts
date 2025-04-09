@@ -13,6 +13,7 @@ interface HttpStore {
   setHttpMethod: (httpMethod: HttpMethods) => void;
 }
 
+// Endpoint Path, HTTP Method
 export const useHttpStore = create<HttpStore>((set) => ({
   endpointPath: "",
   httpMethod: "GET",
@@ -33,6 +34,7 @@ interface ResponseTypeStore {
   setResponseType: (responseType: ResponseType) => void;
 }
 
+// Response Type
 export const useResponseTypeStore = create<ResponseTypeStore>((set) => ({
   responseType: "Object",
 
@@ -50,6 +52,7 @@ interface ResponsiveFieldStore {
   setFieldType: (fieldType: FieldType) => void;
 }
 
+// Responsive Fields
 export const useResponsiveFieldStore = create<ResponsiveFieldStore>(
   (set) => ({
     fieldName: "",
@@ -80,6 +83,7 @@ interface AddedEndpointsStore {
   addField: (field: Fields) => void;
 }
 
+// Field 전체
 export const useFieldStore = create<AddedEndpointsStore>((set) => ({
   addedFields: [],
 
@@ -95,6 +99,7 @@ interface EndpointStore {
   addEndpoint: (endpoints: Fields) => void;
 }
 
+// Endpoints 전체
 export const useEndpointStore = create<EndpointStore>((set) => ({
   endpoints: [],
 
