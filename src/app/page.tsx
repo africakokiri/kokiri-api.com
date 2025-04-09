@@ -1,6 +1,7 @@
 import { AddEndpointButton } from "@/components/EndpointCreator/AddEndpointButton";
 import { EndpointPath } from "@/components/EndpointCreator/EndpointPath";
 import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
+import { Responses } from "@/components/EndpointCreator/Responses";
 import { SuccessOrErrorStatus } from "@/components/EndpointCreator/SuccessOrErrorStatus";
 import { EndpointList } from "@/components/EndpointList";
 import { Header } from "@/components/Header";
@@ -35,6 +36,11 @@ export default function page() {
               <div className="flex gap-4 *:w-full *:space-y-2">
                 <SuccessOrErrorStatus status="Success" />
                 <SuccessOrErrorStatus status="Error" />
+              </div>
+
+              <div>
+                <Responses status="Success" />
+                <Responses status="Error" />
               </div>
 
               <AddEndpointButton />
