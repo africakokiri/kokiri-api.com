@@ -24,9 +24,9 @@ export const ResponseType = () => {
           <SelectValue placeholder="Select response type" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="object">Object</SelectItem>
-          <SelectItem value="array">Array</SelectItem>
-          <SelectItem value="primitive">Primitive</SelectItem>
+          <SelectItem value="Object">Object</SelectItem>
+          <SelectItem value="Array">Array</SelectItem>
+          <SelectItem value="Primitive">Primitive</SelectItem>
         </SelectContent>
       </Select>
     </div>
