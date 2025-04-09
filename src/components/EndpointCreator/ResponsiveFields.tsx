@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -172,7 +173,45 @@ export const ResponsiveFields = () => {
         </div>
       )}
 
-      {}
+      {addedFields && addedFields.length > 0 && (
+        <Card>
+          <CardContent className="p-6">
+            {addedFields.map(
+              (
+                {
+                  endpointPath,
+                  httpMethod,
+                  responseType,
+                  fieldName,
+                  fieldType
+                },
+                index
+              ) => {
+                return (
+                  <div
+                    key={endpointPath + fieldName}
+                    className="flex items-center justify-between rounded-md
+bg-muted/50 p-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{fieldName}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {fieldType}
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                );
+              }
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
