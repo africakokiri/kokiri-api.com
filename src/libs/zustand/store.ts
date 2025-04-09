@@ -88,3 +88,18 @@ export const useFieldStore = create<AddedEndpointsStore>((set) => ({
       addedFields: [...state.addedFields!, field]
     }))
 }));
+
+interface EndpointStore {
+  endpoints?: Fields[];
+
+  addEndpoint: (endpoints: Fields) => void;
+}
+
+export const useEndpointStore = create<EndpointStore>((set) => ({
+  endpoints: [],
+
+  addEndpoint: (endpoints) =>
+    set((state) => ({
+      endpoints: [...state.endpoints!, endpoints]
+    }))
+}));

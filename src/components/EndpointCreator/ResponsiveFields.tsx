@@ -177,16 +177,13 @@ export const ResponsiveFields = () => {
         <Card>
           <CardContent className="p-6">
             {addedFields.map(
-              (
-                {
-                  endpointPath,
-                  httpMethod,
-                  responseType,
-                  fieldName,
-                  fieldType
-                },
-                index
-              ) => {
+              ({
+                endpointPath,
+                httpMethod,
+                responseType,
+                fieldName,
+                fieldType
+              }) => {
                 return (
                   <div
                     key={endpointPath + fieldName}
