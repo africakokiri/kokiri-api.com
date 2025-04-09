@@ -2,6 +2,21 @@ import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
 
 import { create } from "zustand";
 
+interface AppInitializerStore {
+  userId: string;
+  setUserId: (id: string) => void;
+}
+
+export const useAppInitializerStore = create<AppInitializerStore>(
+  (set) => ({
+    userId: "",
+    setUserId: (id: string) => {
+      set(() => ({ userId: id }));
+      localStorage.setItem("userId", id);
+    }
+  })
+);
+
 interface HttpStore {
   endpointPath: string;
   httpMethod: HttpMethods;
