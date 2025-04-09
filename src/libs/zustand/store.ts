@@ -25,6 +25,30 @@ export const useHttpStore = create<HttpStore>((set) => ({
     }))
 }));
 
+interface SuccessOrErrorStore {
+  successStatus: string;
+  errorStatus: string;
+
+  setSuccessStatus: (successStatus: string) => void;
+  setErrorStatus: (errorStatus: string) => void;
+}
+
+export const useSuccessOrErrorStore = create<SuccessOrErrorStore>(
+  (set) => ({
+    successStatus: "200",
+    errorStatus: "400",
+
+    setSuccessStatus: (successStatus) =>
+      set(() => ({
+        successStatus
+      })),
+    setErrorStatus: (errorStatus) =>
+      set(() => ({
+        errorStatus
+      }))
+  })
+);
+
 interface ResponseStore {
   successResponse: string;
   errorResponse: string;

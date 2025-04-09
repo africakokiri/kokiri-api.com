@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useHttpStore } from "@/libs/zustand/store";
+import { useHttpStore, useResponseStore } from "@/libs/zustand/store";
 
 import { useEffect, useState } from "react";
 
 export const AddEndpointButton = () => {
   const [pathStartWordAlert, setPathStartWordAlert] = useState(false);
 
+  const { successResponse, errorResponse } = useResponseStore();
   const { endpointPath } = useHttpStore();
 
   useEffect(() => {
