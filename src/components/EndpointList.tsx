@@ -9,9 +9,12 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
+import { cn } from "@/libs/shadcn/utils";
 import { useEndpointStore } from "@/libs/zustand/store";
 
+import copy from "copy-to-clipboard";
 import { Play } from "lucide-react";
+import { useState } from "react";
 
 const getMethodVariant = (method: string) => {
   switch (method.toUpperCase()) {
@@ -26,6 +29,29 @@ const getMethodVariant = (method: string) => {
     default:
       return "secondary";
   }
+};
+
+const CopyButton = ({ textToCopy }: { textToCopy: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    copy(textToCopy);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <Badge
+      onClick={handleCopy}
+      className={cn(
+        `cursor-pointer bg-secondary text-foreground hover:bg-foreground
+hover:text-secondary`,
+        copied && "bg-green-500 text-secondary hover:bg-green-500"
+      )}
+    >
+      {copied ? "Copied!" : "Copy"}
+    </Badge>
+  );
 };
 
 export const EndpointList = () => {
@@ -71,12 +97,10 @@ font-semibold"
                   <span className="text-xs">
                     Status: {successStatus}(Success) / {errorStatus}(Error)
                   </span>
-                  <Badge
-                    className="cursor-pointer bg-secondary text-foreground
-hover:bg-foreground hover:text-secondary"
-                  >
-                    Copy
-                  </Badge>
+                  <CopyButton
+                    key={index}
+                    textToCopy={endpointPath}
+                  />
                 </div>
               </div>
             )
