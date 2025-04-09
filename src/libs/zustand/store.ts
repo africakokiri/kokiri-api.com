@@ -5,24 +5,39 @@ import { create } from "zustand";
 
 type HttpMethod = (typeof HTTP_METHODS)[number];
 type FieldType = (typeof FIELD_TYPES)[number];
+type ResponseType = "Object" | "Array" | "Primitive";
 
 interface HttpStore {
   endpointPath: string;
   httpMethod: HttpMethod;
 
-  addEndPointPath: (endpointPath: string) => void;
-  addHttpMethod: (httpMethod: HttpMethod) => void;
+  setEndPointPath: (endpointPath: string) => void;
+  setHttpMethod: (httpMethod: HttpMethod) => void;
 }
 
 export const useHttpStore = create<HttpStore>((set) => ({
   endpointPath: "",
   httpMethod: "GET",
-  addEndPointPath: (endpointPath) =>
+  setEndPointPath: (endpointPath) =>
     set(() => ({
       endpointPath
     })),
-  addHttpMethod: (httpMethod) =>
+  setHttpMethod: (httpMethod) =>
     set(() => ({
       httpMethod
+    }))
+}));
+
+interface ResponseTypeStore {
+  responseType: ResponseType;
+
+  setResponseType: (responseType: ResponseType) => void;
+}
+
+export const useResponseTypeStore = create<ResponseTypeStore>((set) => ({
+  responseType: "Object",
+  setResponseType: (responseType) =>
+    set(() => ({
+      responseType
     }))
 }));
