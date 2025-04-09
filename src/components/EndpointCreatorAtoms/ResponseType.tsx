@@ -12,10 +12,7 @@ export const ResponseType = () => {
     <div className="space-y-2">
       <Label htmlFor="response-type">Resopnse Type</Label>
       <Select>
-        <SelectTrigger
-          id="response-type"
-          className="w-[500px]"
-        >
+        <SelectTrigger id="response-type">
           <SelectValue placeholder="Select response type" />
         </SelectTrigger>
         <SelectContent>

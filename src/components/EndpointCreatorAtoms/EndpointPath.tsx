@@ -6,7 +6,7 @@ export const EndpointPath = () => {
     <div className="space-y-2">
       <Label htmlFor="endpoint-path">Endpoint Path</Label>
       <Input
-        placeholder="[Your UUID]/api/..."
+        placeholder="/api/data"
         id="endpoint-path"
         className="w-[250px]"
       />
