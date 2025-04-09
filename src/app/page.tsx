@@ -1,7 +1,12 @@
 import { EndpointCreator } from "@/components/EndpointCreator";
 import { EndpointList } from "@/components/EndpointList";
 import { Header } from "@/components/Header";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 
 export default function page() {
   return (
@@ -12,7 +17,12 @@ export default function page() {
       {/* Contents */}
       <div className="flex gap-8">
         <Card>
-          <CardContent className="p-6">
+          <CardHeader>
+            <CardTitle className="text-2xl font-semibold">
+              Define API Endpoints
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
             <EndpointCreator />
           </CardContent>
         </Card>
