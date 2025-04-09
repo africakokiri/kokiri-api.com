@@ -12,7 +12,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { useFieldStore } from "@/libs/zustand/store";
+import {
+  useFieldStore,
+  useHttpStore,
+  useResponseTypeStore,
+  useResponsiveFieldStore
+} from "@/libs/zustand/store";
 
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -30,20 +35,33 @@ export const FIELD_TYPES = [
   "any[]"
 ] as const;
 
+export type FieldType = (typeof FIELD_TYPES)[number];
+
 export const ResponsiveFields = () => {
-  const [fieldName, setFieldName] = useState(""); // 필드 이름
-  const [fieldType, setFieldType] = useState("string"); // 필드 타입
-  const [customResponse, setCustomResponse] = useState(false); // Custom response 활성화 여부
-  const [successStatus, setSuccessStatus] = useState("200"); // 성공 Status code
-  const [errorStatus, setErrorStatus] = useState("400"); // 에러 Status code
+  // Custom response 활성화 여부
+  const [customResponse, setCustomResponse] = useState(false);
+  // 성공 Status code
+  const [successStatus, setSuccessStatus] = useState("200");
+  // 에러 Status code
+  const [errorStatus, setErrorStatus] = useState("400");
+  // 성공 Response
   const [successResponse, setSuccessResponse] = useState(
     '{\n  "success": true,\n  "data": {}\n}'
-  ); // 성공 Response
+  );
+  // 에러 Response
   const [errorResponse, setErrorResponse] = useState(
     '{\n  "error": "An error occurred"\n}'
-  ); // 에러 Response
+  );
 
+  // 필드 추가
   const { addedFields, addField } = useFieldStore();
+  // 필드 이름, 필드 타입
+  const { fieldName, fieldType, setFieldName, setFieldType } =
+    useResponsiveFieldStore();
+  // Endpoint path, HTTP Method
+  const { endpointPath, httpMethod } = useHttpStore();
+  // Response type
+  const { responseType } = useResponseTypeStore();
 
   useEffect(() => {
     console.log(addedFields);
@@ -139,12 +157,22 @@ export const ResponsiveFields = () => {
           <Button
             type="button"
             size="icon"
-            onClick={() => addField()}
+            onClick={() =>
+              addField({
+                endpointPath,
+                httpMethod,
+                responseType,
+                fieldName,
+                fieldType
+              })
+            }
           >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
       )}
+
+      {}
     </div>
   );
 };

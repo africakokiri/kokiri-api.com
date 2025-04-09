@@ -8,8 +8,9 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { SelectItem } from "@/components/ui/select";
+import { useHttpStore } from "@/libs/zustand/store";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const HTTP_METHODS = [
   "GET",
@@ -19,8 +20,18 @@ export const HTTP_METHODS = [
   "PATCH"
 ] as const;
 
+export type HttpMethods = (typeof HTTP_METHODS)[number];
+
 export const HttpMethod = () => {
   const [method, setMethod] = useState("GET");
+
+  const { setHttpMethod } = useHttpStore();
+
+  useEffect(() => {
+    setHttpMethod(method as HttpMethods);
+
+    // eslint-disable-next-line
+  }, [method]);
 
   return (
     <div>

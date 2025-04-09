@@ -1,18 +1,16 @@
-import { type HTTP_METHODS } from "@/components/EndpointCreator/HttpMethod";
-import { type FIELD_TYPES } from "@/components/EndpointCreator/ResponsiveFields";
+import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
+import { type FieldType } from "@/components/EndpointCreator/ResponsiveFields";
 
 import { create } from "zustand";
 
-type HttpMethod = (typeof HTTP_METHODS)[number];
-type FieldType = (typeof FIELD_TYPES)[number];
 type ResponseType = "Object" | "Array" | "Primitive";
 
 interface HttpStore {
   endpointPath: string;
-  httpMethod: HttpMethod;
+  httpMethod: HttpMethods;
 
   setEndPointPath: (endpointPath: string) => void;
-  setHttpMethod: (httpMethod: HttpMethod) => void;
+  setHttpMethod: (httpMethod: HttpMethods) => void;
 }
 
 export const useHttpStore = create<HttpStore>((set) => ({
@@ -70,31 +68,23 @@ export const useResponsiveFieldStore = create<ResponsiveFieldStore>(
 
 type Fields = {
   endpointPath: string;
-  httpMethod: HttpMethod;
+  httpMethod: HttpMethods;
   responseType: ResponseType;
   fieldName: string;
   fieldType: FieldType;
 };
 
 interface AddedEndpointsStore {
-  addedFields: Fields[];
+  addedFields?: Fields[];
 
   addField: (field: Fields) => void;
 }
 
 export const useFieldStore = create<AddedEndpointsStore>((set) => ({
-  addedFields: [
-    {
-      endpointPath: "",
-      httpMethod: "GET",
-      responseType: "Object",
-      fieldName: "",
-      fieldType: "string"
-    }
-  ],
+  addedFields: [],
 
   addField: (field) =>
     set((state) => ({
-      addedFields: [...state.addedFields, field]
+      addedFields: [...state.addedFields!, field]
     }))
 }));

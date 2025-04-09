@@ -1,3 +1,5 @@
+"use client";
+
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -6,12 +8,18 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { useResponseTypeStore } from "@/libs/zustand/store";
 
 export const ResponseType = () => {
+  const { responseType, setResponseType } = useResponseTypeStore();
+
   return (
     <div className="space-y-2">
       <Label htmlFor="response-type">Resopnse Type</Label>
-      <Select>
+      <Select
+        value={responseType}
+        onValueChange={setResponseType}
+      >
         <SelectTrigger id="response-type">
           <SelectValue placeholder="Select response type" />
         </SelectTrigger>
