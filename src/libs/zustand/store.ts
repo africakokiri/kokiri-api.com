@@ -83,33 +83,17 @@ type Fields = {
 };
 
 interface AddedEndpointsStore {
-  addedFields?: Fields[];
+  endpoints: Fields[];
 
-  addField: (field: Fields) => void;
+  addEndpoint: (field: Fields) => void;
 }
 
 // Define API Endpoints 전체
-export const useFieldStore = create<AddedEndpointsStore>((set) => ({
-  addedFields: [],
-
-  addField: (field) =>
-    set((state) => ({
-      addedFields: [...state.addedFields!, field]
-    }))
-}));
-
-interface EndpointStore {
-  endpoints?: Fields[];
-
-  addEndpoint: (endpoints: Fields) => void;
-}
-
-// Endpoints 전체
-export const useEndpointStore = create<EndpointStore>((set) => ({
+export const useEndpointStore = create<AddedEndpointsStore>((set) => ({
   endpoints: [],
 
-  addEndpoint: (endpoints) =>
+  addEndpoint: (field) =>
     set((state) => ({
-      endpoints: [...state.endpoints!, endpoints]
+      endpoints: [...state.endpoints, field]
     }))
 }));

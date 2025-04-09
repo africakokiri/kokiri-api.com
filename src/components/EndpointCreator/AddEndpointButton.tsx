@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  useFieldStore,
+  useEndpointStore,
   useHttpStore,
   useResponseStore,
   useSuccessOrErrorStore
@@ -16,7 +16,7 @@ export const AddEndpointButton = () => {
   const { endpointPath, httpMethod } = useHttpStore();
   const { successStatus, errorStatus } = useSuccessOrErrorStore();
   const { successResponse, errorResponse } = useResponseStore();
-  const { addField } = useFieldStore();
+  const { addEndpoint } = useEndpointStore();
 
   useEffect(() => {
     if (!endpointPath || endpointPath[0] !== "/") {
@@ -31,7 +31,7 @@ export const AddEndpointButton = () => {
       disabled={pathStartWordAlert}
       className="w-full"
       onClick={() =>
-        addField({
+        addEndpoint({
           endpointPath,
           httpMethod,
           successStatus,
