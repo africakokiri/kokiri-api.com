@@ -55,7 +55,14 @@ hover:text-secondary`,
 };
 
 export const EndpointList = () => {
-  const { endpoints } = useEndpointStore();
+  const { endpoints, removeEndpoint } = useEndpointStore();
+
+  const handleRemoveButton = (
+    endpointPath: string,
+    httpMethod: string
+  ) => {
+    removeEndpoint(endpointPath, httpMethod);
+  };
 
   return (
     <Card>
@@ -97,10 +104,21 @@ font-semibold"
                   <span className="text-xs">
                     Status: {successStatus}(Success) / {errorStatus}(Error)
                   </span>
-                  <CopyButton
-                    key={index}
-                    textToCopy={endpointPath}
-                  />
+                  <div className="flex gap-4">
+                    <CopyButton
+                      key={index}
+                      textToCopy={endpointPath}
+                    />
+                    <Badge
+                      className="cursor-pointer bg-destructive
+hover:bg-red-400"
+                      onClick={() =>
+                        handleRemoveButton(endpointPath, httpMethod)
+                      }
+                    >
+                      Remove
+                    </Badge>
+                  </div>
                 </div>
               </div>
             )

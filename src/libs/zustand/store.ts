@@ -86,6 +86,7 @@ interface AddedEndpointsStore {
   endpoints: Fields[];
 
   addEndpoint: (field: Fields) => void;
+  removeEndpoint: (endpointPath: string, httpMethod: string) => void;
 }
 
 // Define API Endpoints 전체
@@ -95,5 +96,13 @@ export const useEndpointStore = create<AddedEndpointsStore>((set) => ({
   addEndpoint: (field) =>
     set((state) => ({
       endpoints: [...state.endpoints, field]
+    })),
+  removeEndpoint: (endpointPath, httpMethod) =>
+    set((state) => ({
+      endpoints: state.endpoints.filter(
+        (endpoint) =>
+          endpoint.endpointPath !== endpointPath ||
+          endpoint.httpMethod !== httpMethod
+      )
     }))
 }));
