@@ -1,4 +1,8 @@
-import { EndpointCreator } from "@/components/EndpointCreator";
+import { AddEndpointButton } from "@/components/EndpointCreator/AddEndpointButton";
+import { EndpointPath } from "@/components/EndpointCreator/EndpointPath";
+import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
+import { ResponseType } from "@/components/EndpointCreator/ResponseType";
+import { ResponsiveFields } from "@/components/EndpointCreator/ResponsiveFields";
 import { EndpointList } from "@/components/EndpointList";
 import { Header } from "@/components/Header";
 import {
@@ -23,7 +27,17 @@ export default function page() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <EndpointCreator />
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <EndpointPath />
+                <HttpMethod />
+              </div>
+
+              <ResponseType />
+              <ResponsiveFields />
+
+              <AddEndpointButton />
+            </div>
           </CardContent>
         </Card>
 
