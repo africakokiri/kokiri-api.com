@@ -14,12 +14,12 @@ import {
 
 export default function page() {
   return (
-    <div className="space-y-8 p-8">
+    <div className="w-screen space-y-8 p-8">
       {/* Header */}
       <Header />
 
       {/* Contents */}
-      <div className="flex gap-8">
+      <div className="flex gap-8 *:w-1/2">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold">
@@ -28,7 +28,7 @@ export default function page() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex gap-4">
+              <div className="flex gap-4 *:w-full *:space-y-2">
                 <EndpointPath />
                 <HttpMethod />
               </div>
@@ -41,11 +41,7 @@ export default function page() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
-            <EndpointList />
-          </CardContent>
-        </Card>
+        <EndpointList />
       </div>
     </div>
   );

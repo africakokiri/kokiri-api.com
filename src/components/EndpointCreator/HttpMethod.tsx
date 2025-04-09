@@ -17,16 +17,13 @@ export const HttpMethod = () => {
   const [method, setMethod] = useState("GET");
 
   return (
-    <div className="space-y-2">
+    <div>
       <Label htmlFor="http-method">HTTP Method</Label>
       <Select
         value={method}
         onValueChange={setMethod}
       >
-        <SelectTrigger
-          id="http-method"
-          className="w-[250px]"
-        >
+        <SelectTrigger id="http-method">
           <SelectValue placeholder="Select Method" />
         </SelectTrigger>
         <SelectContent>
