@@ -1,9 +1,6 @@
 import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
-import { type FieldType } from "@/components/EndpointCreator/ResponsiveFields";
 
 import { create } from "zustand";
-
-type ResponseType = "Object" | "Array" | "Primitive";
 
 interface HttpStore {
   endpointPath: string;
@@ -28,12 +25,32 @@ export const useHttpStore = create<HttpStore>((set) => ({
     }))
 }));
 
+interface ResponseStore {
+  successResponse?: string[];
+  errorResponse?: string[];
+
+  addSuccessResponse: (successResponse: string) => void;
+  addErrorResponsve: (errorResponse: string) => void;
+}
+
+// Response 전체
+export const useResponseStore = create<ResponseStore>((set) => ({
+  successResponse: [],
+  errorResponse: [],
+
+  addSuccessResponse: (successResponse) =>
+    set((state) => ({
+      successResponse: [...state.successResponse!, successResponse]
+    })),
+  addErrorResponsve: (errorResponse) =>
+    set((state) => ({
+      errorResponse: [...state.errorResponse!, errorResponse]
+    }))
+}));
+
 type Fields = {
   endpointPath: string;
   httpMethod: HttpMethods;
-  responseType: ResponseType;
-  fieldName: string;
-  fieldType: FieldType;
 };
 
 interface AddedEndpointsStore {
@@ -42,7 +59,7 @@ interface AddedEndpointsStore {
   addField: (field: Fields) => void;
 }
 
-// Field 전체
+// Define API Endpoints 전체
 export const useFieldStore = create<AddedEndpointsStore>((set) => ({
   addedFields: [],
 
