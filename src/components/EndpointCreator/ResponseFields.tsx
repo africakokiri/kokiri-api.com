@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,6 +13,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 const FIELD_TYPES = [
@@ -127,6 +129,12 @@ export const ResponsiveFields = () => {
               })}
             </SelectContent>
           </Select>
+          <Button
+            type="button"
+            size="icon"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>
