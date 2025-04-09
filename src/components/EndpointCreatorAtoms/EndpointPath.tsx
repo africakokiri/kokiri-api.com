@@ -8,6 +8,7 @@ export const EndpointPath = () => {
       <Input
         placeholder="[Your UUID]/api/..."
         id="endpoint-path"
+        className="w-[250px]"
       />
     </div>
   );
