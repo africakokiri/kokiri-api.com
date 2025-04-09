@@ -11,7 +11,13 @@ import { SelectItem } from "@/components/ui/select";
 
 import { useState } from "react";
 
-const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"];
+export const HTTP_METHODS = [
+  "GET",
+  "POST",
+  "PUT",
+  "DELETE",
+  "PATCH"
+] as const;
 
 export const HttpMethod = () => {
   const [method, setMethod] = useState("GET");

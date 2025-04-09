@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-const FIELD_TYPES = [
+export const FIELD_TYPES = [
   "string",
   "number",
   "boolean",
@@ -27,7 +27,7 @@ const FIELD_TYPES = [
   "boolean[]",
   "object[]",
   "any[]"
-];
+] as const;
 
 export const ResponsiveFields = () => {
   const [fieldName, setFieldName] = useState(""); // 필드 이름
