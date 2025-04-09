@@ -67,3 +67,36 @@ export const useResponsiveFieldStore = create<ResponsiveFieldStore>(
       }))
   })
 );
+
+type Fields = {
+  endpointPath: string;
+  httpMethod: HttpMethod;
+  responseType: ResponseType;
+  fieldName: string;
+  fieldType: FieldType;
+};
+
+interface AddedEndpointsStore {
+  addedFields: Fields[];
+
+  addField: (field: Fields) => void;
+}
+
+export const useAddedEndpointsStore = create<AddedEndpointsStore>(
+  (set) => ({
+    addedFields: [
+      {
+        endpointPath: "",
+        httpMethod: "GET",
+        responseType: "Object",
+        fieldName: "",
+        fieldType: "string"
+      }
+    ],
+
+    addField: (field) =>
+      set((state) => ({
+        addedFields: [...state.addedFields, field]
+      }))
+  })
+);
