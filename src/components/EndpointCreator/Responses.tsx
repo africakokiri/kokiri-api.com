@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle
-} from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/libs/shadcn/utils";

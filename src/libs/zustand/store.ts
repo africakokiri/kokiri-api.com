@@ -76,6 +76,10 @@ export const useResponseStore = create<ResponseStore>((set) => ({
 type Fields = {
   endpointPath: string;
   httpMethod: HttpMethods;
+  successStatus: string;
+  errorStatus: string;
+  successResponse: string;
+  errorResponse: string;
 };
 
 interface AddedEndpointsStore {
