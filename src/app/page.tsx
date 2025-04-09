@@ -38,7 +38,7 @@ export default function page() {
                 <SuccessOrErrorStatus status="Error" />
               </div>
 
-              <div>
+              <div className="space-y-4">
                 <Responses status="Success" />
                 <Responses status="Error" />
               </div>

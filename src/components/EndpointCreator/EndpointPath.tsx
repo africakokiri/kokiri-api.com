@@ -32,7 +32,7 @@ export const EndpointPath = () => {
         id="endpoint-path"
         className={cn(
           "w-full",
-          pathStartWordAlert && "border-[1px] border-red-500"
+          pathStartWordAlert && "border-[1px] border-red-500 !ring-red-500"
         )}
         value={endpointPath}
         onChange={(e) => setEndPointPath(e.target.value)}
