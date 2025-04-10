@@ -2,8 +2,8 @@
 
 import { useAppInitializerStore } from "@/libs/zustand/store";
 
-import { nanoid } from "nanoid";
 import { useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const AppInitializer = () => {
   const { setUserId } = useAppInitializerStore();
@@ -12,7 +12,7 @@ const AppInitializer = () => {
     const storedId = localStorage.getItem("userId");
 
     if (!storedId) {
-      const newId = nanoid();
+      const newId = uuidv4();
       setUserId(newId);
       localStorage.setItem("userId", newId);
     } else {
