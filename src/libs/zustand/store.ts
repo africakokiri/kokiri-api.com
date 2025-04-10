@@ -3,21 +3,19 @@ import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface AppInitializerStore {
+interface UuidStore {
   userId: string;
   setUserId: (id: string) => void;
 }
 
 // UUID 발급
-export const useAppInitializerStore = create<AppInitializerStore>(
-  (set) => ({
-    userId: "",
-    setUserId: (userId) => {
-      localStorage.setItem("userId", userId);
-      set({ userId });
-    }
-  })
-);
+export const useUuidStore = create<UuidStore>((set) => ({
+  userId: "",
+  setUserId: (userId) => {
+    localStorage.setItem("userId", userId);
+    set({ userId });
+  }
+}));
 
 interface HttpStore {
   endpointPath: string;

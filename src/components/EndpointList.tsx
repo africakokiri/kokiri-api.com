@@ -14,10 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import {
-  useAppInitializerStore,
-  useEndpointStore
-} from "@/libs/zustand/store";
+import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
 // HTTP Method에 따라 element bg-color 변경
@@ -38,7 +35,7 @@ const getMethodVariant = (method: string) => {
 
 export const EndpointList = () => {
   const { endpoints, removeEndpoint } = useEndpointStore();
-  const { userId } = useAppInitializerStore();
+  const { userId } = useUuidStore();
 
   // Remove 버튼 제어
   const handleRemoveButton = (

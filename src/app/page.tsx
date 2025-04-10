@@ -9,6 +9,7 @@ import { Header } from "@/components/Header";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
@@ -26,8 +27,10 @@ export default function page() {
             <CardTitle className="text-2xl font-semibold">
               Define API Endpoints
             </CardTitle>
+            <CardDescription>
+              <DisplayUUID />
+            </CardDescription>
           </CardHeader>
-          <DisplayUUID />
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4 *:w-full *:space-y-2">

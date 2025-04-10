@@ -15,11 +15,11 @@ import {
   insertEndpoint
 } from "@/libs/supabase/utils";
 import {
-  useAppInitializerStore,
   useEndpointStore,
   useHttpStore,
   useResponseStore,
-  useSuccessOrErrorStore
+  useSuccessOrErrorStore,
+  useUuidStore
 } from "@/libs/zustand/store";
 
 import { useEffect, useState } from "react";
@@ -28,7 +28,7 @@ export const AddEndpointButton = () => {
   const [isPathValid, setIsPathValid] = useState(false);
   const [ieEndpointPathExist, setIsEndpointPathExist] = useState(false);
 
-  const { userId } = useAppInitializerStore();
+  const { userId } = useUuidStore();
   const { endpointPath, httpMethod } = useHttpStore();
   const { successStatus, errorStatus } = useSuccessOrErrorStore();
   const {
