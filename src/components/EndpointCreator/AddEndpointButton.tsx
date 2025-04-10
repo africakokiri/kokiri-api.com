@@ -68,25 +68,27 @@ export const AddEndpointButton = () => {
       <Button
         disabled={pathStartWordAlert}
         className="w-full"
-        onClick={() => {
-          endpoints.forEach(async (endpoint) => {
-            if (endpoint.endpointPath === endpointPath) {
-              setIsEndpointPathExist(true);
-            } else {
-              setIsEndpointPathExist(false);
+        onClick={async () => {
+          const isExist = endpoints.some(
+            (endpoint) => endpoint.endpointPath === endpointPath
+          );
 
-              addEndpoint({
-                endpointPath,
-                httpMethod,
-                successStatus,
-                errorStatus,
-                successResponse,
-                errorResponse
-              });
+          if (!isExist) {
+            setIsEndpointPathExist(false);
 
-              await insertData();
-            }
-          });
+            addEndpoint({
+              endpointPath,
+              httpMethod,
+              successStatus,
+              errorStatus,
+              successResponse,
+              errorResponse
+            });
+
+            await insertData();
+          } else {
+            setIsEndpointPathExist(true);
+          }
         }}
       >
         Add Endpoint
