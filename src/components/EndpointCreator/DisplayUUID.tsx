@@ -60,9 +60,9 @@ dark:border-destructive [&>svg]:text-destructive"
                 somewhere safe.
               </p>
               <p className="font-bold underline underline-offset-2">
-                This message is only shown when you visit this page for the
-                first time and will not appear again unless the UUID stored
-                in Local Storage is deleted.
+                You’ll only see this message the first time you visit. It
+                won’t appear again unless the UUID saved in your browser’s
+                Local Storage has been deleted.
               </p>
             </div>
           </div>
