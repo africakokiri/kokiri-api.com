@@ -10,7 +10,10 @@ import {
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { insertEndpoint } from "@/libs/supabase/utils";
+import {
+  checkIsEndpointExist,
+  insertEndpoint
+} from "@/libs/supabase/utils";
 import {
   useAppInitializerStore,
   useEndpointStore,
@@ -49,7 +52,11 @@ export const AddEndpointButton = () => {
             (endpoint) => endpoint.endpointPath === endpointPath
           );
 
-          if (!isExist) {
+          // DB에 endpointPath가 존재하지 않으면 insert
+          if (
+            !isExist &&
+            !(await checkIsEndpointExist(userId, endpointPath))
+          ) {
             setIsEndpointPathExist(false);
 
             // Defined Endpoints에 엔드포인트 렌더링
@@ -62,7 +69,7 @@ export const AddEndpointButton = () => {
               errorResponse
             });
 
-            // Supabaes에 엔드포인트 insert
+            // DB에 엔드포인트 insert
             await insertEndpoint(userId, {
               endpointPath,
               httpMethod,
