@@ -10,7 +10,7 @@ import {
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/libs/supabase/clientClient";
+import { insertEndpoint } from "@/libs/supabase/utils";
 import {
   useAppInitializerStore,
   useEndpointStore,
@@ -22,7 +22,7 @@ import {
 import { useEffect, useState } from "react";
 
 export const AddEndpointButton = () => {
-  const [pathStartWordAlert, setPathStartWordAlert] = useState(false);
+  const [isPathValid, setIsPathValid] = useState(false);
   const [ieEndpointPathExist, setIsEndpointPathExist] = useState(false);
 
   const { userId } = useAppInitializerStore();
@@ -31,42 +31,18 @@ export const AddEndpointButton = () => {
   const { successResponse, errorResponse } = useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
 
+  // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
-    if (!endpointPath || !endpointPath.startsWith("/api/")) {
-      setPathStartWordAlert(true);
-    } else {
-      setPathStartWordAlert(false);
-    }
+    const isEmpty = endpointPath === "";
+    const isInvalid = !endpointPath.startsWith("/api/");
+
+    setIsPathValid(!isEmpty && isInvalid);
   }, [endpointPath]);
-
-  const insertData = async () => {
-    try {
-      const supabase = createClient();
-
-      if (!userId) throw new Error("nanoId 없음");
-
-      const payload = {
-        nanoid: userId,
-        path: endpointPath,
-        method: httpMethod,
-        status_success: successStatus,
-        status_error: errorStatus,
-        response_success: successResponse,
-        response_error: errorResponse
-      };
-
-      const { error } = await supabase.from("endpoints").insert(payload);
-
-      if (error) throw new Error(error.message);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <>
       <Button
-        disabled={pathStartWordAlert}
+        disabled={isPathValid}
         className="w-full"
         onClick={async () => {
           const isExist = endpoints.some(
@@ -76,6 +52,7 @@ export const AddEndpointButton = () => {
           if (!isExist) {
             setIsEndpointPathExist(false);
 
+            // Defined Endpoints에 엔드포인트 렌더링
             addEndpoint({
               endpointPath,
               httpMethod,
@@ -85,7 +62,15 @@ export const AddEndpointButton = () => {
               errorResponse
             });
 
-            await insertData();
+            // Supabaes에 엔드포인트 insert
+            await insertEndpoint(userId, {
+              endpointPath,
+              httpMethod,
+              successStatus,
+              errorStatus,
+              successResponse,
+              errorResponse
+            });
           } else {
             setIsEndpointPathExist(true);
           }

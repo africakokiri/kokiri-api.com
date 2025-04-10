@@ -89,7 +89,7 @@ export const useResponseStore = create<ResponseStore>((set) => ({
     }))
 }));
 
-type Fields = {
+export type Fields = {
   endpointPath: string;
   httpMethod: HttpMethods;
   successStatus: string;
