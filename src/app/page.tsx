@@ -19,7 +19,7 @@ export default function page() {
       <Header />
 
       {/* Contents */}
-      <div className="flex gap-8 *:w-1/2">
+      <div className="flex items-start gap-8 *:w-1/2">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold">

@@ -68,7 +68,7 @@ export const EndpointList = () => {
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="mb-6 h-[808px] space-y-4 overflow-y-scroll">
         {endpoints.map(
           (
             {
@@ -152,7 +152,7 @@ whitespace-pre-wrap text-xs"
                       <div className="flex items-center gap-2">
                         <Badge
                           variant="destructive"
-                          className="rounded-full"
+                          className="rounded-full hover:bg-destructive"
                         >
                           Status: {errorStatus}
                         </Badge>
