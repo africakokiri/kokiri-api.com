@@ -13,7 +13,7 @@ export const EndpointPath = () => {
   const { endpointPath, setEndPointPath } = useHttpStore();
 
   useEffect(() => {
-    if (!endpointPath || endpointPath[0] !== "/") {
+    if (!endpointPath || !endpointPath.startsWith("/api/")) {
       setPathStartWordAlert(true);
     } else {
       setPathStartWordAlert(false);
@@ -40,7 +40,7 @@ export const EndpointPath = () => {
 
       {pathStartWordAlert && (
         <p className="text-xs text-red-500">
-          Path must start with / and not contain spaces
+          Path must start with /api/ and not contain spaces
         </p>
       )}
     </div>

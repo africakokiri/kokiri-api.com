@@ -22,7 +22,7 @@ export const AddEndpointButton = () => {
   const { addEndpoint } = useEndpointStore();
 
   useEffect(() => {
-    if (!endpointPath || endpointPath[0] !== "/") {
+    if (!endpointPath || !endpointPath.startsWith("/api/")) {
       setPathStartWordAlert(true);
     } else {
       setPathStartWordAlert(false);
