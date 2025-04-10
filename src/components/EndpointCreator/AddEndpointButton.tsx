@@ -31,16 +31,29 @@ export const AddEndpointButton = () => {
   const { userId } = useAppInitializerStore();
   const { endpointPath, httpMethod } = useHttpStore();
   const { successStatus, errorStatus } = useSuccessOrErrorStore();
-  const { successResponse, errorResponse } = useResponseStore();
+  const {
+    successResponse,
+    errorResponse,
+    isResponsesValid,
+    setResponsesValidation
+  } = useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
     const isValid =
-      endpointPath !== "" && endpointPath.startsWith("/api/");
+      endpointPath !== "" &&
+      endpointPath.startsWith("/api/") &&
+      isResponsesValid;
 
     setIsPathValid(isValid);
-  }, [endpointPath]);
+  }, [endpointPath, isResponsesValid]);
+
+  useEffect(() => {
+    setResponsesValidation(successResponse, errorResponse);
+
+    // eslint-disable-next-line
+  }, [successResponse, errorResponse]);
 
   return (
     <>
