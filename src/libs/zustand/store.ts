@@ -8,6 +8,7 @@ interface AppInitializerStore {
   setUserId: (id: string) => void;
 }
 
+// nanoId 발급
 export const useAppInitializerStore = create<AppInitializerStore>(
   (set) => ({
     userId: "",
@@ -49,6 +50,7 @@ interface SuccessOrErrorStore {
   setErrorStatus: (errorStatus: string) => void;
 }
 
+// success, error status code
 export const useSuccessOrErrorStore = create<SuccessOrErrorStore>(
   (set) => ({
     successStatus: "200",
@@ -68,25 +70,41 @@ export const useSuccessOrErrorStore = create<SuccessOrErrorStore>(
 interface ResponseStore {
   successResponse: string;
   errorResponse: string;
+  isResponsesValid: boolean;
 
   setSuccessResponse: (successResponse: string) => void;
   setErrorResponse: (errorResponse: string) => void;
+  setResponsesValidation: (
+    successResponse: string,
+    errorResponse: string
+  ) => void;
 }
 
 // Response 전체
 export const useResponseStore = create<ResponseStore>((set) => ({
   successResponse: '{\n  "data": {}\n}',
   errorResponse: '{\n  "error": "An error occurred"\n}',
+  isResponsesValid: true,
 
   setSuccessResponse: (successResponse) =>
     set(() => ({
       successResponse
     })),
-
   setErrorResponse: (errorResponse) =>
     set(() => ({
       errorResponse
-    }))
+    })),
+  setResponsesValidation: (successResponse, errorResponse) =>
+    set(() => {
+      let isValid = true;
+      try {
+        JSON.parse(successResponse);
+        JSON.parse(errorResponse);
+      } catch {
+        isValid = false;
+      }
+      return { isResponsesValid: isValid };
+    })
 }));
 
 export type Fields = {
@@ -105,6 +123,7 @@ interface AddedEndpointsStore {
   removeEndpoint: (endpointPath: string, httpMethod: string) => void;
 }
 
+// 엔드포인트 전체 관리
 export const useEndpointStore = create<AddedEndpointsStore>()(
   persist(
     (set) => ({
