@@ -37,7 +37,7 @@ export const checkIsEndpointExist = async (
 
   const { data: existing, error } = await supabase
     .from("endpoints")
-    .select("*")
+    .select("id")
     .eq("path", endpointPath)
     .eq("nanoid", userId)
     .maybeSingle();
