@@ -14,6 +14,7 @@ import {
 } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
+// HTTP Method에 따라 element bg-color 변경
 const getMethodVariant = (method: string) => {
   switch (method.toUpperCase()) {
     case "GET":
@@ -33,11 +34,20 @@ export const EndpointList = () => {
   const { endpoints, removeEndpoint } = useEndpointStore();
   const { userId } = useAppInitializerStore();
 
+  // Remove 버튼 제어
   const handleRemoveButton = (
     endpointPath: string,
     httpMethod: string
   ) => {
     removeEndpoint(endpointPath, httpMethod);
+  };
+
+  // Prettify JSON
+  const prettifyResopnse = (response: string) => {
+    const parsedResponse = JSON.parse(response);
+    const prettyResponse = JSON.stringify(parsedResponse, null, 2);
+
+    return prettyResponse;
   };
 
   return (
@@ -66,20 +76,6 @@ export const EndpointList = () => {
               },
               index
             ) => {
-              const parsedSuccessResponse = JSON.parse(successResponse);
-              const prettySuccessResponse = JSON.stringify(
-                parsedSuccessResponse,
-                null,
-                2
-              );
-
-              const parsedErrorResponse = JSON.parse(errorResponse);
-              const prettyErrorResponse = JSON.stringify(
-                parsedErrorResponse,
-                null,
-                2
-              );
-
               return (
                 <div
                   key={`${httpMethod}-${endpointPath}-${index}`}
@@ -128,7 +124,7 @@ underline-offset-4"
                         className="max-h-60 overflow-auto
 whitespace-pre-wrap text-xs"
                       >
-                        {prettySuccessResponse}
+                        {prettifyResopnse(successResponse)}
                       </pre>
                     </div>
                   </div>
@@ -150,7 +146,7 @@ whitespace-pre-wrap text-xs"
                         className="max-h-60 overflow-auto
 whitespace-pre-wrap text-xs"
                       >
-                        {prettyErrorResponse}
+                        {prettifyResopnse(errorResponse)}
                       </pre>
                     </div>
                   </div>
