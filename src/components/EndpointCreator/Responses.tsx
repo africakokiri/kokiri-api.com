@@ -44,9 +44,10 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
   }, [response, status]);
 
   return (
-    <div>
-      <Label>{`${status} Response (JSON)`}</Label>
+    <div className="space-y-2">
+      <Label htmlFor={status}>{`${status} Response (JSON)`}</Label>
       <Textarea
+        id={status}
         value={response}
         onChange={(e) => setResponse(e.target.value)}
         className={cn(
