@@ -8,20 +8,16 @@ import { useHttpStore } from "@/libs/zustand/store";
 import { useEffect, useState } from "react";
 
 export const EndpointPath = () => {
-  const [pathStartWordAlert, setPathStartWordAlert] = useState(false);
+  const [isPathValid, setIsPathValid] = useState(false);
 
   const { endpointPath, setEndPointPath } = useHttpStore();
 
+  // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
-    if (!endpointPath || !endpointPath.startsWith("/api/")) {
-      setPathStartWordAlert(true);
-    } else {
-      setPathStartWordAlert(false);
-    }
+    const isEmpty = endpointPath === "";
+    const isInvalid = !endpointPath.startsWith("/api/");
 
-    if (!endpointPath) {
-      setPathStartWordAlert(false);
-    }
+    setIsPathValid(!isEmpty && isInvalid);
   }, [endpointPath]);
 
   return (
@@ -32,13 +28,13 @@ export const EndpointPath = () => {
         id="endpoint-path"
         className={cn(
           "w-full",
-          pathStartWordAlert && "border-[1px] border-red-500 !ring-red-500"
+          isPathValid && "border-[1px] border-red-500 !ring-red-500"
         )}
         value={endpointPath}
         onChange={(e) => setEndPointPath(e.target.value)}
       />
 
-      {pathStartWordAlert && (
+      {isPathValid && (
         <p className="text-xs text-red-500">
           Path must start with /api/ and not contain spaces
         </p>
