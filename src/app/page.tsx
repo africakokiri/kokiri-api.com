@@ -4,6 +4,7 @@ import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
 import { Responses } from "@/components/EndpointCreator/Responses";
 import { SuccessOrErrorStatus } from "@/components/EndpointCreator/SuccessOrErrorStatus";
 import { EndpointList } from "@/components/EndpointList";
+import { Header } from "@/components/Header";
 import {
   Card,
   CardContent,
@@ -15,10 +16,11 @@ export default function page() {
   return (
     <div className="w-screen space-y-8 p-8">
       {/* <Header /> */}
+      <Header />
 
       {/* Contents */}
-      <div className="relative *:w-[calc(50%-32px)]">
-        <Card className="fixed">
+      <div className="flex gap-8 *:w-1/2">
+        <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold">
               Define API Endpoints
@@ -46,9 +48,7 @@ export default function page() {
           </CardContent>
         </Card>
 
-        <div className="absolute right-0 pb-8">
-          <EndpointList />
-        </div>
+        <EndpointList />
       </div>
     </div>
   );

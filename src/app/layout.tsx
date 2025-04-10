@@ -4,10 +4,11 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "REST API Mock Server",
-  description: "Mock REST API server for frontend developers",
+  title: "Kokiri API",
+  description:
+    "Create a mock REST API. Customize response data for success and error cases.",
   icons: {
-    icon: "/icons/kokiri.svg"
+    icon: "/icons/elephant.png"
   }
 };
 
