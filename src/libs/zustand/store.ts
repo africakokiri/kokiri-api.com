@@ -8,13 +8,13 @@ interface AppInitializerStore {
   setUserId: (id: string) => void;
 }
 
-// nanoId 발급
+// UUID 발급
 export const useAppInitializerStore = create<AppInitializerStore>(
   (set) => ({
     userId: "",
-    setUserId: (id: string) => {
-      set(() => ({ userId: id }));
-      localStorage.setItem("userId", id);
+    setUserId: (userId) => {
+      localStorage.setItem("userId", userId);
+      set({ userId });
     }
   })
 );

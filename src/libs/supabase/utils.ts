@@ -7,10 +7,10 @@ import { type Fields } from "@/libs/zustand/store";
 export const insertEndpoint = async (userId: string, fields: Fields) => {
   const supabase = await createClient();
 
-  if (!userId) throw new Error("nanoId 없음");
+  if (!userId) throw new Error("UUID 없음");
 
   const payload = {
-    nanoid: userId,
+    uuid: userId,
     path: fields.endpointPath,
     method: fields.httpMethod,
     status_success: fields.successStatus,
@@ -39,7 +39,7 @@ export const checkIsEndpointExist = async (
     .from("endpoints")
     .select("id")
     .eq("path", endpointPath)
-    .eq("nanoid", userId)
+    .eq("uuid", userId)
     .maybeSingle();
 
   if (error) throw new Error(error.message);

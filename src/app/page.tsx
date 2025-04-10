@@ -1,4 +1,5 @@
 import { AddEndpointButton } from "@/components/EndpointCreator/AddEndpointButton";
+import { DisplayUUID } from "@/components/EndpointCreator/DisplayUUID";
 import { EndpointPath } from "@/components/EndpointCreator/EndpointPath";
 import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
 import { Responses } from "@/components/EndpointCreator/Responses";
@@ -26,6 +27,7 @@ export default function page() {
               Define API Endpoints
             </CardTitle>
           </CardHeader>
+          <DisplayUUID />
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4 *:w-full *:space-y-2">
