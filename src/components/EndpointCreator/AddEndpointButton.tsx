@@ -36,16 +36,16 @@ export const AddEndpointButton = () => {
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
-    const isEmpty = endpointPath === "";
-    const isInvalid = !endpointPath.startsWith("/api/");
+    const isValid =
+      endpointPath !== "" && endpointPath.startsWith("/api/");
 
-    setIsPathValid(!isEmpty && isInvalid);
+    setIsPathValid(isValid);
   }, [endpointPath]);
 
   return (
     <>
       <Button
-        disabled={isPathValid}
+        disabled={!isPathValid}
         className="w-full"
         onClick={async () => {
           const isExist = endpoints.some(
