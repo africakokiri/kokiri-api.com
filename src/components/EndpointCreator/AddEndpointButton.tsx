@@ -62,8 +62,12 @@ export const AddEndpointButton = () => {
         className="w-full"
         onClick={async () => {
           const isExist = endpoints.some(
-            (endpoint) => endpoint.endpointPath === endpointPath
+            (endpoint) =>
+              endpoint.endpointPath === endpointPath &&
+              endpoint.httpMethod === httpMethod
           );
+
+          console.log(isExist);
 
           // DB에 endpointPath가 존재하지 않으면 insert
           if (

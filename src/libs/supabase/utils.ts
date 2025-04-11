@@ -28,18 +28,19 @@ export const insertEndpoint = async (userId: string, fields: Fields) => {
 
 // DB에 endpointPath가 이미 존재하는지 여부 확인
 export const checkIsEndpointExist = async (
-  userId: string,
-  endpointPath: string
+  endpointPath: string,
+  httpMethod: string
 ) => {
   const supabase = await createClient();
 
-  if (!endpointPath) throw new Error("endpointPath 잘못됨");
+  if (!endpointPath || !httpMethod)
+    throw new Error("endpointPath 또는 httpMethod 잘못됨");
 
   const { data: existing, error } = await supabase
     .from("endpoints")
     .select("id")
     .eq("path", endpointPath)
-    .eq("uuid", userId)
+    .eq("method", httpMethod)
     .maybeSingle();
 
   if (error) throw new Error(error.message);
