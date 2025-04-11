@@ -68,8 +68,6 @@ export const AddEndpointButton = () => {
               endpoint.httpMethod === httpMethod
           );
 
-          console.log(isExist);
-
           // DB에 endpointPath가 존재하지 않으면 insert
           if (
             !isExist &&
@@ -81,8 +79,8 @@ export const AddEndpointButton = () => {
             addEndpoint({
               endpointPath,
               httpMethod,
-              successStatus,
-              errorStatus,
+              successStatus: successStatus === "" ? "200" : successStatus,
+              errorStatus: errorStatus === "" ? "400" : errorStatus,
               successResponse,
               errorResponse
             });

@@ -24,6 +24,7 @@ export const SuccessOrErrorStatus = ({
       <div className="relative flex items-center">
         <Input
           ref={inputRef}
+          placeholder={status === "Success" ? "200" : "400"}
           onChange={(e) =>
             status === "Success"
               ? setSuccessStatus(e.target.value)

@@ -307,11 +307,7 @@ underline-offset-4"
                           : endpointPath}
                       </span>
 
-                      {/* 실제 복사되는 텍스트 */}
-                      <span
-                        className="clip invisible absolute -m-px h-px w-px
-overflow-hidden"
-                      >
+                      <span className="sr-only">
                         {`kokiri-api.com/${isSlicedUuidValid ? slicedUuid : userId}${
                           isValidUUID(endpointPath.slice(0, 36))
                             ? endpointPath.slice(36, 72)
