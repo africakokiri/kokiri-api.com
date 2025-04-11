@@ -6,7 +6,19 @@ import {
   AccordionItem,
   AccordionTrigger
 } from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,9 +26,14 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { deleteEndpoint } from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
+
+import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 // HTTP Method에 따라 element bg-color 변경
 const getMethodVariant = (method: string) => {
@@ -35,6 +52,9 @@ const getMethodVariant = (method: string) => {
 };
 
 export const EndpointList = () => {
+  const [uuid, setUuid] = useState("");
+  const [uuidValidation, setUuidValidation] = useState(false);
+
   const { endpoints, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
 
@@ -59,11 +79,66 @@ export const EndpointList = () => {
     return prettyResponse;
   };
 
+  // UUID 유효성 확인
+  const isValidUUID = (uuid: string) => {
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(uuid);
+  };
+
+  useEffect(() => {
+    if (uuid && !isValidUUID(uuid)) {
+      setUuidValidation(false);
+    } else {
+      setUuidValidation(true);
+    }
+  }, [uuid]);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl font-semibold">
+        <CardTitle
+          className="flex items-center justify-between text-2xl
+font-semibold"
+        >
           Defined Endpoints
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button>Fetch endpoints by UUID</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Fetch endpoints by UUID
+                </AlertDialogTitle>
+                <AlertDialogDescription asChild>
+                  <div className="space-y-2">
+                    <Label htmlFor="input-uuid">
+                      Please enter your UUID
+                    </Label>
+                    <Input
+                      id="input-uuid"
+                      onChange={(e) => setUuid(e.target.value)}
+                    />
+                    {!uuidValidation && (
+                      <div
+                        className="mt-2 flex items-center gap-2 rounded-lg
+border border-destructive/50 px-4 py-3 text-sm text-destructive
+dark:border-destructive [&>svg]:text-destructive"
+                      >
+                        <AlertCircle className="h-4 w-4" />
+                        <p>Invalid UUID format</p>
+                      </div>
+                    )}
+                  </div>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardTitle>
         {endpoints && endpoints.length === 0 && (
           <CardDescription>

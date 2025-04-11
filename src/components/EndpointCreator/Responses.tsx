@@ -62,7 +62,7 @@ border-destructive/50 px-4 py-3 text-sm text-destructive
 dark:border-destructive [&>svg]:text-destructive"
         >
           <AlertCircle className="h-4 w-4" />
-          <p>Invalid JSON Format</p>
+          <p>Invalid JSON format</p>
         </div>
       )}
     </div>
