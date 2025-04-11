@@ -106,7 +106,7 @@ export const EndpointList = () => {
 
   return (
     <Card className="h-[732px]">
-      <CardHeader>
+      <CardHeader className="space-y-4">
         <CardTitle
           className="flex items-center justify-between text-2xl
 font-semibold"
