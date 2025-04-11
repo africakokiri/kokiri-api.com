@@ -242,7 +242,7 @@ gap-4"
                     </Badge>
                     <div
                       className={`${robotoMonoVar.className} rounded-md
-border bg-muted/50 px-2 py-1 text-sm`}
+border bg-muted/50 px-2 py-1 text-xs`}
                     >
                       <span
                         className="text-green-600 underline
