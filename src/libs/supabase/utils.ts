@@ -46,3 +46,23 @@ export const checkIsEndpointExist = async (
 
   return !!existing;
 };
+
+// DB에 있는 endpointPath 삭제
+export const deleteEndpoint = async (
+  userId: string,
+  endpointPath: string
+) => {
+  const supabase = await createClient();
+
+  if (!userId || !endpointPath) {
+    throw new Error("userID 또는 endpointPath 잘못됨");
+  }
+
+  const { error } = await supabase
+    .from("endpoints")
+    .delete()
+    .eq("uuid", userId)
+    .eq("path", endpointPath);
+
+  if (error) throw new Error(error.message);
+};
