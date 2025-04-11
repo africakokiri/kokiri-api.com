@@ -34,7 +34,7 @@ import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
 import { AlertCircle, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Endpoint = {
   id: number;
@@ -65,6 +65,8 @@ const getMethodVariant = (method: string) => {
 };
 
 export const EndpointList = () => {
+  const inputRef = useRef(null);
+
   const [uuid, setUuid] = useState("");
   const [uuidValidation, setUuidValidation] = useState(false);
   const [existEndpoint, setExistEndpoint] = useState(false);
@@ -131,6 +133,7 @@ font-semibold"
                     </Label>
                     <div className="relative flex items-center">
                       <Input
+                        ref={inputRef}
                         id="input-uuid"
                         value={uuid}
                         onChange={(e) => setUuid(e.target.value)}
@@ -142,7 +145,13 @@ font-semibold"
                         className="absolute right-1 top-1/2 h-7 w-7
 -translate-y-1/2 text-gray-500 hover:text-gray-900 dark:text-gray-400
 dark:hover:text-gray-100"
-                        onClick={() => setUuid("")}
+                        onClick={() => {
+                          setUuid("");
+
+                          if (inputRef.current) {
+                            (inputRef.current as HTMLInputElement).focus();
+                          }
+                        }}
                       >
                         <X className="h-4 w-4" />
                         <span className="sr-only">Clear</span>
