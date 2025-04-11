@@ -1,10 +1,16 @@
-import NextThemesProvider from "@/libs/next-themes/next-themes-provider";
 import "@/styles/globals.css";
 
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: ""
+  title: "Kokiri API",
+  description:
+    "Create a mock REST API. Customize response data for success and error cases.",
+  icons: {
+    icon: "/icons/elephant.png"
+  }
 };
 
 export default function RootLayout({
@@ -13,9 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className="h-screen w-screen antialiased">
-        <NextThemesProvider>{children}</NextThemesProvider>
+    <html lang="en">
+      <body className="antialiased">
+        {children}
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
