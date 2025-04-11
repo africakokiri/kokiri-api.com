@@ -30,7 +30,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/libs/shadcn/utils";
-import { deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
+import {
+  deleteEndpoint,
+  getEndpoints,
+  getUuid
+} from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
@@ -73,7 +77,7 @@ export const EndpointList = () => {
 
   const [uuid, setUuid] = useState("");
   const [uuidValidation, setUuidValidation] = useState(false);
-  const [existEndpoint, setExistEndpoint] = useState(false);
+  const [existEndpoint, setExistEndpoint] = useState([false, ""]);
 
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
@@ -104,6 +108,10 @@ export const EndpointList = () => {
       setUuidValidation(true);
     }
   }, [uuid]);
+
+  useEffect(() => {
+    console.log(existEndpoint);
+  }, [existEndpoint]);
 
   return (
     <Card className="h-[732px]">
@@ -170,7 +178,9 @@ dark:border-destructive [&>svg]:text-destructive"
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    setExistEndpoint(false);
+                    if (!uuid) return;
+
+                    setExistEndpoint([false]);
 
                     const dbEndpoints: Endpoint[] =
                       await getEndpoints(uuid);
@@ -186,11 +196,17 @@ dark:border-destructive [&>svg]:text-destructive"
                       )
                     );
 
-                    setExistEndpoint(allExist);
+                    const uuidInDB = await getUuid(uuid);
+
+                    if (!uuidInDB) {
+                      console.log(uuidInDB + "!");
+
+                      setExistEndpoint([true, "Endpoint not found."]);
+
+                      return;
+                    }
 
                     if (!allExist) {
-                      setExistEndpoint(false);
-
                       dbEndpoints.forEach((endpoint) => {
                         addEndpoint({
                           endpointPath: endpoint.uuid + endpoint.path,
@@ -203,7 +219,10 @@ dark:border-destructive [&>svg]:text-destructive"
                         });
                       });
                     } else {
-                      setExistEndpoint(true);
+                      setExistEndpoint([
+                        true,
+                        "The endpoint you are trying to add already exists in this field."
+                      ]);
                     }
                   }}
                 >
@@ -219,7 +238,8 @@ dark:border-destructive [&>svg]:text-destructive"
             No endpoints defined yet. Create one using the form.
           </CardDescription>
         )}
-        {existEndpoint && (
+
+        {existEndpoint[0] && (
           <div
             className="mt-2 flex items-center justify-between gap-2
 rounded-lg border border-destructive/50 px-4 py-3 text-sm text-destructive
@@ -227,11 +247,11 @@ dark:border-destructive [&>svg]:text-destructive"
           >
             <div className="flex items-center gap-2">
               <AlertCircle className="h-4 w-4" />
-              <p>The endpoint you are trying to add already exists.</p>
+              <p>{existEndpoint[1]}</p>
             </div>
 
             <X
-              onClick={() => setExistEndpoint(false)}
+              onClick={() => setExistEndpoint([false])}
               className="h-4 w-4 cursor-pointer"
             />
           </div>
