@@ -263,15 +263,14 @@ gap-4"
                       className={`${robotoMonoVar.className} rounded-md
 border bg-muted/50 px-2 py-1 text-xs`}
                     >
-                      <span aria-hidden="true">kokiri-api.com/</span>
+                      <span>kokiri-api.com/</span>
                       <span
                         className="font-semibold text-green-600 underline
 underline-offset-4"
-                        aria-hidden="true"
                       >
                         {isSlicedUuidValid ? slicedUuid : userId}
                       </span>
-                      <span aria-hidden="true">
+                      <span>
                         {isValidUUID(endpointPath.slice(0, 36))
                           ? endpointPath.slice(36, 72)
                           : endpointPath}
