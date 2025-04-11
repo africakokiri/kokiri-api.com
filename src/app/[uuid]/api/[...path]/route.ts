@@ -4,8 +4,9 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { uuid: string; path: string[] } }
+  props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
+  const params = await props.params;
   try {
     const supabase = await createClient();
 
