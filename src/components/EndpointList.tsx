@@ -68,8 +68,6 @@ export const EndpointList = () => {
   const [uuid, setUuid] = useState("");
   const [uuidValidation, setUuidValidation] = useState(false);
   const [existEndpoint, setExistEndpoint] = useState(false);
-  const [openExistEndpointModal, setOpenExistEndpointModal] =
-    useState(false);
 
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
@@ -83,7 +81,7 @@ export const EndpointList = () => {
     removeEndpoint(endpointPath, httpMethod);
 
     // DB에서 삭제
-    await deleteEndpoint(userId, endpointPath);
+    await deleteEndpoint(endpointPath);
   };
 
   // Prettify JSON
@@ -108,10 +106,6 @@ export const EndpointList = () => {
       setUuidValidation(true);
     }
   }, [uuid]);
-
-  useEffect(() => {
-    setOpenExistEndpointModal(true);
-  }, [existEndpoint]);
 
   return (
     <Card>
