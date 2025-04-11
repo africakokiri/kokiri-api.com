@@ -122,27 +122,20 @@ interface AddedEndpointsStore {
 }
 
 // 엔드포인트 전체 관리
-export const useEndpointStore = create<AddedEndpointsStore>()(
-  persist(
-    (set) => ({
-      endpoints: [],
+export const useEndpointStore = create<AddedEndpointsStore>()((set) => ({
+  endpoints: [],
 
-      addEndpoint: (field) =>
-        set((state) => ({
-          endpoints: [...state.endpoints, field]
-        })),
+  addEndpoint: (field) =>
+    set((state) => ({
+      endpoints: [...state.endpoints, field]
+    })),
 
-      removeEndpoint: (endpointPath, httpMethod) =>
-        set((state) => ({
-          endpoints: state.endpoints.filter(
-            (endpoint) =>
-              endpoint.endpointPath !== endpointPath ||
-              endpoint.httpMethod !== httpMethod
-          )
-        }))
-    }),
-    {
-      name: "endpoints"
-    }
-  )
-);
+  removeEndpoint: (endpointPath, httpMethod) =>
+    set((state) => ({
+      endpoints: state.endpoints.filter(
+        (endpoint) =>
+          endpoint.endpointPath !== endpointPath ||
+          endpoint.httpMethod !== httpMethod
+      )
+    }))
+}));

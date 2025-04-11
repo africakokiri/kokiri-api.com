@@ -28,8 +28,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { deleteEndpoint } from "@/libs/supabase/utils";
-import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
+import { deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
+import {
+  useEndpointStore,
+  useHttpStore,
+  useUuidStore
+} from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
 import { AlertCircle } from "lucide-react";
@@ -57,6 +61,7 @@ export const EndpointList = () => {
 
   const { endpoints, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
+  const { endpointPath, setEndPointPath } = useHttpStore();
 
   // Remove 버튼 제어
   const handleRemoveButton = async (
@@ -135,7 +140,9 @@ dark:border-destructive [&>svg]:text-destructive"
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogAction onClick={() => getEndpoints(userId)}>
+                  Continue
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
