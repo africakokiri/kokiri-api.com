@@ -16,44 +16,46 @@ import {
 
 export default function page() {
   return (
-    <div className="w-screen space-y-8 p-8">
-      {/* <Header /> */}
-      <Header />
+    <div className="flex w-screen justify-center p-8">
+      <div className="w-[1500px] space-y-8">
+        {/* <Header /> */}
+        <Header />
 
-      {/* Contents */}
-      <div className="flex items-start gap-8 *:w-1/2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl font-semibold">
-              Define API Endpoints
-            </CardTitle>
-            <CardDescription>
-              <DisplayUUID />
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex gap-4 *:w-full *:space-y-2">
-                <EndpointPath />
-                <HttpMethod />
-              </div>
-
-              <div className="flex gap-4 *:w-full *:space-y-2">
-                <SuccessOrErrorStatus status="Success" />
-                <SuccessOrErrorStatus status="Error" />
-              </div>
-
+        {/* Contents */}
+        <div className="flex items-start gap-8 *:w-1/2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl font-semibold">
+                Define API Endpoints
+              </CardTitle>
+              <CardDescription>
+                <DisplayUUID />
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
               <div className="space-y-4">
-                <Responses status="Success" />
-                <Responses status="Error" />
+                <div className="flex gap-4 *:w-full *:space-y-2">
+                  <EndpointPath />
+                  <HttpMethod />
+                </div>
+
+                <div className="flex gap-4 *:w-full *:space-y-2">
+                  <SuccessOrErrorStatus status="Success" />
+                  <SuccessOrErrorStatus status="Error" />
+                </div>
+
+                <div className="space-y-4">
+                  <Responses status="Success" />
+                  <Responses status="Error" />
+                </div>
+
+                <AddEndpointButton />
               </div>
+            </CardContent>
+          </Card>
 
-              <AddEndpointButton />
-            </div>
-          </CardContent>
-        </Card>
-
-        <EndpointList />
+          <EndpointList />
+        </div>
       </div>
     </div>
   );
