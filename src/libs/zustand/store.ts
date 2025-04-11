@@ -1,6 +1,7 @@
 import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface UuidStore {
   userId: string;
@@ -121,20 +122,25 @@ interface AddedEndpointsStore {
 }
 
 // 엔드포인트 전체 관리
-export const useEndpointStore = create<AddedEndpointsStore>()((set) => ({
-  endpoints: [],
-
-  addEndpoint: (field) =>
-    set((state) => ({
-      endpoints: [...state.endpoints, field]
-    })),
-
-  removeEndpoint: (endpointPath, httpMethod) =>
-    set((state) => ({
-      endpoints: state.endpoints.filter(
-        (endpoint) =>
-          endpoint.endpointPath !== endpointPath ||
-          endpoint.httpMethod !== httpMethod
-      )
-    }))
-}));
+export const useEndpointStore = create<AddedEndpointsStore>()(
+  persist(
+    (set) => ({
+      endpoints: [],
+      addEndpoint: (field) =>
+        set((state) => ({
+          endpoints: [...state.endpoints, field]
+        })),
+      removeEndpoint: (endpointPath, httpMethod) =>
+        set((state) => ({
+          endpoints: state.endpoints.filter(
+            (endpoint) =>
+              endpoint.endpointPath !== endpointPath ||
+              endpoint.httpMethod !== httpMethod
+          )
+        }))
+    }),
+    {
+      name: "endpoints"
+    }
+  )
+);

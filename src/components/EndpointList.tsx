@@ -36,6 +36,18 @@ import { robotoMonoVar } from "@/styles/fonts";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
+type Endpoint = {
+  id: number;
+  created_at: string;
+  path: string;
+  method: string;
+  status_success: string;
+  status_error: string;
+  response_success: string;
+  response_error: string;
+  uuid: string;
+};
+
 // HTTP Method에 따라 element bg-color 변경
 const getMethodVariant = (method: string) => {
   switch (method.toUpperCase()) {
@@ -55,6 +67,9 @@ const getMethodVariant = (method: string) => {
 export const EndpointList = () => {
   const [uuid, setUuid] = useState("");
   const [uuidValidation, setUuidValidation] = useState(false);
+  const [existEndpoint, setExistEndpoint] = useState(false);
+  const [openExistEndpointModal, setOpenExistEndpointModal] =
+    useState(false);
 
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
@@ -67,7 +82,6 @@ export const EndpointList = () => {
     // UI에서 삭제
     removeEndpoint(endpointPath, httpMethod);
 
-    console.log(endpointPath, userId);
     // DB에서 삭제
     await deleteEndpoint(userId, endpointPath);
   };
@@ -95,9 +109,13 @@ export const EndpointList = () => {
     }
   }, [uuid]);
 
+  useEffect(() => {
+    setOpenExistEndpointModal(true);
+  }, [existEndpoint]);
+
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="space-y-4">
         <CardTitle
           className="flex items-center justify-between text-2xl
 font-semibold"
@@ -138,32 +156,38 @@ dark:border-destructive [&>svg]:text-destructive"
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    type Endpoint = {
-                      id: number;
-                      created_at: string;
-                      path: string;
-                      method: string;
-                      status_success: string;
-                      status_error: string;
-                      response_success: string;
-                      response_error: string;
-                      uuid: string;
-                    };
-
                     const dbEndpoints: Endpoint[] =
                       await getEndpoints(uuid);
 
-                    dbEndpoints.forEach((endpoint) => {
-                      addEndpoint({
-                        endpointPath: endpoint.uuid + endpoint.path,
-                        httpMethod:
-                          endpoint.method as (typeof HTTP_METHODS)[number],
-                        successStatus: endpoint.status_success,
-                        errorStatus: endpoint.status_error,
-                        successResponse: endpoint.response_success,
-                        errorResponse: endpoint.response_error
+                    // 모든 DB 엔드포인트가 기존에 존재하는지 확인
+                    const allExist = dbEndpoints.every((incoming) =>
+                      endpoints.some(
+                        (existing) =>
+                          existing.endpointPath.slice(36) ===
+                            incoming.path &&
+                          existing.httpMethod === incoming.method
+                      )
+                    );
+
+                    setExistEndpoint(allExist);
+
+                    if (!allExist) {
+                      setExistEndpoint(false);
+
+                      dbEndpoints.forEach((endpoint) => {
+                        addEndpoint({
+                          endpointPath: endpoint.uuid + endpoint.path,
+                          httpMethod:
+                            endpoint.method as (typeof HTTP_METHODS)[number],
+                          successStatus: endpoint.status_success,
+                          errorStatus: endpoint.status_error,
+                          successResponse: endpoint.response_success,
+                          errorResponse: endpoint.response_error
+                        });
                       });
-                    });
+                    } else {
+                      setExistEndpoint(true);
+                    }
                   }}
                 >
                   Continue
@@ -172,10 +196,21 @@ dark:border-destructive [&>svg]:text-destructive"
             </AlertDialogContent>
           </AlertDialog>
         </CardTitle>
+
         {endpoints && endpoints.length === 0 && (
           <CardDescription>
             No endpoints defined yet. Create one using the form.
           </CardDescription>
+        )}
+        {existEndpoint && (
+          <div
+            className="mt-2 flex items-center gap-2 rounded-lg border
+border-destructive/50 px-4 py-3 text-sm text-destructive
+dark:border-destructive [&>svg]:text-destructive"
+          >
+            <AlertCircle className="h-4 w-4" />
+            <p>The endpoint you are trying to add already exists.</p>
+          </div>
         )}
       </CardHeader>
       <CardContent className="mb-6 h-[808px] space-y-4 overflow-y-scroll">
