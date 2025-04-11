@@ -34,7 +34,10 @@ import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
 import { AlertCircle, X } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
+
+const ReactJson = dynamic(() => import("react-json-view"), { ssr: false });
 
 type Endpoint = {
   id: number;
@@ -84,14 +87,6 @@ export const EndpointList = () => {
 
     // DB에서 삭제
     await deleteEndpoint(endpointPath);
-  };
-
-  // Prettify JSON
-  const prettifyResopnse = (response: string) => {
-    const parsedResponse = JSON.parse(response);
-    const prettyResponse = JSON.stringify(parsedResponse, null, 2);
-
-    return prettyResponse;
   };
 
   // UUID 유효성 확인
@@ -306,7 +301,12 @@ underline-offset-4"
                           className="max-h-60 overflow-auto
 whitespace-pre-wrap text-xs"
                         >
-                          {prettifyResopnse(successResponse)}
+                          <ReactJson
+                            src={JSON.parse(successResponse)}
+                            displayDataTypes={false}
+                            iconStyle="square"
+                            collapsed={2}
+                          />
                         </pre>
                       </div>
                     </AccordionContent>
@@ -337,7 +337,12 @@ whitespace-pre-wrap text-xs"
                           className="max-h-60 overflow-auto
 whitespace-pre-wrap text-xs"
                         >
-                          {prettifyResopnse(errorResponse)}
+                          <ReactJson
+                            src={JSON.parse(errorResponse)}
+                            displayDataTypes={false}
+                            iconStyle="square"
+                            collapsed={2}
+                          />
                         </pre>
                       </div>
                     </AccordionContent>
