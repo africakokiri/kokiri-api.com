@@ -1,3 +1,4 @@
-## TODO
+# [Kokiri API 🐘](https://www.kokiri-api.com/)
 
-- JSON 입력기 추가
+Create a mock REST API. Customize response data for success and error
+cases.
