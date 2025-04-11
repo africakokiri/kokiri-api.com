@@ -109,10 +109,6 @@ export const EndpointList = () => {
     }
   }, [uuid]);
 
-  useEffect(() => {
-    console.log(existEndpoint);
-  }, [existEndpoint]);
-
   return (
     <Card className="h-[732px]">
       <CardHeader className="space-y-4">
