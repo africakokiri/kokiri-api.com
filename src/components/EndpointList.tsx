@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/libs/shadcn/utils";
 import { deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
@@ -229,7 +230,12 @@ dark:border-destructive [&>svg]:text-destructive"
           </div>
         )}
       </CardHeader>
-      <CardContent className="h-[620px] space-y-4 overflow-y-scroll">
+      <CardContent
+        className={cn(
+          "h-[620px] space-y-4 overflow-y-scroll",
+          existEndpoint && "h-[562px]"
+        )}
+      >
         {endpoints.map(
           (
             {
