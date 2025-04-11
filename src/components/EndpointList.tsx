@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
+import { deleteEndpoint } from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
@@ -38,11 +39,16 @@ export const EndpointList = () => {
   const { userId } = useUuidStore();
 
   // Remove 버튼 제어
-  const handleRemoveButton = (
+  const handleRemoveButton = async (
     endpointPath: string,
     httpMethod: string
   ) => {
+    // UI에서 삭제
     removeEndpoint(endpointPath, httpMethod);
+
+    console.log(endpointPath, userId);
+    // DB에서 삭제
+    await deleteEndpoint(userId, endpointPath);
   };
 
   // Prettify JSON

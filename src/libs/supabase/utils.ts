@@ -61,8 +61,7 @@ export const deleteEndpoint = async (
   const { error } = await supabase
     .from("endpoints")
     .delete()
-    .eq("uuid", userId)
-    .eq("path", endpointPath);
+    .match({ uuid: userId, path: endpointPath });
 
   if (error) throw new Error(error.message);
 };
