@@ -1,18 +1,12 @@
 import { AddEndpointButton } from "@/components/EndpointCreator/AddEndpointButton";
-import { DisplayUUID } from "@/components/EndpointCreator/DisplayUUID";
+import { CardHeader } from "@/components/EndpointCreator/CardHeader";
 import { EndpointPath } from "@/components/EndpointCreator/EndpointPath";
 import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
 import { Responses } from "@/components/EndpointCreator/Responses";
 import { SuccessOrErrorStatus } from "@/components/EndpointCreator/SuccessOrErrorStatus";
 import { EndpointList } from "@/components/EndpointList";
 import { Header } from "@/components/Header";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function page() {
   return (
@@ -24,14 +18,7 @@ export default function page() {
         {/* Contents */}
         <div className="flex items-start gap-8 *:w-1/2">
           <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold">
-                Define API Endpoints
-              </CardTitle>
-              <CardDescription>
-                <DisplayUUID />
-              </CardDescription>
-            </CardHeader>
+            <CardHeader />
             <CardContent>
               <div className="space-y-4">
                 <div className="flex gap-4 *:w-full *:space-y-2">
