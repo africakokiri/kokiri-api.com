@@ -29,7 +29,7 @@ export const AddEndpointButton = () => {
   const [ieEndpointPathExist, setIsEndpointPathExist] = useState(false);
 
   const { userId } = useUuidStore();
-  const { endpointPath, httpMethod } = useHttpStore();
+  const { endpointPath, setEndPointPath, httpMethod } = useHttpStore();
   const { successStatus, errorStatus } = useSuccessOrErrorStore();
   const {
     successResponse,
@@ -38,6 +38,7 @@ export const AddEndpointButton = () => {
     setResponsesValidation
   } = useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
+  const { setSuccessResponse, setErrorResponse } = useResponseStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
@@ -62,7 +63,9 @@ export const AddEndpointButton = () => {
         className="w-full"
         onClick={async () => {
           const isExist = endpoints.some(
-            (endpoint) => endpoint.endpointPath === endpointPath
+            (endpoint) =>
+              endpoint.endpointPath === endpointPath &&
+              endpoint.httpMethod === httpMethod
           );
 
           // DB에 endpointPath가 존재하지 않으면 insert
@@ -76,8 +79,8 @@ export const AddEndpointButton = () => {
             addEndpoint({
               endpointPath,
               httpMethod,
-              successStatus,
-              errorStatus,
+              successStatus: successStatus === "" ? "200" : successStatus,
+              errorStatus: errorStatus === "" ? "400" : errorStatus,
               successResponse,
               errorResponse
             });
@@ -91,6 +94,10 @@ export const AddEndpointButton = () => {
               successResponse,
               errorResponse
             });
+
+            setEndPointPath("");
+            setSuccessResponse('{\n  "data": {}\n}');
+            setErrorResponse('{\n  "error": "An error occurred"\n}');
           } else {
             setIsEndpointPathExist(true);
           }

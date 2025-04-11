@@ -29,7 +29,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
+import { cn } from "@/libs/shadcn/utils";
+import {
+  deleteEndpoint,
+  getEndpoints,
+  getUuid
+} from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
@@ -72,7 +77,7 @@ export const EndpointList = () => {
 
   const [uuid, setUuid] = useState("");
   const [uuidValidation, setUuidValidation] = useState(false);
-  const [existEndpoint, setExistEndpoint] = useState(false);
+  const [existEndpoint, setExistEndpoint] = useState([false, ""]);
 
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
@@ -105,8 +110,8 @@ export const EndpointList = () => {
   }, [uuid]);
 
   return (
-    <Card className="h-[732px]">
-      <CardHeader>
+    <Card className="h-[840px]">
+      <CardHeader className="space-y-4">
         <CardTitle
           className="flex items-center justify-between text-2xl
 font-semibold"
@@ -169,6 +174,10 @@ dark:border-destructive [&>svg]:text-destructive"
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
+                    if (!uuid) return;
+
+                    setExistEndpoint([false]);
+
                     const dbEndpoints: Endpoint[] =
                       await getEndpoints(uuid);
 
@@ -183,11 +192,17 @@ dark:border-destructive [&>svg]:text-destructive"
                       )
                     );
 
-                    setExistEndpoint(allExist);
+                    const uuidInDB = await getUuid(uuid);
+
+                    if (!uuidInDB) {
+                      console.log(uuidInDB + "!");
+
+                      setExistEndpoint([true, "Endpoint not found."]);
+
+                      return;
+                    }
 
                     if (!allExist) {
-                      setExistEndpoint(false);
-
                       dbEndpoints.forEach((endpoint) => {
                         addEndpoint({
                           endpointPath: endpoint.uuid + endpoint.path,
@@ -200,7 +215,10 @@ dark:border-destructive [&>svg]:text-destructive"
                         });
                       });
                     } else {
-                      setExistEndpoint(true);
+                      setExistEndpoint([
+                        true,
+                        "The endpoint you are trying to add already exists in this field."
+                      ]);
                     }
                   }}
                 >
@@ -216,18 +234,31 @@ dark:border-destructive [&>svg]:text-destructive"
             No endpoints defined yet. Create one using the form.
           </CardDescription>
         )}
-        {existEndpoint && (
+
+        {existEndpoint[0] && (
           <div
-            className="mt-2 flex items-center gap-2 rounded-lg border
-border-destructive/50 px-4 py-3 text-sm text-destructive
+            className="mt-2 flex items-center justify-between gap-2
+rounded-lg border border-destructive/50 px-4 py-3 text-sm text-destructive
 dark:border-destructive [&>svg]:text-destructive"
           >
-            <AlertCircle className="h-4 w-4" />
-            <p>The endpoint you are trying to add already exists.</p>
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              <p>{existEndpoint[1]}</p>
+            </div>
+
+            <X
+              onClick={() => setExistEndpoint([false])}
+              className="h-4 w-4 cursor-pointer"
+            />
           </div>
         )}
       </CardHeader>
-      <CardContent className="h-[620px] space-y-4 overflow-y-scroll">
+      <CardContent
+        className={cn(
+          "h-[724px] space-y-4 overflow-y-scroll",
+          existEndpoint[0] && "h-[670px]"
+        )}
+      >
         {endpoints.map(
           (
             {
@@ -260,8 +291,8 @@ gap-4"
                       {httpMethod}
                     </Badge>
                     <div
-                      className={`${robotoMonoVar.className} rounded-md
-border bg-muted/50 px-2 py-1 text-xs`}
+                      className={`${robotoMonoVar.className} relative
+rounded-md border bg-muted/50 px-2 py-1 text-xs`}
                     >
                       <span>kokiri-api.com/</span>
                       <span
@@ -270,10 +301,35 @@ underline-offset-4"
                       >
                         {isSlicedUuidValid ? slicedUuid : userId}
                       </span>
+                      <span>
+                        {isValidUUID(endpointPath.slice(0, 36))
+                          ? endpointPath.slice(36, 72)
+                          : endpointPath}
+                      </span>
 
-                      {isValidUUID(endpointPath.slice(0, 36))
-                        ? endpointPath.slice(36, 72)
-                        : endpointPath}
+                      {/* ✅ 진짜 완벽한 hidden 복사 텍스트 */}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none"
+                        style={{
+                          position: "absolute",
+                          width: "1px",
+                          height: "1px",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          clip: "rect(0 0 0 0)",
+                          clipPath: "inset(50%)",
+                          border: 0,
+                          padding: 0,
+                          margin: 0
+                        }}
+                      >
+                        {`kokiri-api.com/${isSlicedUuidValid ? slicedUuid : userId}${
+                          isValidUUID(endpointPath.slice(0, 36))
+                            ? endpointPath.slice(36, 72)
+                            : endpointPath
+                        }`}
+                      </span>
                     </div>
                   </div>
                 </div>
