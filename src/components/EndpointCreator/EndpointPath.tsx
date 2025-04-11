@@ -57,6 +57,12 @@ dark:hover:text-gray-100"
           <span className="sr-only">Clear</span>
         </Button>
       </div>
+
+      {isPathValid && (
+        <p className="text-xs text-red-500">
+          Path must start with /api/ and not contain spaces
+        </p>
+      )}
     </div>
   );
 };
