@@ -65,3 +65,23 @@ export const deleteEndpoint = async (
 
   if (error) throw new Error(error.message);
 };
+
+// DB에 있는 endpoints 불러오기
+export const getEndpoints = async (userId: string) => {
+  const supabase = await createClient();
+
+  if (!userId) {
+    throw new Error("userId 잘못됨");
+  }
+
+  const { data, error } = await supabase
+    .from("endpoints")
+    .select("id")
+    .eq("uuid", userId);
+
+  if (error) throw new Error(error.message);
+
+  console.log(data);
+
+  return data;
+};
