@@ -263,8 +263,9 @@ gap-4"
                       className={`${robotoMonoVar.className} rounded-md
 border bg-muted/50 px-2 py-1 text-xs`}
                     >
+                      <span>kokiri-api.com/</span>
                       <span
-                        className="text-green-600 underline
+                        className="font-semibold text-green-600 underline
 underline-offset-4"
                       >
                         {isSlicedUuidValid ? slicedUuid : userId}
