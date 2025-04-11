@@ -68,9 +68,7 @@ export const deleteEndpoint = async (endpointPath: string) => {
 export const getEndpoints = async (userId: string) => {
   const supabase = await createClient();
 
-  if (!userId) {
-    throw new Error("userId 잘못됨");
-  }
+  if (!userId) throw new Error("userId 잘못됨");
 
   const { data, error } = await supabase
     .from("endpoints")
@@ -80,4 +78,20 @@ export const getEndpoints = async (userId: string) => {
   if (error) throw new Error(error.message);
 
   return data;
+};
+
+// DB에 해당 UUID가 존재하는지 호가인
+export const getUuid = async (uuid: string) => {
+  const supabase = await createClient();
+
+  if (!uuid) throw new Error("uuid 잘못됨");
+
+  const { data, error } = await supabase
+    .from("endpoints")
+    .select("*")
+    .eq("uuid", uuid);
+
+  if (error) throw new Error(error.message);
+
+  return data.length > 0 ? true : false;
 };
