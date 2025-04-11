@@ -6,10 +6,13 @@ export const Header = () => {
       <div className="flex items-center gap-2 text-4xl">
         <h1>Kokiri API 🐘</h1>
       </div>
-      <p>
-        Create a mock REST API. Customize response data for success and
-        error cases.
-      </p>
+      <div>
+        <p>
+          Create a mock REST API. Customize response data for success and
+          error cases.
+        </p>
+        <p>Contact: africakokiri@gmail.com</p>
+      </div>
     </header>
   );
 };
