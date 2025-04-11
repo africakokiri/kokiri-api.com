@@ -169,6 +169,8 @@ dark:border-destructive [&>svg]:text-destructive"
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
+                    setExistEndpoint(false);
+
                     const dbEndpoints: Endpoint[] =
                       await getEndpoints(uuid);
 
