@@ -263,17 +263,28 @@ gap-4"
                       className={`${robotoMonoVar.className} rounded-md
 border bg-muted/50 px-2 py-1 text-xs`}
                     >
-                      <span>kokiri-api.com/</span>
+                      <span aria-hidden="true">kokiri-api.com/</span>
                       <span
                         className="font-semibold text-green-600 underline
 underline-offset-4"
+                        aria-hidden="true"
                       >
                         {isSlicedUuidValid ? slicedUuid : userId}
                       </span>
+                      <span aria-hidden="true">
+                        {isValidUUID(endpointPath.slice(0, 36))
+                          ? endpointPath.slice(36, 72)
+                          : endpointPath}
+                      </span>
 
-                      {isValidUUID(endpointPath.slice(0, 36))
-                        ? endpointPath.slice(36, 72)
-                        : endpointPath}
+                      {/* 실제 복사되는 텍스트 */}
+                      <span className="sr-only">
+                        {`kokiri-api.com/${isSlicedUuidValid ? slicedUuid : userId}${
+                          isValidUUID(endpointPath.slice(0, 36))
+                            ? endpointPath.slice(36, 72)
+                            : endpointPath
+                        }`}
+                      </span>
                     </div>
                   </div>
                 </div>
