@@ -15,7 +15,7 @@ export const DisplayUUID = ({
 border-destructive/50 px-4 py-3 text-sm text-destructive
 dark:border-destructive [&>svg]:text-destructive"
         >
-          <div className="space-y-1">
+          <div className="space-y-1 font-light">
             <p className="flex items-center gap-1">
               <AlertCircle className="h-4 w-4" />
               Your UUID:{" "}

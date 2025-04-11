@@ -110,7 +110,7 @@ export const EndpointList = () => {
   }, [uuid]);
 
   return (
-    <Card className="h-[732px]">
+    <Card className="h-[840px]">
       <CardHeader className="space-y-4">
         <CardTitle
           className="flex items-center justify-between text-2xl
@@ -255,8 +255,8 @@ dark:border-destructive [&>svg]:text-destructive"
       </CardHeader>
       <CardContent
         className={cn(
-          "h-[620px] space-y-4 overflow-y-scroll",
-          existEndpoint && "h-[562px]"
+          "h-[724px] space-y-4 overflow-y-scroll",
+          existEndpoint[0] && "h-[670px]"
         )}
       >
         {endpoints.map(
@@ -308,7 +308,10 @@ underline-offset-4"
                       </span>
 
                       {/* 실제 복사되는 텍스트 */}
-                      <span className="sr-only">
+                      <span
+                        className="clip invisible absolute -m-px h-px w-px
+overflow-hidden"
+                      >
                         {`kokiri-api.com/${isSlicedUuidValid ? slicedUuid : userId}${
                           isValidUUID(endpointPath.slice(0, 36))
                             ? endpointPath.slice(36, 72)

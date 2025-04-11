@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="overflow-y-hidden antialiased">
+      <body className="antialiased">
         {children}
         <SpeedInsights />
         <Analytics />
