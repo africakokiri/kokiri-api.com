@@ -108,8 +108,8 @@ export const EndpointList = () => {
   }, [uuid]);
 
   return (
-    <Card>
-      <CardHeader className="space-y-4">
+    <Card className="h-[732px]">
+      <CardHeader>
         <CardTitle
           className="flex items-center justify-between text-2xl
 font-semibold"
@@ -208,7 +208,7 @@ dark:border-destructive [&>svg]:text-destructive"
           </div>
         )}
       </CardHeader>
-      <CardContent className="mb-6 h-[808px] space-y-4 overflow-y-scroll">
+      <CardContent className="h-[620px] space-y-4 overflow-y-scroll">
         {endpoints.map(
           (
             {
