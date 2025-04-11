@@ -221,12 +221,19 @@ dark:border-destructive [&>svg]:text-destructive"
         )}
         {existEndpoint && (
           <div
-            className="mt-2 flex items-center gap-2 rounded-lg border
-border-destructive/50 px-4 py-3 text-sm text-destructive
+            className="mt-2 flex items-center justify-between gap-2
+rounded-lg border border-destructive/50 px-4 py-3 text-sm text-destructive
 dark:border-destructive [&>svg]:text-destructive"
           >
-            <AlertCircle className="h-4 w-4" />
-            <p>The endpoint you are trying to add already exists.</p>
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              <p>The endpoint you are trying to add already exists.</p>
+            </div>
+
+            <X
+              onClick={() => setExistEndpoint(false)}
+              className="h-4 w-4 cursor-pointer"
+            />
           </div>
         )}
       </CardHeader>
