@@ -128,7 +128,7 @@ export const useEndpointStore = create<AddedEndpointsStore>()(
       endpoints: [],
       addEndpoint: (field) =>
         set((state) => ({
-          endpoints: [...state.endpoints, field]
+          endpoints: [field, ...state.endpoints]
         })),
       removeEndpoint: (endpointPath, httpMethod) =>
         set((state) => ({
