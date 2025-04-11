@@ -157,8 +157,9 @@ dark:border-destructive [&>svg]:text-destructive"
                     const allExist = dbEndpoints.every((incoming) =>
                       endpoints.some(
                         (existing) =>
-                          existing.endpointPath.slice(36) ===
-                            incoming.path &&
+                          (existing.endpointPath.slice(36) ===
+                            incoming.path ||
+                            existing.endpointPath === incoming.path) &&
                           existing.httpMethod === incoming.method
                       )
                     );
