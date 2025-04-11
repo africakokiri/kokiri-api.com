@@ -26,10 +26,6 @@ export const DisplayUUID = () => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    console.log(isUuidExist);
-  }, [isUuidExist]);
-
   return (
     <>
       {!isUuidExist && (

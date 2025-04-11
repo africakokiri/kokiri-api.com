@@ -76,12 +76,10 @@ export const getEndpoints = async (userId: string) => {
 
   const { data, error } = await supabase
     .from("endpoints")
-    .select("id")
+    .select("*")
     .eq("uuid", userId);
 
   if (error) throw new Error(error.message);
-
-  console.log(data);
 
   return data;
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { type HTTP_METHODS } from "@/components/EndpointCreator/HttpMethod";
 import {
   Accordion,
   AccordionContent,
@@ -29,11 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
-import {
-  useEndpointStore,
-  useHttpStore,
-  useUuidStore
-} from "@/libs/zustand/store";
+import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
 import { AlertCircle } from "lucide-react";
@@ -59,9 +56,8 @@ export const EndpointList = () => {
   const [uuid, setUuid] = useState("");
   const [uuidValidation, setUuidValidation] = useState(false);
 
-  const { endpoints, removeEndpoint } = useEndpointStore();
+  const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
   const { userId } = useUuidStore();
-  const { endpointPath, setEndPointPath } = useHttpStore();
 
   // Remove 버튼 제어
   const handleRemoveButton = async (
@@ -140,7 +136,36 @@ dark:border-destructive [&>svg]:text-destructive"
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => getEndpoints(userId)}>
+                <AlertDialogAction
+                  onClick={async () => {
+                    type Endpoint = {
+                      id: number;
+                      created_at: string;
+                      path: string;
+                      method: string;
+                      status_success: string;
+                      status_error: string;
+                      response_success: string;
+                      response_error: string;
+                      uuid: string;
+                    };
+
+                    const dbEndpoints: Endpoint[] =
+                      await getEndpoints(uuid);
+
+                    dbEndpoints.forEach((endpoint) => {
+                      addEndpoint({
+                        endpointPath: endpoint.uuid + endpoint.path,
+                        httpMethod:
+                          endpoint.method as (typeof HTTP_METHODS)[number],
+                        successStatus: endpoint.status_success,
+                        errorStatus: endpoint.status_error,
+                        successResponse: endpoint.response_success,
+                        errorResponse: endpoint.response_error
+                      });
+                    });
+                  }}
+                >
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -166,6 +191,9 @@ dark:border-destructive [&>svg]:text-destructive"
             },
             index
           ) => {
+            const slicedUuid = endpointPath.slice(0, 36);
+            const isSlicedUuidValid = isValidUUID(slicedUuid);
+
             return (
               <div
                 key={`${httpMethod}-${endpointPath}-${index}`}
@@ -190,9 +218,12 @@ border bg-muted/50 px-2 py-1 text-sm`}
                         className="text-green-600 underline
 underline-offset-4"
                       >
-                        {userId}
+                        {isSlicedUuidValid ? slicedUuid : userId}
                       </span>
-                      {endpointPath}
+
+                      {isValidUUID(endpointPath.slice(0, 36))
+                        ? endpointPath.slice(36, 72)
+                        : endpointPath}
                     </div>
                   </div>
                 </div>

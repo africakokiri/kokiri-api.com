@@ -1,7 +1,6 @@
 import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 interface UuidStore {
   userId: string;
