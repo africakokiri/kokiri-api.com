@@ -17,8 +17,8 @@ export const insertEndpoint = async (userId: string, fields: Fields) => {
     status_error: fields.errorStatus,
     response_success: fields.successResponse,
     response_error: fields.errorResponse,
-    success_delay: fields.successDelay,
-    error_delay: fields.errorDelay
+    delay_success: fields.successDelay,
+    delay_error: fields.errorDelay
   };
 
   const { error } = await supabase.from("endpoints").insert(payload);
