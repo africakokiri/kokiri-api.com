@@ -117,7 +117,7 @@ export const EndpointList = () => {
           className="flex items-center justify-between text-2xl
 font-semibold"
         >
-          Defined Endpoints
+          <h2>Defined Endpoints</h2>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button>Fetch endpoints by UUID</Button>
