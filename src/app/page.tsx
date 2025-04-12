@@ -30,14 +30,21 @@ mobile:*:w-full"
                   <HttpMethod />
                 </div>
 
-                <div
-                  className="flex gap-4 *:w-full *:space-y-2
-mobile:flex-col"
-                >
-                  <SuccessOrErrorStatus status="Success" />
-                  <Delay status="Success" />
-                  <SuccessOrErrorStatus status="Error" />
-                  <Delay status="Error" />
+                <div className="flex gap-4 *:w-full">
+                  <div
+                    className="flex items-center gap-4 *:w-full
+*:space-y-2"
+                  >
+                    <SuccessOrErrorStatus status="Success" />
+                    <Delay status="Success" />
+                  </div>
+                  <div
+                    className="flex items-center gap-4 *:w-full
+*:space-y-2"
+                  >
+                    <SuccessOrErrorStatus status="Error" />
+                    <Delay status="Error" />
+                  </div>
                 </div>
 
                 <div className="space-y-4">
