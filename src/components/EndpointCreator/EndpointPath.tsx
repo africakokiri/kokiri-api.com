@@ -18,7 +18,8 @@ export const EndpointPath = () => {
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
     const isEmpty = endpointPath === "";
-    const isInvalid = !endpointPath.startsWith("/api/");
+    const isInvalid =
+      !endpointPath.startsWith("/api/") || endpointPath.length < 6;
 
     setIsPathValid(!isEmpty && isInvalid);
   }, [endpointPath]);
@@ -59,7 +60,9 @@ dark:hover:text-gray-100"
       </div>
 
       {isPathValid && (
-        <p className="text-xs text-red-500">Path must start with /api/</p>
+        <p className="text-xs text-red-500">
+          Path must start with /api/...
+        </p>
       )}
     </div>
   );
