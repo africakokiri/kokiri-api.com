@@ -65,6 +65,22 @@ export const useSuccessOrErrorStore = create<SuccessOrErrorStore>(
   })
 );
 
+interface DelayStore {
+  delay: string;
+
+  setDelay: (delay: string) => void;
+}
+
+// Delay
+export const useDelayStore = create<DelayStore>((set) => ({
+  delay: "0",
+
+  setDelay: (delay) =>
+    set(() => ({
+      delay
+    }))
+}));
+
 interface ResponseStore {
   successResponse: string;
   errorResponse: string;
