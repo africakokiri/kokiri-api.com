@@ -109,8 +109,9 @@ export const EndpointList = () => {
     }
   }, [uuid]);
 
+  // 840 - 718 = 122
   return (
-    <Card className="h-[840px]">
+    <Card className="h-[718px]">
       <CardHeader className="space-y-4">
         <CardTitle
           className="flex items-center justify-between text-2xl
@@ -255,8 +256,8 @@ dark:border-destructive [&>svg]:text-destructive"
       </CardHeader>
       <CardContent
         className={cn(
-          "h-[724px] space-y-4 overflow-y-scroll",
-          existEndpoint[0] && "h-[670px]"
+          "h-[602px] space-y-4 overflow-y-scroll",
+          existEndpoint[0] && "h-[548px]"
         )}
       >
         {endpoints.map(
