@@ -7,7 +7,7 @@ import { useResponseStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
 
 import { AlertCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const Responses = ({ status }: { status: "Success" | "Error" }) => {
   const {
@@ -26,6 +26,8 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
     Error: true
   });
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const validateJsonInput = (value: string) => {
     try {
       JSON.parse(value);
@@ -42,6 +44,29 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
       [status]: isValid
     }));
   }, [response, status]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      const tab = "  "; // 2칸 공백 (필요시 "\t"로 교체 가능)
+
+      const newValue =
+        response.substring(0, start) + tab + response.substring(end);
+      setResponse(newValue);
+
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd =
+          start + tab.length;
+      });
+    }
+  };
 
   return (
     <div className="space-y-2">
@@ -62,9 +87,11 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
       </div>
 
       <Textarea
+        ref={textareaRef}
         id={status}
         value={response}
         onChange={(e) => setResponse(e.target.value)}
+        onKeyDown={handleKeyDown}
         className={cn(
           `${robotoMonoVar.className} h-40 !text-xs`,
           !validationStates[status] && "border-red-500 !ring-red-500"
