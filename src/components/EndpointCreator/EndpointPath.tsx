@@ -36,7 +36,7 @@ export const EndpointPath = () => {
             isPathValid && "border-[1px] border-red-500 !ring-red-500"
           )}
           value={endpointPath}
-          onChange={(e) => setEndPointPath(e.target.value)}
+          onChange={(e) => setEndPointPath(e.target.value.trim())}
         />
         <Button
           type="button"
@@ -59,9 +59,7 @@ dark:hover:text-gray-100"
       </div>
 
       {isPathValid && (
-        <p className="text-xs text-red-500">
-          Path must start with /api/ and not contain spaces
-        </p>
+        <p className="text-xs text-red-500">Path must start with /api/</p>
       )}
     </div>
   );
