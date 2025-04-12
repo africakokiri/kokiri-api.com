@@ -109,12 +109,11 @@ export const EndpointList = () => {
     }
   }, [uuid]);
 
-  // 840 - 718 = 122
   return (
     <Card className="h-[718px]">
       <CardHeader className="space-y-4">
         <CardTitle
-          className="flex items-center justify-between text-2xl
+          className="flex items-center justify-between gap-4 text-2xl
 font-semibold"
         >
           <h2>Defined Endpoints</h2>
@@ -247,7 +246,8 @@ dark:hover:text-gray-100"
 
         {endpoints && endpoints.length === 0 && (
           <CardDescription>
-            No endpoints defined yet. Create one using the form.
+            No endpoints defined yet. Create a new one or load using a
+            UUID.
           </CardDescription>
         )}
 
