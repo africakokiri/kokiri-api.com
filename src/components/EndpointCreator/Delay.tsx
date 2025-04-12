@@ -8,14 +8,16 @@ import { useDelayStore } from "@/libs/zustand/store";
 import { X } from "lucide-react";
 import { useRef } from "react";
 
-export const Delay = () => {
+export const Delay = ({ status }: { status: "Success" | "Error" }) => {
   const inputRef = useRef(null);
 
   const { delay, setDelay } = useDelayStore();
 
   return (
     <div>
-      <Label htmlFor="delay">{"Delay(ms)"}</Label>
+      <Label htmlFor="delay">
+        {status === "Success" ? "Success Delay(ms)" : "Error Delay(ms)"}
+      </Label>
       <div className="relative flex items-center">
         <Input
           id="delay"

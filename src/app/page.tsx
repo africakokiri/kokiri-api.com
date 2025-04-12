@@ -32,8 +32,9 @@ mobile:*:w-full"
 
                 <div className="flex gap-4 *:w-full *:space-y-2">
                   <SuccessOrErrorStatus status="Success" />
+                  <Delay status="Success" />
                   <SuccessOrErrorStatus status="Error" />
-                  <Delay />
+                  <Delay status="Error" />
                 </div>
 
                 <div className="space-y-4">
