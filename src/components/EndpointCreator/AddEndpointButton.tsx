@@ -39,7 +39,7 @@ export const AddEndpointButton = () => {
     setResponsesValidation
   } = useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
-  const { delay } = useDelayStore();
+  const { successDelay, errorDelay } = useDelayStore();
   const { setSuccessResponse, setErrorResponse } = useResponseStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
@@ -85,7 +85,8 @@ export const AddEndpointButton = () => {
               errorStatus: errorStatus === "" ? "400" : errorStatus,
               successResponse,
               errorResponse,
-              delay
+              successDelay,
+              errorDelay
             });
 
             // DB에 엔드포인트 insert
@@ -96,7 +97,8 @@ export const AddEndpointButton = () => {
               errorStatus,
               successResponse,
               errorResponse,
-              delay
+              successDelay,
+              errorDelay
             });
 
             setEndPointPath("");

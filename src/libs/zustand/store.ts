@@ -135,7 +135,8 @@ export type Fields = {
   errorStatus: string;
   successResponse: string;
   errorResponse: string;
-  delay: string;
+  successDelay: string;
+  errorDelay: string;
 };
 
 interface AddedEndpointsStore {
