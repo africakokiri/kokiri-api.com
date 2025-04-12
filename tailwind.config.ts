@@ -8,7 +8,8 @@ export default {
   theme: {
     extend: {
       screens: {
-        mobile: { max: "1304px" }
+        max1304: { max: "1304px" },
+        max672: { max: "672px" }
       },
       borderRadius: {
         lg: "var(--radius)",

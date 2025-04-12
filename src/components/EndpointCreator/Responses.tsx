@@ -93,7 +93,7 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
         onChange={(e) => setResponse(e.target.value)}
         onKeyDown={handleKeyDown}
         className={cn(
-          `${robotoMonoVar.className} mobile:!text-base h-40 !text-xs`,
+          `${robotoMonoVar.className} max672:!text-base h-40 !text-xs`,
           !validationStates[status] && "border-red-500 !ring-red-500"
         )}
       />
