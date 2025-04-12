@@ -246,7 +246,8 @@ dark:hover:text-gray-100"
 
         {endpoints && endpoints.length === 0 && (
           <CardDescription>
-            No endpoints defined yet. Create one using the form.
+            No endpoints defined yet. Create a new one or load using a
+            UUID.
           </CardDescription>
         )}
 

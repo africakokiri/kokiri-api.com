@@ -16,7 +16,10 @@ export default function page() {
         <Header />
 
         {/* Contents */}
-        <div className="flex items-start gap-8 *:w-1/2">
+        <div
+          className="mobile:flex-col mobile:*:w-full flex items-start gap-8
+*:w-1/2"
+        >
           <Card>
             <CardHeader />
             <CardContent>
