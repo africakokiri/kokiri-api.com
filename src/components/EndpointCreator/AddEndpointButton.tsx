@@ -15,6 +15,7 @@ import {
   insertEndpoint
 } from "@/libs/supabase/utils";
 import {
+  useDelayStore,
   useEndpointStore,
   useHttpStore,
   useResponseStore,
@@ -38,6 +39,7 @@ export const AddEndpointButton = () => {
     setResponsesValidation
   } = useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
+  const { successDelay, errorDelay } = useDelayStore();
   const { setSuccessResponse, setErrorResponse } = useResponseStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
@@ -82,17 +84,24 @@ export const AddEndpointButton = () => {
               successStatus: successStatus === "" ? "200" : successStatus,
               errorStatus: errorStatus === "" ? "400" : errorStatus,
               successResponse,
-              errorResponse
+              errorResponse,
+              successDelay: successStatus === "" ? "0" : successDelay,
+              errorDelay: errorStatus === "" ? "0" : errorDelay
             });
 
             // DB에 엔드포인트 insert
             await insertEndpoint(userId, {
               endpointPath,
               httpMethod,
-              successStatus,
-              errorStatus,
+              successStatus:
+                successStatus === "" ? 200 : parseInt(successStatus),
+              errorStatus:
+                errorStatus === "" ? 400 : parseInt(errorStatus),
               successResponse,
-              errorResponse
+              errorResponse,
+              successDelay:
+                successStatus === "" ? 0 : parseInt(successDelay),
+              errorDelay: errorStatus === "" ? 0 : parseInt(errorDelay)
             });
 
             setEndPointPath("");

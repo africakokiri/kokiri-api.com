@@ -65,6 +65,29 @@ export const useSuccessOrErrorStore = create<SuccessOrErrorStore>(
   })
 );
 
+interface DelayStore {
+  successDelay: string;
+  errorDelay: string;
+
+  setSuccessDelay: (successDelay: string) => void;
+  setErrorDelay: (errorDelay: string) => void;
+}
+
+// Delay
+export const useDelayStore = create<DelayStore>((set) => ({
+  successDelay: "0",
+  errorDelay: "0",
+
+  setSuccessDelay: (successDelay) =>
+    set(() => ({
+      successDelay
+    })),
+  setErrorDelay: (errorDelay) =>
+    set(() => ({
+      errorDelay
+    }))
+}));
+
 interface ResponseStore {
   successResponse: string;
   errorResponse: string;
@@ -108,10 +131,12 @@ export const useResponseStore = create<ResponseStore>((set) => ({
 export type Fields = {
   endpointPath: string;
   httpMethod: HttpMethods;
-  successStatus: string;
-  errorStatus: string;
+  successStatus: string | number;
+  errorStatus: string | number;
   successResponse: string;
   errorResponse: string;
+  successDelay: string | number;
+  errorDelay: string | number;
 };
 
 interface AddedEndpointsStore {
