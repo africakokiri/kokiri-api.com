@@ -34,7 +34,7 @@ export const CardHeader = () => {
         <CardTitle
           className="flex items-center gap-2 text-2xl font-semibold"
         >
-          <p>Define API Endpoints</p>
+          <h2>Define API Endpoints</h2>
           <HoverCard>
             <HoverCardTrigger asChild>
               <HelpCircle className="text-red-500" />
