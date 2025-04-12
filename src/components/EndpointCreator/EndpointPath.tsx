@@ -33,7 +33,7 @@ export const EndpointPath = () => {
           placeholder="/api/data"
           id="endpoint-path"
           className={cn(
-            "w-full",
+            "max672:text-base w-full text-sm",
             isPathValid && "border-[1px] border-red-500 !ring-red-500"
           )}
           value={endpointPath}

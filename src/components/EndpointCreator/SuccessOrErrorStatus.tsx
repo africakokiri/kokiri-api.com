@@ -32,6 +32,7 @@ export const SuccessOrErrorStatus = ({
           }
           id={`${status} Status`}
           value={status === "Success" ? successStatus : errorStatus}
+          className="max672:text-base text-sm"
         />
 
         <Button
