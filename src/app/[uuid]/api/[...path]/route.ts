@@ -1,4 +1,5 @@
 import { createClient } from "@/libs/supabase/serverClient";
+import { monitorMemoryUsage } from "@/utils/monitorMemoryUsage";
 
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -113,29 +114,59 @@ export async function GET(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return handleRequest(req, "GET", props);
+  return await monitorMemoryUsage(
+    "GET",
+    req.nextUrl.pathname,
+    async () => {
+      return handleRequest(req, "GET", props);
+    }
+  );
 }
 export async function POST(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return handleRequest(req, "POST", props);
+  return await monitorMemoryUsage(
+    "POST",
+    req.nextUrl.pathname,
+    async () => {
+      return handleRequest(req, "POST", props);
+    }
+  );
 }
 export async function PUT(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return handleRequest(req, "PUT", props);
+  return await monitorMemoryUsage(
+    "PUT",
+    req.nextUrl.pathname,
+    async () => {
+      return handleRequest(req, "PUT", props);
+    }
+  );
 }
 export async function PATCH(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return handleRequest(req, "PATCH", props);
+  return await monitorMemoryUsage(
+    "PATCH",
+    req.nextUrl.pathname,
+    async () => {
+      return handleRequest(req, "PATCH", props);
+    }
+  );
 }
 export async function DELETE(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return handleRequest(req, "DELETE", props);
+  return await monitorMemoryUsage(
+    "DELETE",
+    req.nextUrl.pathname,
+    async () => {
+      return handleRequest(req, "DELETE", props);
+    }
+  );
 }
