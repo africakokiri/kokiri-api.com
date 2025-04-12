@@ -53,6 +53,8 @@ type Endpoint = {
   status_error: string;
   response_success: string;
   response_error: string;
+  delay_success: string;
+  delay_error: string;
   uuid: string;
 };
 
@@ -226,7 +228,9 @@ dark:hover:text-gray-100"
                           successStatus: endpoint.status_success,
                           errorStatus: endpoint.status_error,
                           successResponse: endpoint.response_success,
-                          errorResponse: endpoint.response_error
+                          errorResponse: endpoint.response_error,
+                          successDelay: endpoint.delay_success,
+                          errorDelay: endpoint.delay_error
                         });
                       });
                     } else {
