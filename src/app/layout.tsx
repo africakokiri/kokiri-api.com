@@ -58,16 +58,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "http://schema.org",
-              "@type": "Product",
+              "@type": ["WebAPI", "SoftwareApplication"],
               name: "Kokiri API",
               description:
                 "Create a mock REST API. Customize response data for success and error cases.",
+              applicationCategory: "DeveloperApplication",
               url: "https://www.kokiri-api.com",
               image: "/icons/kokiri.svg",
-              sku: "mock-api",
-              priceCurrency: "USD",
-              price: "49.99",
-              availability: "InStock"
+              sku: "mock-api"
             })
           }}
         />
