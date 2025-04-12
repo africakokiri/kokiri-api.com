@@ -25,12 +25,12 @@ async function handleRequest(
     .eq("method", method)
     .maybeSingle();
 
-  // ✅ 해당 endpoint가 없는 경우 (404 응답)
+  // 🔴 Not Found
   if (error || !data) {
     return NextResponse.json(
       {
         code: 404,
-        message: "해당 API endpoint를 찾을 수 없습니다.",
+        message: "API endpoint not found.",
         error: error ?? "No matching endpoint"
       },
       { status: 404 }
@@ -39,15 +39,13 @@ async function handleRequest(
 
   const forceError = req.nextUrl.searchParams.get("force") === "error";
 
-  // ✅ 실패 응답
+  // 🔴 Error Response
   if (forceError) {
-    const errorDelay = parseInt(data.error_delay || "0");
-    if (!isNaN(errorDelay) && errorDelay > 0) {
-      await delay(errorDelay);
-    }
+    const errorDelay = Number(data.error_delay || 0);
+    if (errorDelay > 0) await delay(errorDelay);
 
-    const errorStatus = parseInt(data.status_error) || 400;
-    const errorMessage = data.message_error || "요청이 실패했습니다.";
+    const errorStatus = Number(data.status_error) || 400;
+    const errorMessage = data.message_error || "The request failed.";
     const errorBody = data.response_error
       ? JSON.parse(data.response_error)
       : {};
@@ -62,15 +60,13 @@ async function handleRequest(
     );
   }
 
-  // ✅ 성공 응답
-  const successDelay = parseInt(data.success_delay || "0");
-  if (!isNaN(successDelay) && successDelay > 0) {
-    await delay(successDelay);
-  }
+  // ✅ Success Response
+  const successDelay = Number(data.success_delay || 0);
+  if (successDelay > 0) await delay(successDelay);
 
-  const successStatus = parseInt(data.status_success) || 200;
+  const successStatus = Number(data.status_success) || 200;
   const successMessage =
-    data.message_success || "요청이 성공적으로 수행되었습니다.";
+    data.message_success || "The request was successful.";
   const successBody = data.response_success
     ? JSON.parse(data.response_success)
     : {};
@@ -85,35 +81,31 @@ async function handleRequest(
   );
 }
 
-// ✅ 각 HTTP 메서드에 연결
+// Export handlers
 export async function GET(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
   return handleRequest(req, "GET", props);
 }
-
 export async function POST(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
   return handleRequest(req, "POST", props);
 }
-
 export async function PUT(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
   return handleRequest(req, "PUT", props);
 }
-
 export async function PATCH(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
   return handleRequest(req, "PATCH", props);
 }
-
 export async function DELETE(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
