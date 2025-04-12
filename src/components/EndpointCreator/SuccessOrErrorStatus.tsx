@@ -32,7 +32,8 @@ export const SuccessOrErrorStatus = ({
           }
           id={`${status} Status`}
           value={status === "Success" ? successStatus : errorStatus}
-          className="max672:text-base text-sm"
+          onKeyDown={(e) => e.key === " " && e.preventDefault()}
+          className="text-sm max672:text-base"
         />
 
         <Button

@@ -32,7 +32,8 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
               ? setSuccessDelay(e.target.value.trim())
               : setErrorDelay(e.target.value.trim())
           }
-          className="max672:text-base text-sm"
+          onKeyDown={(e) => e.key === " " && e.preventDefault()}
+          className="text-sm max672:text-base"
         />
 
         <Button

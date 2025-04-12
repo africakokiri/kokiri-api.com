@@ -33,10 +33,11 @@ export const EndpointPath = () => {
           placeholder="/api/data"
           id="endpoint-path"
           className={cn(
-            "max672:text-base w-full text-sm",
+            "w-full text-sm max672:text-base",
             isPathValid && "border-[1px] border-red-500 !ring-red-500"
           )}
           value={endpointPath}
+          onKeyDown={(e) => e.key === " " && e.preventDefault()}
           onChange={(e) => setEndPointPath(e.target.value.trim())}
         />
         <Button
