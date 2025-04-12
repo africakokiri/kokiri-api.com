@@ -27,7 +27,7 @@ interface HttpStore {
 
 // Endpoint Path, HTTP Method
 export const useHttpStore = create<HttpStore>((set) => ({
-  endpointPath: "/api/",
+  endpointPath: "",
   httpMethod: "GET",
 
   setEndPointPath: (endpointPath) =>
