@@ -1,5 +1,6 @@
 import { AddEndpointButton } from "@/components/EndpointCreator/AddEndpointButton";
 import { CardHeader } from "@/components/EndpointCreator/CardHeader";
+import { Delay } from "@/components/EndpointCreator/Delay";
 import { EndpointPath } from "@/components/EndpointCreator/EndpointPath";
 import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
 import { Responses } from "@/components/EndpointCreator/Responses";
@@ -17,8 +18,8 @@ export default function page() {
 
         {/* Contents */}
         <div
-          className="mobile:flex-col mobile:*:w-full flex items-start gap-8
-*:w-1/2"
+          className="flex items-start gap-8 *:w-1/2 mobile:flex-col
+mobile:*:w-full"
         >
           <Card>
             <CardHeader />
@@ -32,6 +33,7 @@ export default function page() {
                 <div className="flex gap-4 *:w-full *:space-y-2">
                   <SuccessOrErrorStatus status="Success" />
                   <SuccessOrErrorStatus status="Error" />
+                  <Delay />
                 </div>
 
                 <div className="space-y-4">
