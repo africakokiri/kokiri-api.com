@@ -85,8 +85,8 @@ export const AddEndpointButton = () => {
               errorStatus: errorStatus === "" ? "400" : errorStatus,
               successResponse,
               errorResponse,
-              successDelay,
-              errorDelay
+              successDelay: successStatus === "" ? "0" : successDelay,
+              errorDelay: errorStatus === "" ? "0" : errorDelay
             });
 
             // DB에 엔드포인트 insert
