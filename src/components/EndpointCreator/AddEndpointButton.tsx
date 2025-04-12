@@ -47,6 +47,7 @@ export const AddEndpointButton = () => {
     const isValid =
       endpointPath !== "" &&
       endpointPath.startsWith("/api/") &&
+      endpointPath.length > 5 &&
       isResponsesValid;
 
     setIsPathValid(isValid);

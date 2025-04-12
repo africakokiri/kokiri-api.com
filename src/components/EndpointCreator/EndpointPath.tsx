@@ -18,7 +18,8 @@ export const EndpointPath = () => {
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
     const isEmpty = endpointPath === "";
-    const isInvalid = !endpointPath.startsWith("/api/");
+    const isInvalid =
+      !endpointPath.startsWith("/api/") || endpointPath.length < 6;
 
     setIsPathValid(!isEmpty && isInvalid);
   }, [endpointPath]);
@@ -32,11 +33,11 @@ export const EndpointPath = () => {
           placeholder="/api/data"
           id="endpoint-path"
           className={cn(
-            "w-full",
+            "max672:text-base w-full text-sm",
             isPathValid && "border-[1px] border-red-500 !ring-red-500"
           )}
           value={endpointPath}
-          onChange={(e) => setEndPointPath(e.target.value)}
+          onChange={(e) => setEndPointPath(e.target.value.trim())}
         />
         <Button
           type="button"
@@ -60,7 +61,7 @@ dark:hover:text-gray-100"
 
       {isPathValid && (
         <p className="text-xs text-red-500">
-          Path must start with /api/ and not contain spaces
+          Path must start with /api/...
         </p>
       )}
     </div>

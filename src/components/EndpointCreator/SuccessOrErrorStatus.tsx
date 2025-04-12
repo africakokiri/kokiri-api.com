@@ -27,11 +27,12 @@ export const SuccessOrErrorStatus = ({
           placeholder={status === "Success" ? "200" : "400"}
           onChange={(e) =>
             status === "Success"
-              ? setSuccessStatus(e.target.value)
-              : setErrorStatus(e.target.value)
+              ? setSuccessStatus(e.target.value.trim())
+              : setErrorStatus(e.target.value.trim())
           }
           id={`${status} Status`}
           value={status === "Success" ? successStatus : errorStatus}
+          className="max672:text-base text-sm"
         />
 
         <Button

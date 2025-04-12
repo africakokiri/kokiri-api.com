@@ -18,8 +18,8 @@ export default function page() {
 
         {/* Contents */}
         <div
-          className="flex items-start gap-8 *:w-1/2 mobile:flex-col
-mobile:*:w-full"
+          className="max1304:flex-col max1304:*:w-full flex items-start
+gap-8 *:w-1/2"
         >
           <Card>
             <CardHeader />
@@ -30,11 +30,18 @@ mobile:*:w-full"
                   <HttpMethod />
                 </div>
 
-                <div className="flex gap-4 *:w-full *:space-y-2">
-                  <SuccessOrErrorStatus status="Success" />
-                  <Delay status="Success" />
-                  <SuccessOrErrorStatus status="Error" />
-                  <Delay status="Error" />
+                <div
+                  className="max672:flex-col max1304:flex max672:flex gap-4
+*:w-full"
+                >
+                  <div className="flex gap-4 *:w-full *:space-y-2">
+                    <SuccessOrErrorStatus status="Success" />
+                    <Delay status="Success" />
+                  </div>
+                  <div className="flex gap-4 *:w-full *:space-y-2">
+                    <SuccessOrErrorStatus status="Error" />
+                    <Delay status="Error" />
+                  </div>
                 </div>
 
                 <div className="space-y-4">

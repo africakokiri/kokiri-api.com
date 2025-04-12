@@ -1,3 +1,4 @@
+import twContainerQueries from "@tailwindcss/container-queries";
 import type { Config } from "tailwindcss";
 import twAnimate from "tailwindcss-animate";
 
@@ -7,7 +8,8 @@ export default {
   theme: {
     extend: {
       screens: {
-        mobile: { max: "1024px" }
+        max1304: { max: "1304px" },
+        max672: { max: "672px" }
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,5 +82,5 @@ export default {
       }
     }
   },
-  plugins: [twAnimate]
+  plugins: [twAnimate, twContainerQueries]
 } satisfies Config;

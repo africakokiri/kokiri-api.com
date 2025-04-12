@@ -29,9 +29,10 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
           value={status === "Success" ? successDelay : errorDelay}
           onChange={(e) =>
             status === "Success"
-              ? setSuccessDelay(e.target.value)
-              : setErrorDelay(e.target.value)
+              ? setSuccessDelay(e.target.value.trim())
+              : setErrorDelay(e.target.value.trim())
           }
+          className="max672:text-base text-sm"
         />
 
         <Button
