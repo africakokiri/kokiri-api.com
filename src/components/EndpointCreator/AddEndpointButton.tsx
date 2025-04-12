@@ -93,12 +93,15 @@ export const AddEndpointButton = () => {
             await insertEndpoint(userId, {
               endpointPath,
               httpMethod,
-              successStatus: successStatus === "" ? "200" : successStatus,
-              errorStatus: errorStatus === "" ? "400" : errorStatus,
+              successStatus:
+                successStatus === "" ? 200 : parseInt(successStatus),
+              errorStatus:
+                errorStatus === "" ? 400 : parseInt(errorStatus),
               successResponse,
               errorResponse,
-              successDelay: successStatus === "" ? "0" : successDelay,
-              errorDelay: errorStatus === "" ? "0" : errorDelay
+              successDelay:
+                successStatus === "" ? 0 : parseInt(successDelay),
+              errorDelay: errorStatus === "" ? 0 : parseInt(errorDelay)
             });
 
             setEndPointPath("");
