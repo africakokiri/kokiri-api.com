@@ -11,20 +11,27 @@ import { useRef } from "react";
 export const Delay = ({ status }: { status: "Success" | "Error" }) => {
   const inputRef = useRef(null);
 
-  const { delay, setDelay } = useDelayStore();
+  const { successDelay, setSuccessDelay, errorDelay, setErrorDelay } =
+    useDelayStore();
 
   return (
     <div>
-      <Label htmlFor="delay">
+      <Label
+        htmlFor={status === "Success" ? "success-delay" : "error-delay"}
+      >
         {status === "Success" ? "Success Delay(ms)" : "Error Delay(ms)"}
       </Label>
       <div className="relative flex items-center">
         <Input
-          id="delay"
+          id={status === "Success" ? "success-delay" : "error-delay"}
           ref={inputRef}
           placeholder="0"
-          value={delay}
-          onChange={(e) => setDelay(e.target.value)}
+          value={status === "Success" ? successDelay : errorDelay}
+          onChange={(e) =>
+            status === "Success"
+              ? setSuccessDelay(e.target.value)
+              : setErrorDelay(e.target.value)
+          }
         />
 
         <Button
