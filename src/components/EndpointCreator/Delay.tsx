@@ -41,6 +41,17 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
           className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2
 text-gray-500 hover:text-gray-900 dark:text-gray-400
 dark:hover:text-gray-100"
+          onClick={() => {
+            if (status === "Success") {
+              setSuccessDelay("");
+            } else {
+              setErrorDelay("");
+            }
+
+            if (inputRef.current) {
+              (inputRef.current as HTMLInputElement).focus();
+            }
+          }}
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Clear</span>
