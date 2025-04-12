@@ -311,8 +311,8 @@ gap-4"
                       {httpMethod}
                     </Badge>
                     <div
-                      className={`${robotoMonoVar.className} relative
-rounded-md border bg-muted/50 px-2 py-1 text-xs`}
+                      className={`${robotoMonoVar.className} rounded-md
+border bg-muted/50 px-2 py-1 text-xs`}
                     >
                       <span>kokiri-api.com/</span>
                       <span
@@ -327,28 +327,7 @@ underline-offset-4"
                           : endpointPath}
                       </span>
 
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none"
-                        style={{
-                          position: "absolute",
-                          width: "1px",
-                          height: "1px",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                          clip: "rect(0 0 0 0)",
-                          clipPath: "inset(50%)",
-                          border: 0,
-                          padding: 0,
-                          margin: 0
-                        }}
-                      >
-                        {`kokiri-api.com/${isSlicedUuidValid ? slicedUuid : userId}${
-                          isValidUUID(endpointPath.slice(0, 36))
-                            ? endpointPath.slice(36, 72)
-                            : endpointPath
-                        }`}
-                      </span>
+                      <span className="sr-only"></span>
                     </div>
                   </div>
                 </div>
