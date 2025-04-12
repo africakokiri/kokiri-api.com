@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Kokiri API",
@@ -47,6 +48,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link
+          rel="canonical"
+          href="https://www.kokiri-api.com/"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "http://schema.org",
+              "@type": "Product",
+              name: "Kokiri API",
+              description:
+                "Create a mock REST API. Customize response data for success and error cases.",
+              url: "https://www.kokiri-api.com",
+              image: "/icons/kokiri.svg",
+              sku: "mock-api",
+              priceCurrency: "USD",
+              price: "49.99",
+              availability: "InStock"
+            })
+          }}
+        />
+      </Head>
+
       <body className="antialiased">
         {children}
         <SpeedInsights />
