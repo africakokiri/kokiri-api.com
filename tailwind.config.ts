@@ -1,3 +1,4 @@
+import twContainerQueries from "@tailwindcss/container-queries";
 import type { Config } from "tailwindcss";
 import twAnimate from "tailwindcss-animate";
 
@@ -80,5 +81,5 @@ export default {
       }
     }
   },
-  plugins: [twAnimate]
+  plugins: [twAnimate, twContainerQueries]
 } satisfies Config;
