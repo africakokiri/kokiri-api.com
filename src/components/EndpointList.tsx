@@ -129,15 +129,35 @@ font-semibold"
                 </AlertDialogTitle>
                 <AlertDialogDescription asChild>
                   <div className="space-y-2">
-                    <Label htmlFor="input-uuid">
-                      Please enter your UUID
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="input-uuid">
+                        Please enter your UUID
+                      </Label>
+                      <div
+                        className="flex h-5 items-center gap-2 text-sm
+text-destructive"
+                      >
+                        {!uuidValidation ? (
+                          <>
+                            <AlertCircle className="h-4 w-4" />
+                            <span>Invalid JSON format</span>
+                          </>
+                        ) : (
+                          <span className="invisible">
+                            Invalid JSON format
+                          </span>
+                        )}
+                      </div>
+                    </div>
                     <div className="relative flex items-center">
                       <Input
                         ref={inputRef}
                         id="input-uuid"
                         value={uuid}
                         onChange={(e) => setUuid(e.target.value)}
+                        className={cn(
+                          !uuidValidation && "border-red-500 !ring-red-500"
+                        )}
                       />
                       <Button
                         type="button"
@@ -158,22 +178,13 @@ dark:hover:text-gray-100"
                         <span className="sr-only">Clear</span>
                       </Button>
                     </div>
-                    {!uuidValidation && (
-                      <div
-                        className="mt-2 flex items-center gap-2 rounded-lg
-border border-destructive/50 px-4 py-3 text-sm text-destructive
-dark:border-destructive [&>svg]:text-destructive"
-                      >
-                        <AlertCircle className="h-4 w-4" />
-                        <p>Invalid UUID format</p>
-                      </div>
-                    )}
                   </div>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
+                  disabled={!uuidValidation}
                   onClick={async () => {
                     if (!uuid) return;
 
