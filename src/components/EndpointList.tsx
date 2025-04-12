@@ -182,11 +182,15 @@ dark:hover:text-gray-100"
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setUuid("")}>
+                  Cancel
+                </AlertDialogCancel>
                 <AlertDialogAction
                   disabled={!uuidValidation}
                   onClick={async () => {
                     if (!uuid) return;
+
+                    setUuid("");
 
                     setExistEndpoint([false]);
 
@@ -319,7 +323,6 @@ underline-offset-4"
                           : endpointPath}
                       </span>
 
-                      {/* ✅ 진짜 완벽한 hidden 복사 텍스트 */}
                       <span
                         aria-hidden="true"
                         className="pointer-events-none"
