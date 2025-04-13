@@ -95,9 +95,6 @@ export const EndpointList = () => {
       )
     );
 
-    console.log(dbEndpoints);
-    console.log(endpoints);
-
     // 5. Fetch할 UUID가 DB에 존재하는지 확인
     const uuidInDB = await checkUuidExist(fetchUuid);
 
@@ -114,12 +111,13 @@ export const EndpointList = () => {
         addEndpoint({
           endpoint_path: endpoint.uuid + endpoint.endpoint_path,
           http_method: endpoint.http_method as (typeof HTTP_METHODS)[number],
-          status_success: endpoint.status_success,
-          status_error: endpoint.status_error,
-          response_success: endpoint.response_success,
-          response_error: endpoint.response_error,
-          delay_success: endpoint.delay_success,
-          delay_error: endpoint.delay_error
+          status_success: endpoint.status_success.toString(),
+          status_error: endpoint.status_error.toString(),
+          response_success: endpoint.response_success!.toString(),
+          response_error: endpoint.response_error!.toString(),
+          delay_success: endpoint.delay_success.toString(),
+          delay_error: endpoint.delay_error.toString(),
+          uuid
         });
       });
       // 7-2. 추가하려는 endpoints가 localStoarge의 endpoints와 중복되면 함수를 종료하고 경고를 렌더링하고 함수 종료

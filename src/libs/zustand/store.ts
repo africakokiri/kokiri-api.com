@@ -1,5 +1,5 @@
 import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
-import { type Endpoints } from "@/types/endoints";
+import { type Insert } from "@/types/endoints";
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -125,11 +125,15 @@ export const useResponseStore = create<ResponseStore>((set) => ({
     })
 }));
 
-interface EndpointStore {
-  endpoints: Endpoints[];
+type FieldsInsertEntireStringType<T> = {
+  [K in keyof T]: T[K] extends string ? T[K] : string;
+};
 
-  addEndpoint: (field: Endpoints) => void;
-  removeEndpoint: (endpont_path: string, http_method: string) => void;
+interface EndpointStore {
+  endpoints: FieldsInsertEntireStringType<Insert>[];
+
+  addEndpoint: (fields: FieldsInsertEntireStringType<Insert>) => void;
+  removeEndpoint: (endpoint_path: string, http_method: string) => void;
 }
 
 // localStorage에 추가된 엔드포인트
@@ -137,9 +141,9 @@ export const useEndpointStore = create<EndpointStore>()(
   persist(
     (set) => ({
       endpoints: [],
-      addEndpoint: (field) =>
+      addEndpoint: (fields) =>
         set((state) => ({
-          endpoints: [field, ...state.endpoints]
+          endpoints: [fields, ...state.endpoints]
         })),
       removeEndpoint: (endpoint_path, http_method) =>
         set((state) => ({

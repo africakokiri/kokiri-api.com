@@ -72,10 +72,11 @@ export const AddEndpointButton = () => {
         response_success,
         response_error,
         delay_success: status_success === "" ? "0" : delay_success,
-        delay_error: status_error === "" ? "0" : delay_error
+        delay_error: status_error === "" ? "0" : delay_error,
+        uuid
       };
 
-      // 3. localStorage에 저장된 endpoints 렌더링
+      // 3. localStorage에 endpoint 추가
       addEndpoint(fields);
 
       // 4. DB에 endpoint insert

@@ -1,10 +1,10 @@
 "use server";
 
 import { createClient } from "@/libs/supabase/serverClient";
-import { type Endpoints } from "@/types/endoints";
+import { type Insert } from "@/types/endoints";
 
 // DB에 엔드포인트 insert
-export const insertEndpoint = async (uuid: string, fields: Endpoints) => {
+export const insertEndpoint = async (uuid: string, fields: Insert) => {
   const supabase = await createClient();
 
   if (!uuid) throw new Error("UUID 없음");
