@@ -52,51 +52,56 @@ export const AddEndpointButton = () => {
     // eslint-disable-next-line
   }, [response_success, response_error]);
 
+  // Add Endpoint 버튼 제어하는 함수
+  const handleAddEndpointButtonOnclick = async () => {
+    // 1. 추가하려는 endpoint path && http method가 이미 존재하는지 확인
+    const isExist = endpoints.some(
+      (endpoint) => endpoint.endpoint_path === endpoint_path && endpoint.http_method === http_method
+    );
+
+    // 2. localStorage의 endpoints와 DB에 endpoint path가 존재하지 않으면 insert
+    if (!isExist && !(await checkEndpointExist(uuid, endpoint_path))) {
+      setIsEndpointPathExist(false);
+
+      // Endpoints
+      const fields = {
+        endpoint_path,
+        http_method,
+        status_success: status_success === "" ? "200" : status_success,
+        status_error: status_error === "" ? "400" : status_error,
+        response_success,
+        response_error,
+        delay_success: status_success === "" ? "0" : delay_success,
+        delay_error: status_error === "" ? "0" : delay_error
+      };
+
+      // 3. localStorage에 저장된 endpoints 렌더링
+      addEndpoint(fields);
+
+      // 4. DB에 endpoint insert
+      await insertEndpoint(uuid, {
+        ...fields,
+        status_success: parseInt(fields.status_success),
+        status_error: parseInt(fields.status_error),
+        delay_success: parseInt(fields.delay_success),
+        delay_error: parseInt(fields.delay_error)
+      });
+
+      // 5. 모든 로직이 수행되면 endpoint path, success / error response 초기화
+      setEndPointPath("");
+      setSuccessResponse('{\n  "data": {}\n}');
+      setErrorResponse('{\n  "error": "An error occurred"\n}');
+    } else {
+      setIsEndpointPathExist(true);
+    }
+  };
+
   return (
     <>
       <Button
         disabled={!isPathValid}
         className="w-full"
-        onClick={async () => {
-          const isExist = endpoints.some(
-            (endpoint) => endpoint.endpointPath === endpoint_path && endpoint.httpMethod === http_method
-          );
-
-          // DB에 endpointPath가 존재하지 않으면 insert
-          if (!isExist && !(await checkEndpointExist(uuid, endpoint_path))) {
-            setIsEndpointPathExist(false);
-
-            // Defined Endpoints에 엔드포인트 렌더링
-            addEndpoint({
-              endpoint_path,
-              http_method,
-              status_success: status_success === "" ? "200" : status_success,
-              status_error: status_error === "" ? "400" : status_error,
-              response_success,
-              response_error,
-              delay_success: status_success === "" ? "0" : delay_success,
-              delay_error: status_error === "" ? "0" : delay_error
-            });
-
-            // DB에 엔드포인트 insert
-            await insertEndpoint(uuid, {
-              endpoint_path,
-              http_method,
-              status_success: status_success === "" ? 200 : parseInt(status_success),
-              status_error: status_error === "" ? 400 : parseInt(status_error),
-              response_success,
-              response_error,
-              delay_success: status_success === "" ? 0 : parseInt(delay_success),
-              delay_error: status_error === "" ? 0 : parseInt(delay_error)
-            });
-
-            setEndPointPath("");
-            setSuccessResponse('{\n  "data": {}\n}');
-            setErrorResponse('{\n  "error": "An error occurred"\n}');
-          } else {
-            setIsEndpointPathExist(true);
-          }
-        }}
+        onClick={handleAddEndpointButtonOnclick}
       >
         Add Endpoint
       </Button>
