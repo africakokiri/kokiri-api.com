@@ -62,12 +62,6 @@ export const EndpointList = () => {
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
   const { uuid } = useUuidStore();
 
-  // Remove 버튼을 제어하는 함수
-  const handleRemoveButton = async (endpoint_path: string, http_method: string) => {
-    removeEndpoint(endpoint_path, http_method); // UI에서 삭제
-    await deleteEndpoint(endpoint_path); // DB에서 삭제
-  };
-
   // UUID가 존재하고 UUID의 유효성 여부에 따라 UUIDValidation state를 제어하는 로직
   useEffect(() => {
     if (fetchUuid && !checkUUIDValidation(fetchUuid)) {
@@ -76,6 +70,69 @@ export const EndpointList = () => {
       setFetchUuidValidation(true);
     }
   }, [fetchUuid]);
+
+  // UUID로 endpoints를 불러오는 로직
+  const handleFetchEndpointsByUuid = async () => {
+    // Fetch할 UUID를 입력하지 않으면 함수 종료
+    if (!fetchUuid) return;
+
+    // 1. Fetch할 UUID가 유효하게 입력되었으므로 fetch UUID 빈 문자열로 변경
+    setFetchUuid("");
+
+    // 2. Fetch UUID가 빈 문자열로 변경되었으므로 중복될 경우가 없어 이미 존재하는 fetch endpoint 여부를 false로 변경
+    setExistEndpoint([false]);
+
+    // 3. DB에 존재하는 endpoints를 불러옴
+    const dbEndpoints: Endpoints[] = await getEndpoints(fetchUuid);
+
+    // 4. localStorage에 추가된 endpoints와 DB의 endpoints가 중복되는지 확인
+    const allExist = dbEndpoints.every((incoming) =>
+      endpoints.some(
+        (existing) =>
+          (existing.endpoint_path.slice(36) === incoming.endpoint_path ||
+            existing.endpoint_path === incoming.endpoint_path) &&
+          existing.http_method === incoming.http_method
+      )
+    );
+
+    console.log(dbEndpoints);
+    console.log(endpoints);
+
+    // 5. Fetch할 UUID가 DB에 존재하는지 확인
+    const uuidInDB = await checkUuidExist(fetchUuid);
+
+    // 6. 존재하지 않으면 경고를 렌더링하고 함수 종료
+    if (!uuidInDB) {
+      setExistEndpoint([true, "Endpoint not found."]);
+
+      return;
+    }
+
+    // 7-1. 추가하려는 endpoints가 localStorage의 endpoints와 중복되지 않으면 endpoints를 localStorage에 추가
+    if (!allExist) {
+      dbEndpoints.forEach((endpoint) => {
+        addEndpoint({
+          endpoint_path: endpoint.uuid + endpoint.endpoint_path,
+          http_method: endpoint.http_method as (typeof HTTP_METHODS)[number],
+          status_success: endpoint.status_success,
+          status_error: endpoint.status_error,
+          response_success: endpoint.response_success,
+          response_error: endpoint.response_error,
+          delay_success: endpoint.delay_success,
+          delay_error: endpoint.delay_error
+        });
+      });
+      // 7-2. 추가하려는 endpoints가 localStoarge의 endpoints와 중복되면 함수를 종료하고 경고를 렌더링하고 함수 종료
+    } else {
+      setExistEndpoint([true, "The endpoint you are trying to add already exists in this field."]);
+    }
+  };
+
+  // Remove 버튼을 제어하는 함수
+  const handleRemoveButton = async (endpoint_path: string, http_method: string) => {
+    removeEndpoint(endpoint_path, http_method); // UI에서 삭제
+    await deleteEndpoint(endpoint_path); // DB에서 삭제
+  };
 
   return (
     <Card className="h-[718px]">
@@ -137,53 +194,7 @@ hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                 <AlertDialogCancel onClick={() => setFetchUuid("")}>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   disabled={!fetchUuidValidation}
-                  onClick={async () => {
-                    if (!fetchUuid) return;
-
-                    setFetchUuid("");
-
-                    setExistEndpoint([false]);
-
-                    const dbEndpoints: Endpoints[] = await getEndpoints(fetchUuid);
-
-                    // 모든 DB 엔드포인트가 기존에 존재하는지 확인
-                    const allExist = dbEndpoints.every((incoming) =>
-                      endpoints.some(
-                        (existing) =>
-                          (existing.endpoint_path.slice(36) === incoming.path ||
-                            existing.endpoint_path === incoming.path) &&
-                          existing.http_method === incoming.method
-                      )
-                    );
-
-                    const uuidInDB = await checkUuidExist(fetchUuid);
-
-                    if (!uuidInDB) {
-                      setExistEndpoint([true, "Endpoint not found."]);
-
-                      return;
-                    }
-
-                    if (!allExist) {
-                      dbEndpoints.forEach((endpoint) => {
-                        addEndpoint({
-                          endpoint_path: endpoint.uuid + endpoint.endpoint_path,
-                          http_method: endpoint.http_method as (typeof HTTP_METHODS)[number],
-                          status_success: endpoint.status_success,
-                          status_error: endpoint.status_error,
-                          response_success: endpoint.response_success,
-                          response_error: endpoint.response_error,
-                          delay_success: endpoint.delay_success,
-                          delay_error: endpoint.delay_error
-                        });
-                      });
-                    } else {
-                      setExistEndpoint([
-                        true,
-                        "The endpoint you are trying to add already exists in this field."
-                      ]);
-                    }
-                  }}
+                  onClick={handleFetchEndpointsByUuid}
                 >
                   Continue
                 </AlertDialogAction>
