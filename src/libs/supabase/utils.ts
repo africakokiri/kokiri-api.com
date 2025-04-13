@@ -17,16 +17,16 @@ export const insertEndpoint = async (UUID: string, fields: Endpoints) => {
 };
 
 // DB에 endpointPath가 이미 존재하는지 여부 확인
-export const checkIsEndpointExist = async (endpointPath: string, httpMethod: string) => {
+export const checkEndpointExist = async (endpoint_path: string, http_method: string) => {
   const supabase = await createClient();
 
-  if (!endpointPath || !httpMethod) throw new Error("endpointPath 또는 httpMethod 잘못됨");
+  if (!endpoint_path || !http_method) throw new Error("endpointPath 또는 httpMethod 잘못됨");
 
   const { data: existing, error } = await supabase
     .from("endpoints")
     .select("id")
-    .eq("path", endpointPath)
-    .eq("method", httpMethod)
+    .eq("endpoint_path", endpoint_path)
+    .eq("http_method", http_method)
     .maybeSingle();
 
   if (error) throw new Error(error.message);
