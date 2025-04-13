@@ -51,20 +51,20 @@ export const deleteEndpoint = async (endpoint_path: string) => {
 };
 
 // DB에 있는 endpoints 불러오기
-export const getEndpoints = async (userId: string) => {
+export const getEndpoints = async (UUID: string) => {
   const supabase = await createClient();
 
-  if (!userId) throw new Error("userId 잘못됨");
+  if (!UUID) throw new Error("UUID 잘못됨");
 
-  const { data, error } = await supabase.from("endpoints").select("*").eq("uuid", userId);
+  const { data, error } = await supabase.from("endpoints").select("*").eq("uuid", UUID);
 
   if (error) throw new Error(error.message);
 
   return data;
 };
 
-// DB에 해당 UUID가 존재하는지 호가인
-export const getUuid = async (uuid: string) => {
+// DB에 해당 UUID가 존재하는지 확인
+export const checkUUIDExist = async (uuid: string) => {
   const supabase = await createClient();
 
   if (!uuid) throw new Error("uuid 잘못됨");
