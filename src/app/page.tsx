@@ -4,7 +4,7 @@ import { Delay } from "@/components/EndpointCreator/Delay";
 import { EndpointPath } from "@/components/EndpointCreator/EndpointPath";
 import { HttpMethod } from "@/components/EndpointCreator/HttpMethod";
 import { Responses } from "@/components/EndpointCreator/Responses";
-import { SuccessOrErrorStatus } from "@/components/EndpointCreator/SuccessOrErrorStatus";
+import { Status } from "@/components/EndpointCreator/Status";
 import { EndpointList } from "@/components/EndpointList";
 import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,10 +17,7 @@ export default function page() {
         <Header />
 
         {/* Contents */}
-        <div
-          className="max1304:flex-col max1304:*:w-full flex items-start
-gap-8 *:w-1/2"
-        >
+        <div className="flex items-start gap-8 *:w-1/2 max1304:flex-col max1304:*:w-full">
           <Card>
             <CardHeader />
             <CardContent>
@@ -30,16 +27,13 @@ gap-8 *:w-1/2"
                   <HttpMethod />
                 </div>
 
-                <div
-                  className="max672:flex-col max1304:flex max672:flex gap-4
-*:w-full"
-                >
+                <div className="gap-4 *:w-full max1304:flex max672:flex max672:flex-col">
                   <div className="flex gap-4 *:w-full *:space-y-2">
-                    <SuccessOrErrorStatus status="Success" />
+                    <Status status="Success" />
                     <Delay status="Success" />
                   </div>
                   <div className="flex gap-4 *:w-full *:space-y-2">
-                    <SuccessOrErrorStatus status="Error" />
+                    <Status status="Error" />
                     <Delay status="Error" />
                   </div>
                 </div>

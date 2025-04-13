@@ -1,12 +1,7 @@
 "use client";
 
 import { type HTTP_METHODS } from "@/components/EndpointCreator/HttpMethod";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,23 +15,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/libs/shadcn/utils";
-import {
-  deleteEndpoint,
-  getEndpoints,
-  getUuid
-} from "@/libs/supabase/utils";
+import { checkUuidExist, deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
+import { type Endpoints } from "@/types/endoints";
 
 import { AlertCircle, X } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -44,21 +30,7 @@ import { useEffect, useRef, useState } from "react";
 
 const ReactJson = dynamic(() => import("react-json-view"), { ssr: false });
 
-type Endpoint = {
-  id: number;
-  created_at: string;
-  path: string;
-  method: string;
-  status_success: string;
-  status_error: string;
-  response_success: string;
-  response_error: string;
-  delay_success: string;
-  delay_error: string;
-  uuid: string;
-};
-
-// HTTP Method에 따라 element bg-color 변경
+// HTTP Method에 따라 element의 ba-color를 변경하는 함수
 const getMethodVariant = (method: string) => {
   switch (method.toUpperCase()) {
     case "GET":
@@ -74,50 +46,96 @@ const getMethodVariant = (method: string) => {
   }
 };
 
+// UUID의 유효성을 확인하는 함수
+const checkUUIDValidation = (uuid: string) => {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+};
+
 export const EndpointList = () => {
   const inputRef = useRef(null);
 
-  const [uuid, setUuid] = useState("");
-  const [uuidValidation, setUuidValidation] = useState(false);
+  const [fetchUuid, setFetchUuid] = useState("");
+  const [fetchUuidValidation, setFetchUuidValidation] = useState(false);
   const [existEndpoint, setExistEndpoint] = useState([false, ""]);
 
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
-  const { userId } = useUuidStore();
+  const { uuid } = useUuidStore();
 
-  // Remove 버튼 제어
-  const handleRemoveButton = async (
-    endpointPath: string,
-    httpMethod: string
-  ) => {
-    // UI에서 삭제
-    removeEndpoint(endpointPath, httpMethod);
-
-    // DB에서 삭제
-    await deleteEndpoint(endpointPath);
-  };
-
-  // UUID 유효성 확인
-  const isValidUUID = (uuid: string) => {
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(uuid);
-  };
-
+  // UUID가 존재하고 UUID의 유효성 여부에 따라 UUIDValidation state를 제어하는 로직
   useEffect(() => {
-    if (uuid && !isValidUUID(uuid)) {
-      setUuidValidation(false);
+    if (fetchUuid && !checkUUIDValidation(fetchUuid)) {
+      setFetchUuidValidation(false);
     } else {
-      setUuidValidation(true);
+      setFetchUuidValidation(true);
     }
-  }, [uuid]);
+  }, [fetchUuid]);
+
+  // UUID로 endpoints를 불러오는 로직
+  const handleFetchEndpointsByUuid = async () => {
+    // Fetch할 UUID를 입력하지 않으면 함수 종료
+    if (!fetchUuid) return;
+
+    // 1. Fetch할 UUID가 유효하게 입력되었으므로 fetch UUID 빈 문자열로 변경
+    setFetchUuid("");
+
+    // 2. Fetch UUID가 빈 문자열로 변경되었으므로 중복될 경우가 없어 이미 존재하는 fetch endpoint 여부를 false로 변경
+    setExistEndpoint([false]);
+
+    // 3. DB에 존재하는 endpoints를 불러옴
+    const dbEndpoints: Endpoints[] = await getEndpoints(fetchUuid);
+
+    // 4. localStorage에 추가된 endpoints와 DB의 endpoints가 중복되는지 확인
+    const allExist = dbEndpoints.every((incoming) =>
+      endpoints.some(
+        (existing) =>
+          (existing.endpoint_path.slice(36) === incoming.endpoint_path ||
+            existing.endpoint_path === incoming.endpoint_path) &&
+          existing.http_method === incoming.http_method
+      )
+    );
+
+    // 5. Fetch할 UUID가 DB에 존재하는지 확인
+    const uuidInDB = await checkUuidExist(fetchUuid);
+
+    // 6. 존재하지 않으면 경고를 렌더링하고 함수 종료
+    if (!uuidInDB) {
+      setExistEndpoint([true, "Endpoint not found."]);
+
+      return;
+    }
+
+    // 7-1. 추가하려는 endpoints가 localStorage의 endpoints와 중복되지 않으면 endpoints를 localStorage에 추가
+    if (!allExist) {
+      dbEndpoints.forEach((endpoint) => {
+        addEndpoint({
+          endpoint_path: endpoint.uuid + endpoint.endpoint_path,
+          http_method: endpoint.http_method as (typeof HTTP_METHODS)[number],
+          status_success: endpoint.status_success.toString(),
+          status_error: endpoint.status_error.toString(),
+          response_success: endpoint.response_success!.toString(),
+          response_error: endpoint.response_error!.toString(),
+          delay_success: endpoint.delay_success.toString(),
+          delay_error: endpoint.delay_error.toString(),
+          uuid
+        });
+      });
+      // 7-2. 추가하려는 endpoints가 localStoarge의 endpoints와 중복되면 함수를 종료하고 경고를 렌더링하고 함수 종료
+    } else {
+      setExistEndpoint([true, "The endpoint you are trying to add already exists in this field."]);
+    }
+  };
+
+  // Remove 버튼을 제어하는 함수
+  const handleRemoveButton = async (endpoint_path: string, http_method: string) => {
+    removeEndpoint(endpoint_path, http_method); // UI에서 삭제
+    await deleteEndpoint(endpoint_path); // DB에서 삭제
+  };
 
   return (
     <Card className="h-[718px]">
       <CardHeader className="space-y-4">
-        <CardTitle
-          className="flex items-center justify-between gap-4 text-2xl
-font-semibold"
-        >
+        <CardTitle className="flex items-center justify-between gap-4 text-2xl font-semibold">
           <h2>Defined Endpoints</h2>
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -125,28 +143,19 @@ font-semibold"
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Fetch endpoints by UUID
-                </AlertDialogTitle>
+                <AlertDialogTitle>Fetch endpoints by UUID</AlertDialogTitle>
                 <AlertDialogDescription asChild>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="input-uuid">
-                        Please enter your UUID
-                      </Label>
-                      <div
-                        className="flex h-5 items-center gap-2 text-sm
-text-destructive"
-                      >
-                        {!uuidValidation ? (
+                      <Label htmlFor="input-uuid">Please enter your UUID</Label>
+                      <div className="flex h-5 items-center gap-2 text-sm text-destructive">
+                        {!fetchUuidValidation ? (
                           <>
                             <AlertCircle className="h-4 w-4" />
                             <span>Invalid JSON format</span>
                           </>
                         ) : (
-                          <span className="invisible">
-                            Invalid JSON format
-                          </span>
+                          <span className="invisible">Invalid JSON format</span>
                         )}
                       </div>
                     </div>
@@ -154,21 +163,18 @@ text-destructive"
                       <Input
                         ref={inputRef}
                         id="input-uuid"
-                        value={uuid}
-                        onChange={(e) => setUuid(e.target.value)}
-                        className={cn(
-                          !uuidValidation && "border-red-500 !ring-red-500"
-                        )}
+                        value={fetchUuid}
+                        onChange={(e) => setFetchUuid(e.target.value)}
+                        className={cn(!fetchUuidValidation && "border-red-500 !ring-red-500")}
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-1 top-1/2 h-7 w-7
--translate-y-1/2 text-gray-500 hover:text-gray-900 dark:text-gray-400
-dark:hover:text-gray-100"
+                        className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-gray-500
+hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                         onClick={() => {
-                          setUuid("");
+                          setFetchUuid("");
 
                           if (inputRef.current) {
                             (inputRef.current as HTMLInputElement).focus();
@@ -183,63 +189,10 @@ dark:hover:text-gray-100"
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setUuid("")}>
-                  Cancel
-                </AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setFetchUuid("")}>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  disabled={!uuidValidation}
-                  onClick={async () => {
-                    if (!uuid) return;
-
-                    setUuid("");
-
-                    setExistEndpoint([false]);
-
-                    const dbEndpoints: Endpoint[] =
-                      await getEndpoints(uuid);
-
-                    // 모든 DB 엔드포인트가 기존에 존재하는지 확인
-                    const allExist = dbEndpoints.every((incoming) =>
-                      endpoints.some(
-                        (existing) =>
-                          (existing.endpointPath.slice(36) ===
-                            incoming.path ||
-                            existing.endpointPath === incoming.path) &&
-                          existing.httpMethod === incoming.method
-                      )
-                    );
-
-                    const uuidInDB = await getUuid(uuid);
-
-                    if (!uuidInDB) {
-                      console.log(uuidInDB + "!");
-
-                      setExistEndpoint([true, "Endpoint not found."]);
-
-                      return;
-                    }
-
-                    if (!allExist) {
-                      dbEndpoints.forEach((endpoint) => {
-                        addEndpoint({
-                          endpointPath: endpoint.uuid + endpoint.path,
-                          httpMethod:
-                            endpoint.method as (typeof HTTP_METHODS)[number],
-                          successStatus: endpoint.status_success,
-                          errorStatus: endpoint.status_error,
-                          successResponse: endpoint.response_success,
-                          errorResponse: endpoint.response_error,
-                          successDelay: endpoint.delay_success,
-                          errorDelay: endpoint.delay_error
-                        });
-                      });
-                    } else {
-                      setExistEndpoint([
-                        true,
-                        "The endpoint you are trying to add already exists in this field."
-                      ]);
-                    }
-                  }}
+                  disabled={!fetchUuidValidation}
+                  onClick={handleFetchEndpointsByUuid}
                 >
                   Continue
                 </AlertDialogAction>
@@ -250,16 +203,15 @@ dark:hover:text-gray-100"
 
         {endpoints && endpoints.length === 0 && (
           <CardDescription>
-            No endpoints defined yet. Create a new one or load using a
-            UUID.
+            No endpoints defined yet. Create a new one or load using a UUID.
           </CardDescription>
         )}
 
         {existEndpoint[0] && (
           <div
-            className="mt-2 flex items-center justify-between gap-2
-rounded-lg border border-destructive/50 px-4 py-3 text-sm text-destructive
-dark:border-destructive [&>svg]:text-destructive"
+            className="mt-2 flex items-center justify-between gap-2 rounded-lg border
+border-destructive/50 px-4 py-3 text-sm text-destructive dark:border-destructive
+[&>svg]:text-destructive"
           >
             <div className="flex items-center gap-2">
               <AlertCircle className="h-4 w-4" />
@@ -274,57 +226,48 @@ dark:border-destructive [&>svg]:text-destructive"
         )}
       </CardHeader>
       <CardContent
-        className={cn(
-          "h-[602px] space-y-4 overflow-y-scroll",
-          existEndpoint[0] && "h-[548px]"
-        )}
+        className={cn("h-[602px] space-y-4 overflow-y-scroll", existEndpoint[0] && "h-[548px]")}
       >
         {endpoints.map(
           (
             {
-              endpointPath,
-              httpMethod,
-              successStatus,
-              errorStatus,
-              successResponse,
-              errorResponse
+              endpoint_path,
+              http_method,
+              status_success,
+              status_error,
+              response_success,
+              response_error
             },
             index
           ) => {
-            const slicedUuid = endpointPath.slice(0, 36);
-            const isSlicedUuidValid = isValidUUID(slicedUuid);
+            const slicedUuid = endpoint_path.slice(0, 36);
+            const isSlicedUuidValid = checkUUIDValidation(slicedUuid);
 
             return (
               <div
-                key={`${httpMethod}-${endpointPath}-${index}`}
+                key={`${http_method}-${endpoint_path}-${index}`}
                 className="space-y-2 rounded-md border p-2"
               >
                 <div className="flex items-center justify-between">
-                  <div
-                    className="flex w-full items-center justify-between
-gap-4"
-                  >
+                  <div className="flex w-full items-center justify-between gap-4">
                     <Badge
-                      variant={getMethodVariant(httpMethod)}
+                      variant={getMethodVariant(http_method)}
                       className="rounded-full"
                     >
-                      {httpMethod}
+                      {http_method}
                     </Badge>
                     <div
-                      className={`${robotoMonoVar.className} rounded-md
-border bg-muted/50 px-2 py-1 text-xs`}
+                      className={`${robotoMonoVar.className} rounded-md border bg-muted/50 px-2 py-1
+text-xs`}
                     >
                       <span>kokiri-api.com/</span>
-                      <span
-                        className="font-semibold text-green-600 underline
-underline-offset-4"
-                      >
-                        {isSlicedUuidValid ? slicedUuid : userId}
+                      <span className="font-semibold text-green-600 underline underline-offset-4">
+                        {isSlicedUuidValid ? slicedUuid : uuid}
                       </span>
                       <span>
-                        {isValidUUID(endpointPath.slice(0, 36))
-                          ? endpointPath.slice(36, 72)
-                          : endpointPath}
+                        {checkUUIDValidation(endpoint_path.slice(0, 36))
+                          ? endpoint_path.slice(36, 72)
+                          : endpoint_path}
                       </span>
 
                       <span className="sr-only"></span>
@@ -343,21 +286,16 @@ underline-offset-4"
                           variant="outline"
                           className="rounded-full"
                         >
-                          Status: {successStatus}
+                          Status: {status_success}
                         </Badge>
-                        <span className="text-sm text-muted-foreground">
-                          Success Response
-                        </span>
+                        <span className="text-sm text-muted-foreground">Success Response</span>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="rounded-md border bg-muted/50 p-4">
-                        <pre
-                          className="max-h-60 overflow-auto
-whitespace-pre-wrap text-xs"
-                        >
+                        <pre className="max-h-60 overflow-auto whitespace-pre-wrap text-xs">
                           <ReactJson
-                            src={JSON.parse(successResponse)}
+                            src={JSON.parse(response_success)}
                             displayDataTypes={false}
                             iconStyle="square"
                             collapsed={2}
@@ -379,21 +317,16 @@ whitespace-pre-wrap text-xs"
                           variant="destructive"
                           className="rounded-full hover:bg-destructive"
                         >
-                          Status: {errorStatus}
+                          Status: {status_error}
                         </Badge>
-                        <span className="text-sm text-muted-foreground">
-                          Error Response
-                        </span>
+                        <span className="text-sm text-muted-foreground">Error Response</span>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="rounded-md border bg-muted/50 p-4">
-                        <pre
-                          className="max-h-60 overflow-auto
-whitespace-pre-wrap text-xs"
-                        >
+                        <pre className="max-h-60 overflow-auto whitespace-pre-wrap text-xs">
                           <ReactJson
-                            src={JSON.parse(errorResponse)}
+                            src={JSON.parse(response_error)}
                             displayDataTypes={false}
                             iconStyle="square"
                             collapsed={2}
@@ -407,11 +340,8 @@ whitespace-pre-wrap text-xs"
                 <div className="flex items-center justify-between">
                   <div className="flex w-full justify-end gap-4">
                     <Badge
-                      className="cursor-pointer bg-destructive
-hover:bg-red-400"
-                      onClick={() =>
-                        handleRemoveButton(endpointPath, httpMethod)
-                      }
+                      className="cursor-pointer bg-destructive hover:bg-red-400"
+                      onClick={() => handleRemoveButton(endpoint_path, http_method)}
                     >
                       Remove
                     </Badge>

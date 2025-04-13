@@ -13,16 +13,15 @@ export const EndpointPath = () => {
   const [isPathValid, setIsPathValid] = useState(false);
   const inputRef = useRef(null);
 
-  const { endpointPath, setEndPointPath } = useHttpStore();
+  const { endpoint_path, setEndPointPath } = useHttpStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
-    const isEmpty = endpointPath === "";
-    const isInvalid =
-      !endpointPath.startsWith("/api/") || endpointPath.length < 6;
+    const isEmpty = endpoint_path === "";
+    const isInvalid = !endpoint_path.startsWith("/api/") || endpoint_path.length < 6;
 
     setIsPathValid(!isEmpty && isInvalid);
-  }, [endpointPath]);
+  }, [endpoint_path]);
 
   return (
     <div>
@@ -33,19 +32,19 @@ export const EndpointPath = () => {
           placeholder="/api/data"
           id="endpoint-path"
           className={cn(
-            "max672:text-base w-full text-sm",
+            "w-full text-sm max672:text-base",
             isPathValid && "border-[1px] border-red-500 !ring-red-500"
           )}
-          value={endpointPath}
+          value={endpoint_path}
+          onKeyDown={(e) => e.key === " " && e.preventDefault()}
           onChange={(e) => setEndPointPath(e.target.value.trim())}
         />
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2
-text-gray-500 hover:text-gray-900 dark:text-gray-400
-dark:hover:text-gray-100"
+          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-gray-500 hover:text-gray-900
+dark:text-gray-400 dark:hover:text-gray-100"
           onClick={() => {
             setEndPointPath("");
 
@@ -59,11 +58,7 @@ dark:hover:text-gray-100"
         </Button>
       </div>
 
-      {isPathValid && (
-        <p className="text-xs text-red-500">
-          Path must start with /api/...
-        </p>
-      )}
+      {isPathValid && <p className="text-xs text-red-500">Path must start with /api/...</p>}
     </div>
   );
 };

@@ -1,126 +1,123 @@
 import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
+import { type Insert } from "@/types/endoints";
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface UuidStore {
-  userId: string;
-  setUserId: (id: string) => void;
+  uuid: string;
+  setUuid: (uuid: string) => void;
 }
 
-// UUID 발급
+// UUID
 export const useUuidStore = create<UuidStore>((set) => ({
-  userId: "",
-  setUserId: (userId) => {
-    localStorage.setItem("userId", userId);
-    set({ userId });
+  uuid: "",
+  setUuid: (uuid) => {
+    localStorage.setItem("uuid", uuid);
+
+    set({ uuid });
   }
 }));
 
 interface HttpStore {
-  endpointPath: string;
-  httpMethod: HttpMethods;
+  endpoint_path: string;
+  http_method: HttpMethods;
 
-  setEndPointPath: (endpointPath: string) => void;
-  setHttpMethod: (httpMethod: HttpMethods) => void;
+  setEndPointPath: (endpoint_path: string) => void;
+  setHttpMethod: (http_method: HttpMethods) => void;
 }
 
 // Endpoint Path, HTTP Method
 export const useHttpStore = create<HttpStore>((set) => ({
-  endpointPath: "",
-  httpMethod: "GET",
+  endpoint_path: "",
+  http_method: "GET",
 
-  setEndPointPath: (endpointPath) =>
+  setEndPointPath: (endpoint_path) =>
     set(() => ({
-      endpointPath
+      endpoint_path
     })),
-  setHttpMethod: (httpMethod) =>
+  setHttpMethod: (http_method) =>
     set(() => ({
-      httpMethod
+      http_method
     }))
 }));
 
-interface SuccessOrErrorStore {
-  successStatus: string;
-  errorStatus: string;
+interface StatusStore {
+  status_success: string;
+  status_error: string;
 
-  setSuccessStatus: (successStatus: string) => void;
-  setErrorStatus: (errorStatus: string) => void;
+  setSuccessStatus: (status_success: string) => void;
+  setErrorStatus: (status_error: string) => void;
 }
 
-// success, error status code
-export const useSuccessOrErrorStore = create<SuccessOrErrorStore>(
-  (set) => ({
-    successStatus: "200",
-    errorStatus: "400",
+// Success, error Status code
+export const useStatusStore = create<StatusStore>((set) => ({
+  status_success: "200",
+  status_error: "400",
 
-    setSuccessStatus: (successStatus) =>
-      set(() => ({
-        successStatus
-      })),
-    setErrorStatus: (errorStatus) =>
-      set(() => ({
-        errorStatus
-      }))
-  })
-);
+  setSuccessStatus: (status_success) =>
+    set(() => ({
+      status_success
+    })),
+  setErrorStatus: (status_error) =>
+    set(() => ({
+      status_error
+    }))
+}));
 
 interface DelayStore {
-  successDelay: string;
-  errorDelay: string;
+  delay_success: string;
+  delay_error: string;
 
-  setSuccessDelay: (successDelay: string) => void;
-  setErrorDelay: (errorDelay: string) => void;
+  setSuccessDelay: (delay_success: string) => void;
+  setErrorDelay: (delay_error: string) => void;
 }
 
 // Delay
 export const useDelayStore = create<DelayStore>((set) => ({
-  successDelay: "0",
-  errorDelay: "0",
+  delay_success: "0",
+  delay_error: "0",
 
-  setSuccessDelay: (successDelay) =>
+  setSuccessDelay: (delay_success) =>
     set(() => ({
-      successDelay
+      delay_success
     })),
-  setErrorDelay: (errorDelay) =>
+  setErrorDelay: (delay_error) =>
     set(() => ({
-      errorDelay
+      delay_error
     }))
 }));
 
 interface ResponseStore {
-  successResponse: string;
-  errorResponse: string;
+  response_success: string;
+  response_error: string;
   isResponsesValid: boolean;
 
-  setSuccessResponse: (successResponse: string) => void;
-  setErrorResponse: (errorResponse: string) => void;
-  setResponsesValidation: (
-    successResponse: string,
-    errorResponse: string
-  ) => void;
+  setSuccessResponse: (response_success: string) => void;
+  setErrorResponse: (response_error: string) => void;
+  setResponsesValidation: (response_success: string, response_error: string) => void;
 }
 
 // Response 전체
 export const useResponseStore = create<ResponseStore>((set) => ({
-  successResponse: '{\n  "data": {}\n}',
-  errorResponse: '{\n  "error": "An error occurred"\n}',
+  response_success: '{\n  "data": {}\n}',
+  response_error: '{\n  "error": "An error occurred"\n}',
   isResponsesValid: true,
 
-  setSuccessResponse: (successResponse) =>
+  setSuccessResponse: (response_success) =>
     set(() => ({
-      successResponse
+      response_success
     })),
-  setErrorResponse: (errorResponse) =>
+  setErrorResponse: (response_error) =>
     set(() => ({
-      errorResponse
+      response_error
     })),
-  setResponsesValidation: (successResponse, errorResponse) =>
+  setResponsesValidation: (response_success, response_error) =>
     set(() => {
       let isValid = true;
       try {
-        JSON.parse(successResponse);
-        JSON.parse(errorResponse);
+        JSON.parse(response_success);
+        JSON.parse(response_error);
       } catch {
         isValid = false;
       }
@@ -128,39 +125,31 @@ export const useResponseStore = create<ResponseStore>((set) => ({
     })
 }));
 
-export type Fields = {
-  endpointPath: string;
-  httpMethod: HttpMethods;
-  successStatus: string | number;
-  errorStatus: string | number;
-  successResponse: string;
-  errorResponse: string;
-  successDelay: string | number;
-  errorDelay: string | number;
+type FieldsInsertEntireStringType<T> = {
+  [K in keyof T]: T[K] extends string ? T[K] : string;
 };
 
-interface AddedEndpointsStore {
-  endpoints: Fields[];
+interface EndpointStore {
+  endpoints: FieldsInsertEntireStringType<Insert>[];
 
-  addEndpoint: (field: Fields) => void;
-  removeEndpoint: (endpointPath: string, httpMethod: string) => void;
+  addEndpoint: (fields: FieldsInsertEntireStringType<Insert>) => void;
+  removeEndpoint: (endpoint_path: string, http_method: string) => void;
 }
 
-// 엔드포인트 전체 관리
-export const useEndpointStore = create<AddedEndpointsStore>()(
+// localStorage에 추가된 엔드포인트
+export const useEndpointStore = create<EndpointStore>()(
   persist(
     (set) => ({
       endpoints: [],
-      addEndpoint: (field) =>
+      addEndpoint: (fields) =>
         set((state) => ({
-          endpoints: [field, ...state.endpoints]
+          endpoints: [fields, ...state.endpoints]
         })),
-      removeEndpoint: (endpointPath, httpMethod) =>
+      removeEndpoint: (endpoint_path, http_method) =>
         set((state) => ({
           endpoints: state.endpoints.filter(
             (endpoint) =>
-              endpoint.endpointPath !== endpointPath ||
-              endpoint.httpMethod !== httpMethod
+              endpoint.endpoint_path !== endpoint_path || endpoint.http_method !== http_method
           )
         }))
     }),

@@ -3,8 +3,7 @@ import { monitorMemoryUsage } from "@/utils/monitorMemoryUsage";
 
 import { type NextRequest, NextResponse } from "next/server";
 
-const delay = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Standard HTTP status messages
 const HTTP_STATUS_MESSAGES = {
@@ -44,8 +43,8 @@ async function handleRequest(
     .from("endpoints")
     .select("*")
     .eq("uuid", uuid)
-    .eq("path", fullPath)
-    .eq("method", method)
+    .eq("endpoint_path", fullPath)
+    .eq("http_method", method)
     .maybeSingle();
 
   // 🔴 Not Found
@@ -69,12 +68,11 @@ async function handleRequest(
 
     const errorStatus = Number(data.status_error) || 400;
     const errorMessage =
-      HTTP_STATUS_MESSAGES[
-        errorStatus as keyof typeof HTTP_STATUS_MESSAGES
-      ] || "Error";
-    const errorBody = data.response_error
-      ? JSON.parse(data.response_error)
-      : {};
+      HTTP_STATUS_MESSAGES[errorStatus as keyof typeof HTTP_STATUS_MESSAGES] || "Error";
+    const errorBody =
+      typeof data.response_error === "string"
+        ? JSON.parse(data.response_error)
+        : (data.response_error ?? {});
 
     return NextResponse.json(
       {
@@ -92,12 +90,11 @@ async function handleRequest(
 
   const successStatus = Number(data.status_success) || 200;
   const successMessage =
-    HTTP_STATUS_MESSAGES[
-      successStatus as keyof typeof HTTP_STATUS_MESSAGES
-    ] || "Success";
-  const successBody = data.response_success
-    ? JSON.parse(data.response_success)
-    : {};
+    HTTP_STATUS_MESSAGES[successStatus as keyof typeof HTTP_STATUS_MESSAGES] || "Success";
+  const successBody =
+    typeof data.response_success === "string"
+      ? JSON.parse(data.response_success)
+      : (data.response_success ?? {});
 
   return NextResponse.json(
     {
@@ -114,59 +111,39 @@ export async function GET(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return await monitorMemoryUsage(
-    "GET",
-    req.nextUrl.pathname,
-    async () => {
-      return handleRequest(req, "GET", props);
-    }
-  );
+  return await monitorMemoryUsage("GET", req.nextUrl.pathname, async () => {
+    return handleRequest(req, "GET", props);
+  });
 }
 export async function POST(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return await monitorMemoryUsage(
-    "POST",
-    req.nextUrl.pathname,
-    async () => {
-      return handleRequest(req, "POST", props);
-    }
-  );
+  return await monitorMemoryUsage("POST", req.nextUrl.pathname, async () => {
+    return handleRequest(req, "POST", props);
+  });
 }
 export async function PUT(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return await monitorMemoryUsage(
-    "PUT",
-    req.nextUrl.pathname,
-    async () => {
-      return handleRequest(req, "PUT", props);
-    }
-  );
+  return await monitorMemoryUsage("PUT", req.nextUrl.pathname, async () => {
+    return handleRequest(req, "PUT", props);
+  });
 }
 export async function PATCH(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return await monitorMemoryUsage(
-    "PATCH",
-    req.nextUrl.pathname,
-    async () => {
-      return handleRequest(req, "PATCH", props);
-    }
-  );
+  return await monitorMemoryUsage("PATCH", req.nextUrl.pathname, async () => {
+    return handleRequest(req, "PATCH", props);
+  });
 }
 export async function DELETE(
   req: NextRequest,
   props: { params: Promise<{ uuid: string; path: string[] }> }
 ) {
-  return await monitorMemoryUsage(
-    "DELETE",
-    req.nextUrl.pathname,
-    async () => {
-      return handleRequest(req, "DELETE", props);
-    }
-  );
+  return await monitorMemoryUsage("DELETE", req.nextUrl.pathname, async () => {
+    return handleRequest(req, "DELETE", props);
+  });
 }
