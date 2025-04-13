@@ -10,16 +10,13 @@ import {
   AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  checkIsEndpointExist,
-  insertEndpoint
-} from "@/libs/supabase/utils";
+import { checkEndpointExist, insertEndpoint } from "@/libs/supabase/utils";
 import {
   useDelayStore,
   useEndpointStore,
   useHttpStore,
   useResponseStore,
-  useSuccessOrErrorStore,
+  useStatusStore,
   useUuidStore
 } from "@/libs/zustand/store";
 
@@ -29,35 +26,31 @@ export const AddEndpointButton = () => {
   const [isPathValid, setIsPathValid] = useState(false);
   const [ieEndpointPathExist, setIsEndpointPathExist] = useState(false);
 
-  const { userId } = useUuidStore();
-  const { endpointPath, setEndPointPath, httpMethod } = useHttpStore();
-  const { successStatus, errorStatus } = useSuccessOrErrorStore();
-  const {
-    successResponse,
-    errorResponse,
-    isResponsesValid,
-    setResponsesValidation
-  } = useResponseStore();
+  const { uuid } = useUuidStore();
+  const { endpoint_path, setEndPointPath, http_method } = useHttpStore();
+  const { success_status, error_status } = useStatusStore();
+  const { success_response, error_response, isResponsesValid, setResponsesValidation } =
+    useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
-  const { successDelay, errorDelay } = useDelayStore();
+  const { success_delay, error_delay } = useDelayStore();
   const { setSuccessResponse, setErrorResponse } = useResponseStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
   useEffect(() => {
     const isValid =
-      endpointPath !== "" &&
-      endpointPath.startsWith("/api/") &&
-      endpointPath.length > 5 &&
+      endpoint_path !== "" &&
+      endpoint_path.startsWith("/api/") &&
+      endpoint_path.length > 5 &&
       isResponsesValid;
 
     setIsPathValid(isValid);
-  }, [endpointPath, isResponsesValid]);
+  }, [endpoint_path, isResponsesValid]);
 
   useEffect(() => {
-    setResponsesValidation(successResponse, errorResponse);
+    setResponsesValidation(success_response, error_response);
 
     // eslint-disable-next-line
-  }, [successResponse, errorResponse]);
+  }, [success_response, error_response]);
 
   return (
     <>
@@ -66,43 +59,35 @@ export const AddEndpointButton = () => {
         className="w-full"
         onClick={async () => {
           const isExist = endpoints.some(
-            (endpoint) =>
-              endpoint.endpointPath === endpointPath &&
-              endpoint.httpMethod === httpMethod
+            (endpoint) => endpoint.endpointPath === endpoint_path && endpoint.httpMethod === http_method
           );
 
           // DB에 endpointPath가 존재하지 않으면 insert
-          if (
-            !isExist &&
-            !(await checkIsEndpointExist(userId, endpointPath))
-          ) {
+          if (!isExist && !(await checkEndpointExist(uuid, endpoint_path))) {
             setIsEndpointPathExist(false);
 
             // Defined Endpoints에 엔드포인트 렌더링
             addEndpoint({
-              endpointPath,
-              httpMethod,
-              successStatus: successStatus === "" ? "200" : successStatus,
-              errorStatus: errorStatus === "" ? "400" : errorStatus,
-              successResponse,
-              errorResponse,
-              successDelay: successStatus === "" ? "0" : successDelay,
-              errorDelay: errorStatus === "" ? "0" : errorDelay
+              endpoint_path,
+              http_method,
+              success_status: success_status === "" ? "200" : success_status,
+              error_status: error_status === "" ? "400" : error_status,
+              success_response,
+              error_response,
+              success_delay: success_status === "" ? "0" : success_delay,
+              error_delay: error_status === "" ? "0" : error_delay
             });
 
             // DB에 엔드포인트 insert
-            await insertEndpoint(userId, {
-              endpointPath,
-              httpMethod,
-              successStatus:
-                successStatus === "" ? 200 : parseInt(successStatus),
-              errorStatus:
-                errorStatus === "" ? 400 : parseInt(errorStatus),
-              successResponse,
-              errorResponse,
-              successDelay:
-                successStatus === "" ? 0 : parseInt(successDelay),
-              errorDelay: errorStatus === "" ? 0 : parseInt(errorDelay)
+            await insertEndpoint(uuid, {
+              endpoint_path,
+              http_method,
+              success_status: success_status === "" ? 200 : parseInt(success_status),
+              error_status: error_status === "" ? 400 : parseInt(error_status),
+              success_response,
+              error_response,
+              success_delay: success_status === "" ? 0 : parseInt(success_delay),
+              error_delay: error_status === "" ? 0 : parseInt(error_delay)
             });
 
             setEndPointPath("");
@@ -122,12 +107,9 @@ export const AddEndpointButton = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              The endpoint path already exists.
-            </AlertDialogTitle>
+            <AlertDialogTitle>The endpoint path already exists.</AlertDialogTitle>
             <AlertDialogDescription>
-              To modify the JSON response, please delete the existing
-              endpoint path first.
+              To modify the JSON response, please delete the existing endpoint path first.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
