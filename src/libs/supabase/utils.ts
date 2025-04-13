@@ -1,27 +1,15 @@
 "use server";
 
 import { createClient } from "@/libs/supabase/serverClient";
-import { type Fields } from "@/libs/zustand/store";
+import { type Endpoints } from "@/types/endoints";
 
 // DB에 엔드포인트 insert
-export const insertEndpoint = async (userId: string, fields: Fields) => {
+export const insertEndpoint = async (UUID: string, fields: Endpoints) => {
   const supabase = await createClient();
 
-  if (!userId) throw new Error("UUID 없음");
+  if (!UUID) throw new Error("UUID 없음");
 
-  const payload = {
-    uuid: userId,
-    path: fields.endpointPath,
-    method: fields.httpMethod,
-    status_success: fields.successStatus,
-    status_error: fields.errorStatus,
-    response_success: fields.successResponse,
-    response_error: fields.errorResponse,
-    delay_success: fields.successDelay,
-    delay_error: fields.errorDelay
-  };
-
-  const { error } = await supabase.from("endpoints").insert(payload);
+  const { error } = await supabase.from("endpoints").insert(fields);
 
   if (error) {
     throw new Error(`Supabase insert error: ${error.message}`);
@@ -29,14 +17,10 @@ export const insertEndpoint = async (userId: string, fields: Fields) => {
 };
 
 // DB에 endpointPath가 이미 존재하는지 여부 확인
-export const checkIsEndpointExist = async (
-  endpointPath: string,
-  httpMethod: string
-) => {
+export const checkIsEndpointExist = async (endpointPath: string, httpMethod: string) => {
   const supabase = await createClient();
 
-  if (!endpointPath || !httpMethod)
-    throw new Error("endpointPath 또는 httpMethod 잘못됨");
+  if (!endpointPath || !httpMethod) throw new Error("endpointPath 또는 httpMethod 잘못됨");
 
   const { data: existing, error } = await supabase
     .from("endpoints")
@@ -72,10 +56,7 @@ export const getEndpoints = async (userId: string) => {
 
   if (!userId) throw new Error("userId 잘못됨");
 
-  const { data, error } = await supabase
-    .from("endpoints")
-    .select("*")
-    .eq("uuid", userId);
+  const { data, error } = await supabase.from("endpoints").select("*").eq("uuid", userId);
 
   if (error) throw new Error(error.message);
 
@@ -88,10 +69,7 @@ export const getUuid = async (uuid: string) => {
 
   if (!uuid) throw new Error("uuid 잘못됨");
 
-  const { data, error } = await supabase
-    .from("endpoints")
-    .select("*")
-    .eq("uuid", uuid);
+  const { data, error } = await supabase.from("endpoints").select("*").eq("uuid", uuid);
 
   if (error) throw new Error(error.message);
 
