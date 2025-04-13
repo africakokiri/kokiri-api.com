@@ -10,16 +10,10 @@ import { AlertCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const Responses = ({ status }: { status: "Success" | "Error" }) => {
-  const {
-    successResponse,
-    setSuccessResponse,
-    errorResponse,
-    setErrorResponse
-  } = useResponseStore();
+  const { success_response, setSuccessResponse, error_response, setErrorResponse } = useResponseStore();
 
-  const response = status === "Success" ? successResponse : errorResponse;
-  const setResponse =
-    status === "Success" ? setSuccessResponse : setErrorResponse;
+  const response = status === "Success" ? success_response : error_response;
+  const setResponse = status === "Success" ? setSuccessResponse : setErrorResponse;
 
   const [validationStates, setValidationStates] = useState({
     Success: true,
@@ -57,13 +51,11 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
 
       const tab = "  "; // 2칸 공백 (필요시 "\t"로 교체 가능)
 
-      const newValue =
-        response.substring(0, start) + tab + response.substring(end);
+      const newValue = response.substring(0, start) + tab + response.substring(end);
       setResponse(newValue);
 
       requestAnimationFrame(() => {
-        textarea.selectionStart = textarea.selectionEnd =
-          start + tab.length;
+        textarea.selectionStart = textarea.selectionEnd = start + tab.length;
       });
     }
   };
@@ -72,9 +64,7 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <Label htmlFor={status}>{`${status} Response (JSON)`}</Label>
-        <div
-          className="flex h-5 items-center gap-2 text-sm text-destructive"
-        >
+        <div className="flex h-5 items-center gap-2 text-sm text-destructive">
           {!validationStates[status] ? (
             <>
               <AlertCircle className="h-4 w-4" />
@@ -93,7 +83,7 @@ export const Responses = ({ status }: { status: "Success" | "Error" }) => {
         onChange={(e) => setResponse(e.target.value)}
         onKeyDown={handleKeyDown}
         className={cn(
-          `${robotoMonoVar.className} max672:!text-base h-40 !text-xs`,
+          `${robotoMonoVar.className} h-40 !text-xs max672:!text-base`,
           !validationStates[status] && "border-red-500 !ring-red-500"
         )}
       />
