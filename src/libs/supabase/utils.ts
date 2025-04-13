@@ -4,10 +4,10 @@ import { createClient } from "@/libs/supabase/serverClient";
 import { type Endpoints } from "@/types/endoints";
 
 // DB에 엔드포인트 insert
-export const insertEndpoint = async (UUID: string, fields: Endpoints) => {
+export const insertEndpoint = async (uuid: string, fields: Endpoints) => {
   const supabase = await createClient();
 
-  if (!UUID) throw new Error("UUID 없음");
+  if (!uuid) throw new Error("UUID 없음");
 
   const { error } = await supabase.from("endpoints").insert(fields);
 
@@ -51,12 +51,12 @@ export const deleteEndpoint = async (endpoint_path: string) => {
 };
 
 // DB에 있는 endpoints 불러오기
-export const getEndpoints = async (UUID: string) => {
+export const getEndpoints = async (uuid: string) => {
   const supabase = await createClient();
 
-  if (!UUID) throw new Error("UUID 잘못됨");
+  if (!uuid) throw new Error("UUID 잘못됨");
 
-  const { data, error } = await supabase.from("endpoints").select("*").eq("uuid", UUID);
+  const { data, error } = await supabase.from("endpoints").select("*").eq("uuid", uuid);
 
   if (error) throw new Error(error.message);
 
@@ -64,7 +64,7 @@ export const getEndpoints = async (UUID: string) => {
 };
 
 // DB에 해당 UUID가 존재하는지 확인
-export const checkUUIDExist = async (uuid: string) => {
+export const checkUuidExist = async (uuid: string) => {
   const supabase = await createClient();
 
   if (!uuid) throw new Error("uuid 잘못됨");
