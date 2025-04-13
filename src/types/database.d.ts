@@ -14,9 +14,9 @@ export type Database = {
           created_at: string
           delay_error: number
           delay_success: number
+          endpoint_path: string
+          http_method: string
           id: number
-          method: string
-          path: string
           response_error: Json
           response_success: Json
           status_error: number
@@ -27,9 +27,9 @@ export type Database = {
           created_at?: string
           delay_error: number
           delay_success: number
+          endpoint_path: string
+          http_method: string
           id?: number
-          method: string
-          path: string
           response_error: Json
           response_success: Json
           status_error: number
@@ -40,9 +40,9 @@ export type Database = {
           created_at?: string
           delay_error?: number
           delay_success?: number
+          endpoint_path?: string
+          http_method?: string
           id?: number
-          method?: string
-          path?: string
           response_error?: Json
           response_success?: Json
           status_error?: number
