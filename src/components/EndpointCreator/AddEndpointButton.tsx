@@ -28,11 +28,11 @@ export const AddEndpointButton = () => {
 
   const { uuid } = useUuidStore();
   const { endpoint_path, setEndPointPath, http_method } = useHttpStore();
-  const { success_status, error_status } = useStatusStore();
-  const { success_response, error_response, isResponsesValid, setResponsesValidation } =
+  const { status_success, status_error } = useStatusStore();
+  const { response_success, response_error, isResponsesValid, setResponsesValidation } =
     useResponseStore();
   const { endpoints, addEndpoint } = useEndpointStore();
-  const { success_delay, error_delay } = useDelayStore();
+  const { delay_success, delay_error } = useDelayStore();
   const { setSuccessResponse, setErrorResponse } = useResponseStore();
 
   // Endpoint path가 /api/로 시작하지 않으면 에러를 표시하는 로직
@@ -47,10 +47,10 @@ export const AddEndpointButton = () => {
   }, [endpoint_path, isResponsesValid]);
 
   useEffect(() => {
-    setResponsesValidation(success_response, error_response);
+    setResponsesValidation(response_success, response_error);
 
     // eslint-disable-next-line
-  }, [success_response, error_response]);
+  }, [response_success, response_error]);
 
   return (
     <>
@@ -70,24 +70,24 @@ export const AddEndpointButton = () => {
             addEndpoint({
               endpoint_path,
               http_method,
-              success_status: success_status === "" ? "200" : success_status,
-              error_status: error_status === "" ? "400" : error_status,
-              success_response,
-              error_response,
-              success_delay: success_status === "" ? "0" : success_delay,
-              error_delay: error_status === "" ? "0" : error_delay
+              status_success: status_success === "" ? "200" : status_success,
+              status_error: status_error === "" ? "400" : status_error,
+              response_success,
+              response_error,
+              delay_success: status_success === "" ? "0" : delay_success,
+              delay_error: status_error === "" ? "0" : delay_error
             });
 
             // DB에 엔드포인트 insert
             await insertEndpoint(uuid, {
               endpoint_path,
               http_method,
-              success_status: success_status === "" ? 200 : parseInt(success_status),
-              error_status: error_status === "" ? 400 : parseInt(error_status),
-              success_response,
-              error_response,
-              success_delay: success_status === "" ? 0 : parseInt(success_delay),
-              error_delay: error_status === "" ? 0 : parseInt(error_delay)
+              status_success: status_success === "" ? 200 : parseInt(status_success),
+              status_error: status_error === "" ? 400 : parseInt(status_error),
+              response_success,
+              response_error,
+              delay_success: status_success === "" ? 0 : parseInt(delay_success),
+              delay_error: status_error === "" ? 0 : parseInt(delay_error)
             });
 
             setEndPointPath("");

@@ -10,9 +10,9 @@ import { AlertCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const Responses = ({ status }: { status: "Success" | "Error" }) => {
-  const { success_response, setSuccessResponse, error_response, setErrorResponse } = useResponseStore();
+  const { response_success, setSuccessResponse, response_error, setErrorResponse } = useResponseStore();
 
-  const response = status === "Success" ? success_response : error_response;
+  const response = status === "Success" ? response_success : response_error;
   const setResponse = status === "Success" ? setSuccessResponse : setErrorResponse;
 
   const [validationStates, setValidationStates] = useState({

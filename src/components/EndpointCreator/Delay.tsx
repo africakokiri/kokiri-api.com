@@ -11,7 +11,7 @@ import { useRef } from "react";
 export const Delay = ({ status }: { status: "Success" | "Error" }) => {
   const inputRef = useRef(null);
 
-  const { success_delay, setSuccessDelay, error_delay, setErrorDelay } = useDelayStore();
+  const { delay_success, setSuccessDelay, delay_error, setErrorDelay } = useDelayStore();
 
   return (
     <div>
@@ -23,7 +23,7 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
           id={status === "Success" ? "success-delay" : "error-delay"}
           ref={inputRef}
           placeholder="0"
-          value={status === "Success" ? success_delay : error_delay}
+          value={status === "Success" ? delay_success : delay_error}
           onChange={(e) =>
             status === "Success"
               ? setSuccessDelay(e.target.value.trim())

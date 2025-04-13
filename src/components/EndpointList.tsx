@@ -63,9 +63,9 @@ export const EndpointList = () => {
   const { uuid } = useUuidStore();
 
   // Remove 버튼을 제어하는 함수
-  const handleRemoveButton = async (endpointPath: string, httpMethod: string) => {
-    removeEndpoint(endpointPath, httpMethod); // UI에서 삭제
-    await deleteEndpoint(endpointPath); // DB에서 삭제
+  const handleRemoveButton = async (endpoint_path: string, http_method: string) => {
+    removeEndpoint(endpoint_path, http_method); // UI에서 삭제
+    await deleteEndpoint(endpoint_path); // DB에서 삭제
   };
 
   // UUID가 존재하고 UUID의 유효성 여부에 따라 UUIDValidation state를 제어하는 로직
@@ -150,17 +150,15 @@ hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                     const allExist = dbEndpoints.every((incoming) =>
                       endpoints.some(
                         (existing) =>
-                          (existing.endpointPath.slice(36) === incoming.path ||
-                            existing.endpointPath === incoming.path) &&
-                          existing.httpMethod === incoming.method
+                          (existing.endpoint_path.slice(36) === incoming.path ||
+                            existing.endpoint_path === incoming.path) &&
+                          existing.http_method === incoming.method
                       )
                     );
 
                     const uuidInDB = await checkUuidExist(fetchUuid);
 
                     if (!uuidInDB) {
-                      console.log(uuidInDB + "!");
-
                       setExistEndpoint([true, "Endpoint not found."]);
 
                       return;
@@ -169,14 +167,14 @@ hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                     if (!allExist) {
                       dbEndpoints.forEach((endpoint) => {
                         addEndpoint({
-                          endpointPath: endpoint.uuid + endpoint.path,
-                          httpMethod: endpoint.method as (typeof HTTP_METHODS)[number],
-                          successStatus: endpoint.status_success,
-                          errorStatus: endpoint.status_error,
-                          successResponse: endpoint.response_success,
-                          errorResponse: endpoint.response_error,
-                          successDelay: endpoint.delay_success,
-                          errorDelay: endpoint.delay_error
+                          endpoint_path: endpoint.uuid + endpoint.endpoint_path,
+                          http_method: endpoint.http_method as (typeof HTTP_METHODS)[number],
+                          status_success: endpoint.status_success,
+                          status_error: endpoint.status_error,
+                          response_success: endpoint.response_success,
+                          response_error: endpoint.response_error,
+                          delay_success: endpoint.delay_success,
+                          delay_error: endpoint.delay_error
                         });
                       });
                     } else {
@@ -223,24 +221,31 @@ border-destructive/50 px-4 py-3 text-sm text-destructive dark:border-destructive
       >
         {endpoints.map(
           (
-            { endpointPath, httpMethod, successStatus, errorStatus, successResponse, errorResponse },
+            {
+              endpoint_path,
+              http_method,
+              status_success,
+              status_error,
+              response_success,
+              response_error
+            },
             index
           ) => {
-            const slicedUuid = endpointPath.slice(0, 36);
+            const slicedUuid = endpoint_path.slice(0, 36);
             const isSlicedUuidValid = checkUUIDValidation(slicedUuid);
 
             return (
               <div
-                key={`${httpMethod}-${endpointPath}-${index}`}
+                key={`${http_method}-${endpoint_path}-${index}`}
                 className="space-y-2 rounded-md border p-2"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex w-full items-center justify-between gap-4">
                     <Badge
-                      variant={getMethodVariant(httpMethod)}
+                      variant={getMethodVariant(http_method)}
                       className="rounded-full"
                     >
-                      {httpMethod}
+                      {http_method}
                     </Badge>
                     <div
                       className={`${robotoMonoVar.className} rounded-md border bg-muted/50 px-2 py-1
@@ -251,9 +256,9 @@ text-xs`}
                         {isSlicedUuidValid ? slicedUuid : uuid}
                       </span>
                       <span>
-                        {checkUUIDValidation(endpointPath.slice(0, 36))
-                          ? endpointPath.slice(36, 72)
-                          : endpointPath}
+                        {checkUUIDValidation(endpoint_path.slice(0, 36))
+                          ? endpoint_path.slice(36, 72)
+                          : endpoint_path}
                       </span>
 
                       <span className="sr-only"></span>
@@ -272,7 +277,7 @@ text-xs`}
                           variant="outline"
                           className="rounded-full"
                         >
-                          Status: {successStatus}
+                          Status: {status_success}
                         </Badge>
                         <span className="text-sm text-muted-foreground">Success Response</span>
                       </div>
@@ -281,7 +286,7 @@ text-xs`}
                       <div className="rounded-md border bg-muted/50 p-4">
                         <pre className="max-h-60 overflow-auto whitespace-pre-wrap text-xs">
                           <ReactJson
-                            src={JSON.parse(successResponse)}
+                            src={JSON.parse(response_success)}
                             displayDataTypes={false}
                             iconStyle="square"
                             collapsed={2}
@@ -303,7 +308,7 @@ text-xs`}
                           variant="destructive"
                           className="rounded-full hover:bg-destructive"
                         >
-                          Status: {errorStatus}
+                          Status: {status_error}
                         </Badge>
                         <span className="text-sm text-muted-foreground">Error Response</span>
                       </div>
@@ -312,7 +317,7 @@ text-xs`}
                       <div className="rounded-md border bg-muted/50 p-4">
                         <pre className="max-h-60 overflow-auto whitespace-pre-wrap text-xs">
                           <ReactJson
-                            src={JSON.parse(errorResponse)}
+                            src={JSON.parse(response_error)}
                             displayDataTypes={false}
                             iconStyle="square"
                             collapsed={2}
@@ -327,7 +332,7 @@ text-xs`}
                   <div className="flex w-full justify-end gap-4">
                     <Badge
                       className="cursor-pointer bg-destructive hover:bg-red-400"
-                      onClick={() => handleRemoveButton(endpointPath, httpMethod)}
+                      onClick={() => handleRemoveButton(endpoint_path, http_method)}
                     >
                       Remove
                     </Badge>

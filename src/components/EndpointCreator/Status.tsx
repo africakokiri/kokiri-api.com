@@ -11,7 +11,7 @@ import { useRef } from "react";
 export const Status = ({ status }: { status: "Success" | "Error" }) => {
   const inputRef = useRef(null);
 
-  const { success_status, setSuccessStatus, error_status, setErrorStatus } = useStatusStore();
+  const { status_success, setSuccessStatus, status_error, setErrorStatus } = useStatusStore();
 
   return (
     <div>
@@ -26,7 +26,7 @@ export const Status = ({ status }: { status: "Success" | "Error" }) => {
               : setErrorStatus(e.target.value.trim())
           }
           id={`${status} Status`}
-          value={status === "Success" ? success_status : error_status}
+          value={status === "Success" ? status_success : status_error}
           onKeyDown={(e) => e.key === " " && e.preventDefault()}
           className="text-sm max672:text-base"
         />

@@ -9,7 +9,7 @@ export const insertEndpoint = async (uuid: string, fields: Endpoints) => {
 
   if (!uuid) throw new Error("UUID 없음");
 
-  const { error } = await supabase.from("endpoints").insert(fields);
+  const { error } = await supabase.from("endpoints").insert({ ...fields, uuid });
 
   if (error) {
     throw new Error(`Supabase insert error: ${error.message}`);
@@ -45,7 +45,7 @@ export const deleteEndpoint = async (endpoint_path: string) => {
   const { error } = await supabase
     .from("endpoints")
     .delete()
-    .match({ path: "/" + endpoint_path.split("/").slice(1).join("/") });
+    .match({ endpoint_path: "/" + endpoint_path.split("/").slice(1).join("/") });
 
   if (error) throw new Error(error.message);
 };

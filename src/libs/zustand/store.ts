@@ -43,81 +43,81 @@ export const useHttpStore = create<HttpStore>((set) => ({
 }));
 
 interface StatusStore {
-  success_status: string;
-  error_status: string;
+  status_success: string;
+  status_error: string;
 
-  setSuccessStatus: (success_status: string) => void;
-  setErrorStatus: (error_status: string) => void;
+  setSuccessStatus: (status_success: string) => void;
+  setErrorStatus: (status_error: string) => void;
 }
 
 // Success, error Status code
 export const useStatusStore = create<StatusStore>((set) => ({
-  success_status: "200",
-  error_status: "400",
+  status_success: "200",
+  status_error: "400",
 
-  setSuccessStatus: (success_status) =>
+  setSuccessStatus: (status_success) =>
     set(() => ({
-      success_status
+      status_success
     })),
-  setErrorStatus: (error_status) =>
+  setErrorStatus: (status_error) =>
     set(() => ({
-      error_status
+      status_error
     }))
 }));
 
 interface DelayStore {
-  success_delay: string;
-  error_delay: string;
+  delay_success: string;
+  delay_error: string;
 
-  setSuccessDelay: (success_delay: string) => void;
-  setErrorDelay: (error_delay: string) => void;
+  setSuccessDelay: (delay_success: string) => void;
+  setErrorDelay: (delay_error: string) => void;
 }
 
 // Delay
 export const useDelayStore = create<DelayStore>((set) => ({
-  success_delay: "0",
-  error_delay: "0",
+  delay_success: "0",
+  delay_error: "0",
 
-  setSuccessDelay: (success_delay) =>
+  setSuccessDelay: (delay_success) =>
     set(() => ({
-      success_delay
+      delay_success
     })),
-  setErrorDelay: (error_delay) =>
+  setErrorDelay: (delay_error) =>
     set(() => ({
-      error_delay
+      delay_error
     }))
 }));
 
 interface ResponseStore {
-  success_response: string;
-  error_response: string;
+  response_success: string;
+  response_error: string;
   isResponsesValid: boolean;
 
-  setSuccessResponse: (success_response: string) => void;
-  setErrorResponse: (error_response: string) => void;
-  setResponsesValidation: (success_response: string, error_response: string) => void;
+  setSuccessResponse: (response_success: string) => void;
+  setErrorResponse: (response_error: string) => void;
+  setResponsesValidation: (response_success: string, response_error: string) => void;
 }
 
 // Response 전체
 export const useResponseStore = create<ResponseStore>((set) => ({
-  success_response: '{\n  "data": {}\n}',
-  error_response: '{\n  "error": "An error occurred"\n}',
+  response_success: '{\n  "data": {}\n}',
+  response_error: '{\n  "error": "An error occurred"\n}',
   isResponsesValid: true,
 
-  setSuccessResponse: (success_response) =>
+  setSuccessResponse: (response_success) =>
     set(() => ({
-      success_response
+      response_success
     })),
-  setErrorResponse: (error_response) =>
+  setErrorResponse: (response_error) =>
     set(() => ({
-      error_response
+      response_error
     })),
-  setResponsesValidation: (success_response, error_response) =>
+  setResponsesValidation: (response_success, response_error) =>
     set(() => {
       let isValid = true;
       try {
-        JSON.parse(success_response);
-        JSON.parse(error_response);
+        JSON.parse(response_success);
+        JSON.parse(response_error);
       } catch {
         isValid = false;
       }
