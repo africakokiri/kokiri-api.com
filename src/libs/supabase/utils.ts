@@ -20,7 +20,7 @@ export const insertEndpoint = async (UUID: string, fields: Endpoints) => {
 export const checkEndpointExist = async (endpoint_path: string, http_method: string) => {
   const supabase = await createClient();
 
-  if (!endpoint_path || !http_method) throw new Error("endpointPath 또는 httpMethod 잘못됨");
+  if (!endpoint_path || !http_method) throw new Error("Endpoint path 또는 HTTP method 잘못됨");
 
   const { data: existing, error } = await supabase
     .from("endpoints")
@@ -35,17 +35,17 @@ export const checkEndpointExist = async (endpoint_path: string, http_method: str
 };
 
 // DB에 있는 endpointPath 삭제
-export const deleteEndpoint = async (endpointPath: string) => {
+export const deleteEndpoint = async (endpoint_path: string) => {
   const supabase = await createClient();
 
-  if (!endpointPath) {
-    throw new Error("endpointPath 잘못됨");
+  if (!endpoint_path) {
+    throw new Error("Endpoint path 잘못됨");
   }
 
   const { error } = await supabase
     .from("endpoints")
     .delete()
-    .match({ path: "/" + endpointPath.split("/").slice(1).join("/") });
+    .match({ path: "/" + endpoint_path.split("/").slice(1).join("/") });
 
   if (error) throw new Error(error.message);
 };
