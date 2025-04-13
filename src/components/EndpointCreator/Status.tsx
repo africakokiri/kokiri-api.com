@@ -3,20 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSuccessOrErrorStore } from "@/libs/zustand/store";
+import { useStatusStore } from "@/libs/zustand/store";
 
 import { X } from "lucide-react";
 import { useRef } from "react";
 
-export const SuccessOrErrorStatus = ({
-  status
-}: {
-  status: "Success" | "Error";
-}) => {
+export const Status = ({ status }: { status: "Success" | "Error" }) => {
   const inputRef = useRef(null);
 
-  const { successStatus, setSuccessStatus, errorStatus, setErrorStatus } =
-    useSuccessOrErrorStore();
+  const { success_status, setSuccessStatus, error_status, setErrorStatus } = useStatusStore();
 
   return (
     <div>
@@ -31,7 +26,7 @@ export const SuccessOrErrorStatus = ({
               : setErrorStatus(e.target.value.trim())
           }
           id={`${status} Status`}
-          value={status === "Success" ? successStatus : errorStatus}
+          value={status === "Success" ? success_status : error_status}
           onKeyDown={(e) => e.key === " " && e.preventDefault()}
           className="text-sm max672:text-base"
         />
@@ -40,9 +35,8 @@ export const SuccessOrErrorStatus = ({
           type="button"
           variant="ghost"
           size="icon"
-          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2
-text-gray-500 hover:text-gray-900 dark:text-gray-400
-dark:hover:text-gray-100"
+          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-gray-500 hover:text-gray-900
+dark:text-gray-400 dark:hover:text-gray-100"
           onClick={() => {
             if (status === "Success") {
               setSuccessStatus("");
