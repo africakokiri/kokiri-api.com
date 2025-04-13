@@ -11,14 +11,11 @@ import { useRef } from "react";
 export const Delay = ({ status }: { status: "Success" | "Error" }) => {
   const inputRef = useRef(null);
 
-  const { successDelay, setSuccessDelay, errorDelay, setErrorDelay } =
-    useDelayStore();
+  const { success_delay, setSuccessDelay, error_delay, setErrorDelay } = useDelayStore();
 
   return (
     <div>
-      <Label
-        htmlFor={status === "Success" ? "success-delay" : "error-delay"}
-      >
+      <Label htmlFor={status === "Success" ? "success-delay" : "error-delay"}>
         {status === "Success" ? "Success Delay(ms)" : "Error Delay(ms)"}
       </Label>
       <div className="relative flex items-center">
@@ -26,7 +23,7 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
           id={status === "Success" ? "success-delay" : "error-delay"}
           ref={inputRef}
           placeholder="0"
-          value={status === "Success" ? successDelay : errorDelay}
+          value={status === "Success" ? success_delay : error_delay}
           onChange={(e) =>
             status === "Success"
               ? setSuccessDelay(e.target.value.trim())
@@ -40,9 +37,8 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
           type="button"
           variant="ghost"
           size="icon"
-          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2
-text-gray-500 hover:text-gray-900 dark:text-gray-400
-dark:hover:text-gray-100"
+          className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-gray-500 hover:text-gray-900
+dark:text-gray-400 dark:hover:text-gray-100"
           onClick={() => {
             if (status === "Success") {
               setSuccessDelay("");
