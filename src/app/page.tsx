@@ -27,7 +27,7 @@ export default function page() {
                   <HttpMethod />
                 </div>
 
-                <div className="gap-4 *:w-full max1304:flex max672:flex max672:flex-col">
+                <div className="flex flex-col gap-4 *:w-full max1304:flex max672:flex max672:flex-col">
                   <div className="flex gap-4 *:w-full *:space-y-2">
                     <Status status="Success" />
                     <Delay status="Success" />

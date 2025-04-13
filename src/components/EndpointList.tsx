@@ -133,7 +133,7 @@ export const EndpointList = () => {
   };
 
   return (
-    <Card className="h-[718px]">
+    <Card className="h-[786px]">
       <CardHeader className="space-y-4">
         <CardTitle className="flex items-center justify-between gap-4 text-2xl font-semibold">
           <h2>Defined Endpoints</h2>
@@ -226,7 +226,7 @@ border-destructive/50 px-4 py-3 text-sm text-destructive dark:border-destructive
         )}
       </CardHeader>
       <CardContent
-        className={cn("h-[602px] space-y-4 overflow-y-scroll", existEndpoint[0] && "h-[548px]")}
+        className={cn("h-[678px] space-y-4 overflow-y-scroll", existEndpoint[0] && "h-[614px]")}
       >
         {endpoints.map(
           (
