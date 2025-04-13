@@ -19,9 +19,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/libs/shadcn/utils";
-import { deleteEndpoint, getEndpoints, getUuid } from "@/libs/supabase/utils";
+import { checkUuidExist, deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
+import { type Endpoints } from "@/types/endoints";
 
 import { AlertCircle, X } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -54,12 +55,12 @@ const checkUUIDValidation = (uuid: string) => {
 export const EndpointList = () => {
   const inputRef = useRef(null);
 
-  const [uuid, setUuid] = useState("");
-  const [UUIDValidation, setUUIDValidation] = useState(false);
+  const [fetchUuid, setFetchUuid] = useState("");
+  const [fetchUuidValidation, setFetchUuidValidation] = useState(false);
   const [existEndpoint, setExistEndpoint] = useState([false, ""]);
 
   const { endpoints, addEndpoint, removeEndpoint } = useEndpointStore();
-  const { userId } = useUuidStore();
+  const { uuid } = useUuidStore();
 
   // Remove 버튼을 제어하는 함수
   const handleRemoveButton = async (endpointPath: string, httpMethod: string) => {
@@ -69,12 +70,12 @@ export const EndpointList = () => {
 
   // UUID가 존재하고 UUID의 유효성 여부에 따라 UUIDValidation state를 제어하는 로직
   useEffect(() => {
-    if (uuid && !checkUUIDValidation(uuid)) {
-      setUUIDValidation(false);
+    if (fetchUuid && !checkUUIDValidation(fetchUuid)) {
+      setFetchUuidValidation(false);
     } else {
-      setUUIDValidation(true);
+      setFetchUuidValidation(true);
     }
-  }, [uuid]);
+  }, [fetchUuid]);
 
   return (
     <Card className="h-[718px]">
@@ -93,7 +94,7 @@ export const EndpointList = () => {
                     <div className="flex items-center justify-between">
                       <Label htmlFor="input-uuid">Please enter your UUID</Label>
                       <div className="flex h-5 items-center gap-2 text-sm text-destructive">
-                        {!UUIDValidation ? (
+                        {!fetchUuidValidation ? (
                           <>
                             <AlertCircle className="h-4 w-4" />
                             <span>Invalid JSON format</span>
@@ -107,9 +108,9 @@ export const EndpointList = () => {
                       <Input
                         ref={inputRef}
                         id="input-uuid"
-                        value={uuid}
-                        onChange={(e) => setUuid(e.target.value)}
-                        className={cn(!UUIDValidation && "border-red-500 !ring-red-500")}
+                        value={fetchUuid}
+                        onChange={(e) => setFetchUuid(e.target.value)}
+                        className={cn(!fetchUuidValidation && "border-red-500 !ring-red-500")}
                       />
                       <Button
                         type="button"
@@ -118,7 +119,7 @@ export const EndpointList = () => {
                         className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-gray-500
 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                         onClick={() => {
-                          setUuid("");
+                          setFetchUuid("");
 
                           if (inputRef.current) {
                             (inputRef.current as HTMLInputElement).focus();
@@ -133,17 +134,17 @@ hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setUuid("")}>Cancel</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setFetchUuid("")}>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  disabled={!UUIDValidation}
+                  disabled={!fetchUuidValidation}
                   onClick={async () => {
-                    if (!uuid) return;
+                    if (!fetchUuid) return;
 
-                    setUuid("");
+                    setFetchUuid("");
 
                     setExistEndpoint([false]);
 
-                    const dbEndpoints: Endpoint[] = await getEndpoints(uuid);
+                    const dbEndpoints: Endpoints[] = await getEndpoints(fetchUuid);
 
                     // 모든 DB 엔드포인트가 기존에 존재하는지 확인
                     const allExist = dbEndpoints.every((incoming) =>
@@ -155,7 +156,7 @@ hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
                       )
                     );
 
-                    const uuidInDB = await getUuid(uuid);
+                    const uuidInDB = await checkUuidExist(fetchUuid);
 
                     if (!uuidInDB) {
                       console.log(uuidInDB + "!");
@@ -226,7 +227,7 @@ border-destructive/50 px-4 py-3 text-sm text-destructive dark:border-destructive
             index
           ) => {
             const slicedUuid = endpointPath.slice(0, 36);
-            const isSlicedUuidValid = isValidUUID(slicedUuid);
+            const isSlicedUuidValid = checkUUIDValidation(slicedUuid);
 
             return (
               <div
@@ -247,10 +248,10 @@ text-xs`}
                     >
                       <span>kokiri-api.com/</span>
                       <span className="font-semibold text-green-600 underline underline-offset-4">
-                        {isSlicedUuidValid ? slicedUuid : userId}
+                        {isSlicedUuidValid ? slicedUuid : uuid}
                       </span>
                       <span>
-                        {isValidUUID(endpointPath.slice(0, 36))
+                        {checkUUIDValidation(endpointPath.slice(0, 36))
                           ? endpointPath.slice(36, 72)
                           : endpointPath}
                       </span>
