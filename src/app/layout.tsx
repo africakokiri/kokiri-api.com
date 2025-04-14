@@ -7,8 +7,7 @@ import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Kokiri API",
-  description:
-    "Create a mock REST API. Customize response data for success and error cases.",
+  description: "Create a mock REST API. Customize response data for success and error cases.",
   keywords: [
     "Next.js",
     "Kokiri API",
@@ -22,8 +21,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Kokiri API",
-    description:
-      "Create a mock REST API. Customize response data for success and error cases.",
+    description: "Create a mock REST API. Customize response data for success and error cases.",
     url: "https://www.kokiri-api.com",
     siteName: "kokiri-api.com",
     images: [
@@ -33,7 +31,7 @@ export const metadata: Metadata = {
         height: 630
       }
     ],
-    locale: "en_US",
+    locale: "ko_KR",
     type: "website"
   },
   icons: {
@@ -47,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <Head>
         <link
           rel="canonical"
