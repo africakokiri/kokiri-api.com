@@ -1,4 +1,4 @@
-import { type Database } from "@/types/database";
+import { type Database } from "@shared/types/database";
 
 import { createBrowserClient } from "@supabase/ssr";
 

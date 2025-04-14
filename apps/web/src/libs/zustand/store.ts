@@ -1,5 +1,5 @@
 import { type HttpMethods } from "@/components/EndpointCreator/HttpMethod";
-import { type Insert } from "@/types/endoints";
+import { type Insert } from "@shared/types/endoints";
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

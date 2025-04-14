@@ -1,5 +1,5 @@
 import { createClient } from "@/libs/supabase/serverClient";
-import { monitorMemoryUsage } from "@/utils/monitorMemoryUsage";
+import { monitorMemoryUsage } from "@shared/utils/monitorMemoryUsage";
 
 import { type NextRequest, NextResponse } from "next/server";
 

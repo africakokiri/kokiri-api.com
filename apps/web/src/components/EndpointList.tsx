@@ -22,7 +22,7 @@ import { cn } from "@/libs/shadcn/utils";
 import { checkUuidExist, deleteEndpoint, getEndpoints } from "@/libs/supabase/utils";
 import { useEndpointStore, useUuidStore } from "@/libs/zustand/store";
 import { robotoMonoVar } from "@/styles/fonts";
-import { type Endpoints } from "@/types/endoints";
+import { type Endpoints } from "@shared/types/endoints";
 
 import { AlertCircle, X } from "lucide-react";
 import dynamic from "next/dynamic";

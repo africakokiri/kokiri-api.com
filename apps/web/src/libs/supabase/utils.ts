@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/libs/supabase/serverClient";
-import { type Insert } from "@/types/endoints";
+import { type Insert } from "@shared/types/endoints";
 
 // DB에 엔드포인트 insert
 export const insertEndpoint = async (uuid: string, fields: Insert) => {

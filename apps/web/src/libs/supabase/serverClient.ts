@@ -1,6 +1,6 @@
 "use server";
 
-import { type Database } from "@/types/database";
+import { type Database } from "@shared/types/database";
 
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
