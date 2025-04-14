@@ -3,6 +3,9 @@
   "workspaces": {
     "": {
       "name": "kokiri-api.com",
+      "dependencies": {
+        "@supabase/supabase-js": "^2.49.4",
+      },
       "devDependencies": {
         "turbo": "^2",
       },
