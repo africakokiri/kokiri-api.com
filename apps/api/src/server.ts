@@ -85,7 +85,7 @@ const handleRequest = async (
     };
   }
 
-  console.log(`Found matching endpoint: ${JSON.stringify(data)}`);
+  // console.log(`Found matching endpoint: ${JSON.stringify(data)}`);
 
   if (forceError) {
     if (Number(data.delay_error) > 0) await delay(Number(data.delay_error));
