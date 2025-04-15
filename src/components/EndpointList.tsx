@@ -226,7 +226,7 @@ border-destructive/50 px-4 py-3 text-sm text-destructive dark:border-destructive
         )}
       </CardHeader>
       <CardContent
-        className={cn("h-[678px] space-y-4 overflow-y-scroll", existEndpoint[0] && "h-[614px]")}
+        className={cn("h-[678px] space-y-4 overflow-y-auto", existEndpoint[0] && "h-[614px]")}
       >
         {endpoints.map(
           (
