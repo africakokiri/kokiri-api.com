@@ -7,7 +7,8 @@ import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Kokiri API",
-  description: "Create a mock REST API. Customize response data for success and error cases.",
+  description:
+    "성공 및 오류 응답을 자유롭게 설정할 수 있는 모의 REST API 서버를 생성합니다. Create a customizable mock REST API server with support for success and error responses.",
   keywords: [
     "Next.js",
     "Kokiri API",
@@ -17,7 +18,13 @@ export const metadata: Metadata = {
     "Mock server",
     "Mock rest api server",
     "Customize REST API",
-    "Customize response API data"
+    "Customize response API data",
+    "모의 API",
+    "모의 서버",
+    "Mock 서버",
+    "REST API 서버",
+    "응답 데이터 커스터마이징",
+    "API 테스트용 서버"
   ],
   openGraph: {
     title: "Kokiri API",
