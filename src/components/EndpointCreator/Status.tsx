@@ -20,14 +20,23 @@ export const Status = ({ status }: { status: "Success" | "Error" }) => {
         <Input
           ref={inputRef}
           placeholder={status === "Success" ? "200" : "400"}
-          onChange={(e) =>
-            status === "Success"
-              ? setSuccessStatus(e.target.value.trim())
-              : setErrorStatus(e.target.value.trim())
-          }
+          onChange={(e) => {
+            // 숫자만 허용하는 정규식 패턴 적용
+            const numericValue = e.target.value.replace(/[^0-9]/g, "");
+
+            // eslint-disable-next-line
+            status === "Success" ? setSuccessStatus(numericValue) : setErrorStatus(numericValue);
+          }}
           id={`${status} Status`}
           value={status === "Success" ? status_success : status_error}
-          onKeyDown={(e) => e.key === " " && e.preventDefault()}
+          // 키 입력 시 숫자만 허용 (선택적 추가 보안)
+          onKeyDown={(e) => {
+            // 숫자 키, 백스페이스, 탭, 방향키 등 기능키 허용
+            const allowedKeys = ["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete", "Home", "End"];
+            if (!allowedKeys.includes(e.key) && !/^[0-9]$/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
           className="text-sm max672:text-base"
         />
 

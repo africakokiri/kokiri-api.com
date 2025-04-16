@@ -24,12 +24,21 @@ export const Delay = ({ status }: { status: "Success" | "Error" }) => {
           ref={inputRef}
           placeholder="0"
           value={status === "Success" ? delay_success : delay_error}
-          onChange={(e) =>
-            status === "Success"
-              ? setSuccessDelay(e.target.value.trim())
-              : setErrorDelay(e.target.value.trim())
-          }
-          onKeyDown={(e) => e.key === " " && e.preventDefault()}
+          onChange={(e) => {
+            // 숫자만 허용하는 정규식 패턴 적용
+            const numericValue = e.target.value.replace(/[^0-9]/g, "");
+
+            // eslint-disable-next-line
+            status === "Success" ? setSuccessDelay(numericValue) : setErrorDelay(numericValue);
+          }}
+          // 키 입력 시 숫자만 허용
+          onKeyDown={(e) => {
+            // 숫자 키, 백스페이스, 탭, 방향키 등 기능키 허용
+            const allowedKeys = ["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete", "Home", "End"];
+            if (!allowedKeys.includes(e.key) && !/^[0-9]$/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
           className="text-sm max672:text-base"
         />
 
