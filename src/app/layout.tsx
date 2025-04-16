@@ -3,12 +3,11 @@ import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import Head from "next/head";
 
 export const metadata: Metadata = {
-  title: "Kokiri API",
+  title: "Kokiri API - Mock REST API",
   description:
-    "성공 및 오류 응답을 자유롭게 설정할 수 있는 모의 REST API 서버를 생성합니다. Create a customizable mock REST API server with support for success and error responses.",
+    "Create a customizable mock REST API server with support for success and error responses.",
   keywords: [
     "Next.js",
     "Kokiri API",
@@ -26,14 +25,18 @@ export const metadata: Metadata = {
     "응답 데이터 커스터마이징",
     "API 테스트용 서버"
   ],
+  metadataBase: new URL("https://www.kokiri-api.com"),
+  alternates: {
+    canonical: "https://www.kokiri-api.com/"
+  },
   openGraph: {
     title: "Kokiri API",
     description: "Create a mock REST API. Customize response data for success and error cases.",
     url: "https://www.kokiri-api.com",
-    siteName: "kokiri-api.com",
+    siteName: "Kokiri API",
     images: [
       {
-        url: "/icons/kokiri.svg",
+        url: "https://www.kokiri-api.com/icons/elephant.png",
         width: 1200,
         height: 630
       }
@@ -53,30 +56,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <Head>
-        <link
-          rel="canonical"
-          href="https://www.kokiri-api.com/"
-        />
+      <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "http://schema.org",
-              "@type": ["WebAPI", "SoftwareApplication"],
+              "@type": "SoftwareApplication",
               name: "Kokiri API",
               description:
                 "Create a mock REST API. Customize response data for success and error cases.",
               applicationCategory: "DeveloperApplication",
               url: "https://www.kokiri-api.com",
-              image: "/icons/kokiri.svg",
+              image: "https://www.kokiri-api.com/icons/elephant.png",
               sku: "mock-api"
             })
           }}
         />
-      </Head>
-
-      <body className="antialiased">
         {children}
         <SpeedInsights />
         <Analytics />
