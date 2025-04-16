@@ -164,6 +164,7 @@ export const EndpointList = () => {
                         ref={inputRef}
                         id="input-uuid"
                         value={fetchUuid}
+                        maxLength={36}
                         onChange={(e) => setFetchUuid(e.target.value)}
                         className={cn(!fetchUuidValidation && "border-red-500 !ring-red-500")}
                       />
