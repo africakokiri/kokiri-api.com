@@ -9,7 +9,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: ""
+  title: "Kokiri API",
+  icons: {
+    icon: "/icons/main.png"
+  }
 };
 
 export default function RootLayout({
