@@ -13,7 +13,10 @@ export default function page() {
         <Container title="Define API Endpoints">
           <Define />
         </Container>
-        <Container title="API Endpoints"></Container>
+        <Container
+          title="API Endpoints"
+          showId
+        ></Container>
       </main>
     </div>
   );

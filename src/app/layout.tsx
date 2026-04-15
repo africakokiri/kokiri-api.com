@@ -1,4 +1,5 @@
 import { cn } from "@/libs/tailwind/utils";
+import { InsertNanoidProvider } from "@/providers/InsertNanoidProvider";
 import "@/styles/globals.css";
 
 import type { Metadata } from "next";
@@ -22,6 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <InsertNanoidProvider />
       <body className={cn("antialiased", inter.className)}>{children}</body>
     </html>
   );
