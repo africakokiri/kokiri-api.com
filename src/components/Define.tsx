@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/libs/tailwind/utils";
-import { addEndpoint } from "@/server/query";
+import { useAddEndpointMutation } from "@/tanstack-query/mutations/useAddEndpointMutation";
 import { Button } from "@/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/ui/field";
 import { Input } from "@/ui/input";
@@ -38,8 +38,18 @@ export function Define() {
   const [id, setId] = useState("");
 
   const invalidPath = path.includes(" ") || path.length > 50;
-  const validPathRegex = /^[a-z0-9\-\/]*$/;
+  const validPathRegex = /^[A-Za-z0-9\-._~!$&'()*+,;=:@\/]*$/;
   const validPath = validPathRegex.test(path);
+
+  const addEndpointMutation = useAddEndpointMutation();
+
+  const onSubmit: React.ComponentProps<"form">["onSubmit"] = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    addEndpointMutation.mutate(formData);
+  };
 
   useEffect(() => {
     const id = localStorage.getItem("id");
@@ -51,8 +61,9 @@ export function Define() {
 
   return (
     <form
-      action={addEndpoint}
-      onSubmit={() => {
+      onSubmit={(e) => {
+        onSubmit(e);
+
         setPath("");
         setDelay("0");
         setStatus("200");
@@ -82,12 +93,6 @@ export function Define() {
               autoFocus
               onChange={(e) => setPath(e.target.value)}
             />
-            {invalidPath ||
-              (!validPath && (
-                <FieldError className="pl-1">
-                  Use lowercase letters, numbers, "-" and "/" only.
-                </FieldError>
-              ))}
           </FieldContainer>
 
           <div className="flex gap-8">
@@ -190,7 +195,9 @@ export function Define() {
           </FieldContainer>
         </FieldGroup>
 
-        <Button disabled={path.length === 0 || invalidResponse}>Add endpoint</Button>
+        <Button disabled={path.length === 0 || invalidResponse || invalidPath || !validPath}>
+          Add endpoint
+        </Button>
       </FieldSet>
     </form>
   );

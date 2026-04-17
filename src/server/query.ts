@@ -2,6 +2,12 @@
 
 import { prisma } from "@/libs/supabase/prisma";
 
+export const getEndpoints = async (id: string) => {
+  return await prisma.endpoints.findMany({
+    where: { nanoid: id }
+  });
+};
+
 export const addEndpoint = async (formData: FormData) => {
   await prisma.endpoints.create({
     data: {
@@ -15,21 +21,15 @@ export const addEndpoint = async (formData: FormData) => {
   });
 };
 
-export const getEndpoints = async (nanoid: string) => {
-  return await prisma.endpoints.findMany({
-    where: { nanoid }
+export const updateEndpoint = async (nanoid: string, oldPath: string, newPath: string) => {
+  await prisma.endpoints.update({
+    where: { nanoid, path: oldPath },
+    data: { path: newPath.replace("/kokiri-api.com/api", "") }
   });
 };
 
-// export const updateEndpoint = async (id: string, path: string) => {
-//   return await prisma.endpoints.update({
-//     where: { id },
-//     data: { path }
-//   });
-// };
-
-// export const deleteEndpoint = async (id: string) => {
-//   return await prisma.endpoints.delete({
-//     where: { id }
-//   });
-// };
+export const deleteEndpoint = async (nanoid: string, path: string) => {
+  return await prisma.endpoints.delete({
+    where: { nanoid, path }
+  });
+};
