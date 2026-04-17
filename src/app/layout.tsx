@@ -3,6 +3,7 @@ import { InsertNanoidProvider } from "@/providers/InsertNanoidProvider";
 import { TanstackQueryProvider } from "@/providers/TanstackQueryProvider";
 import "@/styles/globals.css";
 import { Toaster } from "@/ui/sonner";
+import { TooltipProvider } from "@/ui/tooltip";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -27,13 +28,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <TanstackQueryProvider>
-        <html lang="en">
-          <InsertNanoidProvider />
-          <body className={cn("antialiased", inter.className)}>
-            {children}
-            <Toaster />
-          </body>
-        </html>
+        <TooltipProvider>
+          <html lang="en">
+            <InsertNanoidProvider />
+            <body className={cn("antialiased", inter.className)}>
+              {children}
+              <Toaster />
+            </body>
+          </html>
+        </TooltipProvider>
       </TanstackQueryProvider>
     </ClerkProvider>
   );

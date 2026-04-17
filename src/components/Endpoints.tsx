@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger
 } from "@/ui/dropdown-menu";
 import { Input } from "@/ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
 
 import { useQuery } from "@tanstack/react-query";
 import { ChevronsUpDown } from "lucide-react";
@@ -37,23 +38,33 @@ export function Endpoints() {
 
   return (
     <ul className="space-y-2">
-      {endpoints
-        ?.sort((a, b) => Number(a.id) - Number(b.id))
-        .map((e) => {
-          return (
-            <EndpointItem
-              key={e.id}
-              e={e}
-            />
-          );
-        })}
+      {endpoints?.length === 0 ? (
+        <p>No API endpoints yet. Create your first endpoint to start testing.</p>
+      ) : (
+        endpoints
+          ?.sort((a, b) => Number(a.id) - Number(b.id))
+          .map((e) => {
+            return (
+              <EndpointItem
+                id={id}
+                key={e.id}
+                e={e}
+              />
+            );
+          })
+      )}
     </ul>
   );
 }
 
-function EndpointItem({ e }: { e: EndpointsType }) {
+type EndpointItemProps = {
+  e: EndpointsType;
+  id: string;
+};
+
+function EndpointItem({ e, id }: EndpointItemProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [endpointValue, setEndpointValue] = useState(`kokiri-api.com/api/${e.path}`);
+  const [endpointValue, setEndpointValue] = useState(`.../${e.path}`);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -96,8 +107,8 @@ function EndpointItem({ e }: { e: EndpointsType }) {
                   ref={inputRef}
                   value={
                     isEditing
-                      ? endpointValue.startsWith("kokiri-api.com/api/")
-                        ? endpointValue.replace("kokiri-api.com/api/", "")
+                      ? endpointValue.startsWith(".../")
+                        ? endpointValue.replace(".../", "")
                         : endpointValue
                       : endpointValue
                   }
@@ -117,7 +128,6 @@ function EndpointItem({ e }: { e: EndpointsType }) {
                       setEndpointValue(e.path);
                     }
                   }}
-                  autoFocus
                 />
                 <Button
                   className="absolute right-2"
@@ -132,42 +142,52 @@ function EndpointItem({ e }: { e: EndpointsType }) {
               </div>
             ) : (
               <DropdownMenu>
-                <DropdownMenuTrigger className="rounded-full">
-                  <Button
-                    variant="outline"
-                    asChild
-                    size="xs"
-                  >
-                    <p
-                      className="rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-sm!
+                <Tooltip>
+                  <DropdownMenuTrigger className="rounded-full">
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="rounded-full"
+                        asChild
+                        size="xs"
+                      >
+                        <p
+                          className="rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-sm!
 text-black!"
-                    >
-                      kokiri-api.com/api/{e.path}
+                        >
+                          .../{e.path}
+                        </p>
+                      </Button>
+                    </TooltipTrigger>
+                  </DropdownMenuTrigger>
+                  <TooltipContent side="bottom">
+                    <p>
+                      kokiri-api.com/api/{id}/<span className="underline">{e.path}</span>
                     </p>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side="right">
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        navigator.clipboard.writeText(`kokiri-api.com/api/${e.path}`);
+                  </TooltipContent>
+                  <DropdownMenuContent side="right">
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          navigator.clipboard.writeText(`kokiri-api.com/api/${id}/${e.path}`);
 
-                        toast.success("API copied to clipboard", {
-                          position: "top-right"
-                        });
-                      }}
-                    >
-                      Copy
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setIsEditing(true)}>Edit</DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="bg-red-500 text-white"
-                      onClick={() => deleteEndpointMutation.mutate({ nanoid: e.nanoid, path: e.path })}
-                    >
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
+                          toast.success("API copied to clipboard", {
+                            position: "top-right"
+                          });
+                        }}
+                      >
+                        Copy
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setIsEditing(true)}>Edit</DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="bg-red-500 text-white"
+                        onClick={() => deleteEndpointMutation.mutate({ nanoid: e.nanoid, path: e.path })}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </Tooltip>
               </DropdownMenu>
             )}
           </div>
