@@ -4,6 +4,7 @@ import { TanstackQueryProvider } from "@/providers/TanstackQueryProvider";
 import "@/styles/globals.css";
 import { Toaster } from "@/ui/sonner";
 
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -24,14 +25,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <TanstackQueryProvider>
-      <html lang="en">
-        <InsertNanoidProvider />
-        <body className={cn("antialiased", inter.className)}>
-          {children}
-          <Toaster />
-        </body>
-      </html>
-    </TanstackQueryProvider>
+    <ClerkProvider>
+      <TanstackQueryProvider>
+        <html lang="en">
+          <InsertNanoidProvider />
+          <body className={cn("antialiased", inter.className)}>
+            {children}
+            <Toaster />
+          </body>
+        </html>
+      </TanstackQueryProvider>
+    </ClerkProvider>
   );
 }
