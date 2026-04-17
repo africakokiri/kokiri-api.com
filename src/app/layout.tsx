@@ -1,6 +1,11 @@
 import { cn } from "@/libs/tailwind/utils";
+import { InsertNanoidProvider } from "@/providers/InsertNanoidProvider";
+import { TanstackQueryProvider } from "@/providers/TanstackQueryProvider";
 import "@/styles/globals.css";
+import { Toaster } from "@/ui/sonner";
+import { TooltipProvider } from "@/ui/tooltip";
 
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -9,7 +14,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: ""
+  title: "Kokiri API",
+  icons: {
+    icon: "/icons/main.png"
+  }
 };
 
 export default function RootLayout({
@@ -18,8 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn("antialiased", inter.className)}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <TanstackQueryProvider>
+        <TooltipProvider>
+          <html lang="en">
+            <InsertNanoidProvider />
+            <body className={cn("antialiased", inter.className)}>
+              {children}
+              <Toaster />
+            </body>
+          </html>
+        </TooltipProvider>
+      </TanstackQueryProvider>
+    </ClerkProvider>
   );
 }
