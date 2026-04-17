@@ -1,3 +1,4 @@
+import pluginQuery from "@tanstack/eslint-plugin-query";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import onlyWarn from "eslint-plugin-only-warn";
@@ -7,6 +8,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  ...pluginQuery.configs["flat/recommended-strict"],
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -16,7 +18,10 @@ const eslintConfig = defineConfig([
     "next-env.d.ts"
   ]),
   {
-    plugins: { "unused-imports": unusedImports, "only-warn": onlyWarn },
+    plugins: {
+      "unused-imports": unusedImports,
+      "only-warn": onlyWarn
+    },
     rules: {
       "unused-imports/no-unused-imports": "warn"
     }

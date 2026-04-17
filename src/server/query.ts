@@ -16,7 +16,7 @@ export const addEndpoint = async (formData: FormData) => {
 };
 
 export const getEndpoints = async (nanoid: string) => {
-  return await prisma.endpoints.findFirst({
+  return await prisma.endpoints.findMany({
     where: { nanoid }
   });
 };

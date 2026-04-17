@@ -1,6 +1,8 @@
 import { cn } from "@/libs/tailwind/utils";
 import { InsertNanoidProvider } from "@/providers/InsertNanoidProvider";
+import { TanstackQueryProvider } from "@/providers/TanstackQueryProvider";
 import "@/styles/globals.css";
+import { Toaster } from "@/ui/sonner";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -22,9 +24,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <InsertNanoidProvider />
-      <body className={cn("antialiased", inter.className)}>{children}</body>
-    </html>
+    <TanstackQueryProvider>
+      <html lang="en">
+        <InsertNanoidProvider />
+        <body className={cn("antialiased", inter.className)}>
+          {children}
+          <Toaster />
+        </body>
+      </html>
+    </TanstackQueryProvider>
   );
 }

@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 export function Define() {
   const [path, setPath] = useState("");
   const [delay, setDelay] = useState("0");
-  const [status, setStatus] = useState("0");
+  const [status, setStatus] = useState("200");
   const [method, setMethod] = useState("GET");
   const [response, setResponse] = useState(`{
   "ok": true,
@@ -42,8 +42,12 @@ export function Define() {
   const validPath = validPathRegex.test(path);
 
   useEffect(() => {
-    if (path.length > 0) setId(localStorage.getItem("id")!);
-  }, [path]);
+    const id = localStorage.getItem("id");
+
+    if (!id) return;
+
+    setId(id);
+  }, []);
 
   return (
     <form

@@ -1,5 +1,6 @@
 import { Container } from "@/components/Container";
 import { Define } from "@/components/Define";
+import { Endpoints } from "@/components/Endpoints";
 import { Header } from "@/components/Header";
 
 export default function page() {
@@ -16,7 +17,9 @@ export default function page() {
         <Container
           title="API Endpoints"
           showId
-        ></Container>
+        >
+          <Endpoints />
+        </Container>
       </main>
     </div>
   );
